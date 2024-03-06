@@ -21,13 +21,14 @@ func (tourKeyPoint *TourKeyPoint) validate() error {
 	if tourKeyPoint.Description == "" {
 		return errors.New("invalid description")
 	}
-	if tourKeyPoint.Latitude == nil || tourKeyPoint.Longitude == nil {
-		return errors.New("invalid coordinates")
+	if tourKeyPoint.Latitude > 90 || tourKeyPoint.Latitude < -90 {
+		return errors.New("invalid latitude")
 	}
-	if tourKeyPoint.TourID == nil {
-		return errors.New("invalid tourID")
+	if tourKeyPoint.Longitude > 180 || tourKeyPoint.Latitude < -180 {
+		return errors.New("invalid longitude")
 	}
-	if tourKeyPoint.PositionInTour == nil {
+
+	if tourKeyPoint.PositionInTour <= 0 {
 		return errors.New("invalid keypoint tour position")
 	}
 
