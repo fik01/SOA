@@ -75,6 +75,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{17F6D753
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{1B866B54-A32F-42BA-8440-7558A971B6C6}"
+	ProjectSection(SolutionItems) = preProject
+		ChallengeExecutionRepository.go = ChallengeExecutionRepository.go
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{22183A88-F105-47D0-8C60-0817F3933162}"
+	ProjectSection(SolutionItems) = preProject
+		ChallengeExecutionService.go = ChallengeExecutionService.go
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -218,6 +226,7 @@ Global
 		{2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C} = {B8BD4B35-C40B-4BC6-9A8D-7FBE215FD1CE}
 		{17F6D753-0C0F-48FF-B643-2614B9966A17} = {2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}
 		{1B866B54-A32F-42BA-8440-7558A971B6C6} = {2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}
+		{22183A88-F105-47D0-8C60-0817F3933162} = {2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C378FE87-3A2E-4BB0-8E39-FB8767789244}
