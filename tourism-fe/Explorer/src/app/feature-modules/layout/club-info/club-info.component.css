@@ -1,0 +1,101 @@
+.background-wrapper {
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px; 
+    box-sizing: border-box;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+  .paragraph {
+    margin-left: 210px;
+    font-style: oblique;
+    font-weight: bold;
+   }
+  
+  .card {
+    width: 100%;
+    margin-bottom: 20px; 
+  }
+  
+  .card-body {
+    padding: 20px; 
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+
+  .mat-input-element {
+    color: black; 
+  }
+  
+  .update-button {
+    background-color: green;
+    color: white;
+  }
+
+  .list-container {
+    background: #edebdf;
+    width: 100%; 
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+ .kick-button {
+    background-color: red;
+  }
+
+  .accept-button {
+    background-color: green;
+  }
+
+  .decline-button {
+    background-color: red;
+    text-decoration-color: black;
+    margin-left: 5px;
+  }
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead tr {
+    background-color: #3f51b5;
+    color: #ffffff;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+
+

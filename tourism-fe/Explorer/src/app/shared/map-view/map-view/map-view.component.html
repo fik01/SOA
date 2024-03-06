@@ -1,0 +1,157 @@
+<div class="map-view-container">
+    <div class="sections">
+        <div class="menu-section">
+            <!--AUTHOR BUTTON SECTION-->
+            <div *ngIf="user.role == 'author'" class="container-fluid button-section">
+                <div class="row d-flex justify-content-around">
+                    <div class="col-sm-4 d-flex flex-column align-items-center pt-3">
+                        <button mat-icon-button class="button-color mb-1" (click)="openAddPublicKeyPoint()">
+                            <mat-icon>add_location</mat-icon>
+                        </button>
+                        <div class="mt-1 text-center text-wrap">New keypoint</div>
+                    </div> 
+                    <div class="col-sm-4 d-flex flex-column align-items-center pt-3">
+                        <button mat-icon-button class="button-color mb-1" (click)="openAddPublicFacilitiy()">
+                            <mat-icon>home</mat-icon>
+                        </button>
+                        <div class="mt-1 text-center text-wrap">New facility</div>
+                    </div> 
+                    <div class="col-sm-4 d-flex flex-column align-items-center pt-3">
+                        <button mat-icon-button class="button-color mb-1" (click)="openAddNewTour()">
+                            <mat-icon>map</mat-icon>
+                        </button>
+                        <div class="mt-1 text-center text-wrap">New tour</div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-around">
+                    <div class="col-sm-4 d-flex flex-column align-items-center pt-3">
+                        <button mat-icon-button class="button-color mb-1" (click)="showPublicKeyPoint()">
+                            <mat-icon>place</mat-icon>
+                        </button>
+                        <div class="mt-1 text-center text-wrap">Show keypoints</div>
+                    </div> 
+                    <div class="col-sm-4 d-flex flex-column align-items-center pt-3">
+                        <button mat-icon-button class="button-color mb-1" (click)="showPublicFacilities()">
+                            <mat-icon>local_activity</mat-icon>
+                        </button>
+                        <div class="mt-1 text-center text-wrap">Show facilities</div>
+                    </div> 
+                    <div class="col-sm-4 d-flex flex-column align-items-center pt-3 mb-3">
+                        <button mat-icon-button class="button-color mb-1" (click)="showAllPublic()">
+                            <mat-icon>my_location</mat-icon>
+                        </button>
+                        <div class="mt-1 text-center text-wrap">Show all</div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!--TOUR SECTION-->
+            <div class="tours-section">
+                <mat-tab-group (selectedIndexChange)="changeTab($event)" [selectedIndex]="selectedTab">
+                    <mat-tab label="Tours" [disabled]="activeChallenge">
+                        <div class="tab">
+                            <p class="my-tours-title">My tours</p>
+                            <div class="tours-section">
+                                <div *ngFor="let tour of tours" class="tour-card" [ngClass]="{'selected-tour': tour == selectedTour, 'disabled-tour': tour != selectedTour && activeSession != null && user.role == 'tourist', 'active-tour': tour == selectedTour && activeSession != null}">
+                                    <p class="tour-name">{{ tour.name }}</p>
+                                    <p class="tour-description">{{ tour.description }}</p>
+                                    <div>
+                                        <mat-radio-group
+                                            aria-labelledby="pick transportation method"
+                                            (change)="showTourOnMap(tour)"
+                                            [(ngModel)]="tour.selectedTransport"
+                                            color="primary"
+                                            class="transportation-radio-group">
+                                            <mat-radio-button
+                                                *ngFor="let duration of tour.durations"
+                                                [value]="duration.transportation">
+                                                {{transportationType[duration.transportation]}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <div *ngIf="user.role == 'author'" class="tour-buttons">
+                                        <button mat-button (click)="onEditClick(tour.id)">Edit</button>
+                                    </div>
+                                    <div *ngIf="user.role == 'tourist'" class="tour-buttons">
+                                        <button mat-raised-button *ngIf="tour.canBeRated" (click)="openReviewForm(tour)">Leave review</button>
+                                        <button mat-raised-button (click)="openTourDetails(tour)">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Challenges" [disabled]="activeSession">
+                        <div class="tab">
+                            <p class="my-tours-title">Challenges</p>
+                            <mat-radio-group 
+                                color="primary" 
+                                class="transportation-radio-group" 
+                                [(ngModel)]="selectedChallengeType" 
+                                (change)="showChallengeOnMap()">
+                                <mat-radio-button [disabled]="disabledChallengeTypes[0]" value="0">Social</mat-radio-button>
+                                <mat-radio-button [disabled]="disabledChallengeTypes[1]" value="1">Location</mat-radio-button>
+                                <mat-radio-button [disabled]="disabledChallengeTypes[2]" value="2">Misc</mat-radio-button>
+                            </mat-radio-group>
+                            <div class="tours-section">
+                                <div *ngFor="let challenge of displayedChallenges" class="tour-card" [ngClass]="{'selected-tour': activeChallenge && challenge.id == activeChallenge!.challengeId, 'disabled-tour': activeChallenge && challenge.id != activeChallenge!.challengeId && user.role == 'tourist', 'active-tour': activeChallenge && challenge.id == activeChallenge!.challengeId}">
+                                    <p class="tour-name">{{ challenge.name }}</p>
+                                    <p class="tour-description">{{ challenge.description }}</p>
+                                    <div class="tour-buttons"><button mat-raised-button (click)="showChallenge(challenge)">Show</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+        <div class="map-section">
+            <xp-map [mapId]="'map-view-map'" #mapViewMap class="map" (mouseup)="updateMyLocation()"></xp-map>
+            <button mat-fab class="button-color my-location-button" (click)="showMyLocation()" *ngIf="showCenterLocation">
+                <mat-icon *ngIf="isLocationInCenter">gps_fixed</mat-icon>
+                <mat-icon *ngIf="!isLocationInCenter">gps_not_fixed</mat-icon>
+            </button>
+            <button mat-fab extended class="button-color tour-execution-button" *ngIf="user.role == 'tourist'" [ngClass]="{'button-invisible': !showAddLocation, 'button-visible': showAddLocation}" (click)="addLocation()">
+                <mat-icon>location_on</mat-icon>
+                Set location
+            </button>
+            <button mat-fab extended class="button-color tour-execution-button" [ngClass]="{'button-invisible': !showStartTour, 'button-visible': showStartTour}" (click)="startTour()">
+                <mat-icon>play_arrow</mat-icon>
+                Start tour
+            </button>
+            <button mat-fab extended class="abandon-button-color tour-execution-button" [ngClass]="{'button-invisible': activeSession == null || showCompleteTour, 'button-visible': activeSession != null && !showCompleteTour}" (click)="abandonTour()">
+                <mat-icon>exit_to_app</mat-icon>
+                Abandon tour
+            </button>
+            <button mat-fab extended class="button-color tour-execution-button" [ngClass]="{'button-invisible': !showCompleteTour, 'button-visible': showCompleteTour}" (click)="completeTour()">
+                <mat-icon>check_circle</mat-icon>
+                Complete tour
+            </button>
+            <button mat-fab extended class="button-color tour-execution-button" [ngClass]="{'button-invisible': !showStartChallenge, 'button-visible': showStartChallenge}" (click)="startChallenge()">
+                <mat-icon>play_arrow</mat-icon>
+                Start challenge
+            </button>
+            <button mat-fab extended class="button-color tour-execution-button" [ngClass]="{'button-invisible': !showCompleteChallenge, 'button-visible': showCompleteChallenge}" (click)="completeChallenge()">
+                <mat-icon>check_circle</mat-icon>
+                Complete challenge
+            </button>
+            <button mat-fab extended class="abandon-button-color tour-execution-button" [ngClass]="{'button-invisible': !showAbandonChallenge, 'button-visible': showAbandonChallenge}" (click)="abandonChallenge()">
+                <mat-icon>exit_to_app</mat-icon>
+                Abandon challenge
+            </button>
+            <button mat-fab extended class="button-color misc-button complete" [ngClass]="{'button-invisible': !showMiscButtons, 'button-visible': showMiscButtons}" (click)="completeChallenge()">
+                <mat-icon>check_circle</mat-icon>
+                Complete challenge
+            </button>
+            <button mat-fab extended class="abandon-button-color misc-button abandon" [ngClass]="{'button-invisible': !showMiscButtons, 'button-visible': showMiscButtons}" (click)="abandonChallenge()">
+                <mat-icon>exit_to_app</mat-icon>
+                Abandon challenge
+            </button>
+            <button mat-fab class="button-color challenge-info-button" (click)="openChallengeInfo()" *ngIf="showChallengeInfo">
+                <mat-icon>info</mat-icon>
+            </button>
+        </div>
+    </div>
+    <xp-map [mapId]="'map-view-map2'"  #mapViewMap2 style="display: none;"></xp-map>
+</div>

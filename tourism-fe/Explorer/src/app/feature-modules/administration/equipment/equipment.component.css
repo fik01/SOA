@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+#tour-problems {
+    margin: 0;
+    background-image: url("../../../../assets/images/challenges-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100hv;
+    box-shadow: inset 0 -12em 60em var(--third-color);
+    font-weight: 700;
+    color: white;
+}
+
+.header-div {
+    font-size: 32px;
+    color: var(--white);
+    margin-top: 4%;
+    padding-bottom: 2%;
+    border-bottom: 1px solid var(--white);
+}
+
+
+.deadline-button {
+    background-color: var(--primary-color) !important;
+    color: white;
+    height: 50px;
+    border: none;
+}
+
+.deadline-button:hover {
+    filter: brightness(0.8);
+}
+
+
+.little-margin {
+    margin-left: 15px;
+}
+
+.challenges-table {
+    border-collapse: separate;
+    border-spacing: 0px 10px;
+    width: 100%;
+    font-weight: 100;
+    font-size: 14px;
+}
+
+.challenges-table thead {
+    background-color: var(--third-color);
+    color: var(--white);
+}
+
+.challenges-table th {
+    padding: 1.2%;
+    height: 54px;
+    max-width: 72px;
+}
+
+
+.challenges-table td {
+    padding: 1.2%;
+    height: 54px;
+    max-width: 102px;
+    word-wrap: break-word;
+}
+
+.challenges-table tr {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+#tour-problems td {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.button-color {
+    background-color: #7c875a;
+    color: white;
+  }

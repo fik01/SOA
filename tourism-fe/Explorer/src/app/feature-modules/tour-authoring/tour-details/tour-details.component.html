@@ -1,0 +1,148 @@
+<div class="tour-details-wrapper">
+  <div class="tour-details-bg pb-5 container-fluid justify-content-center align-items-center">
+    <div class="container-md p-4 details-base shadow-lg">
+      <div class="row">
+        <h1 class="col-md-9 col-6 text-wrap hidden">
+          <span><i class="bi bi-luggage-fill me-2"></i>{{ tour.name }}. </span>
+        </h1>
+        <h2 class="col-md-3 col-6 text-end fw-bold hidden">
+          <span><i class="bi bi-tags me-2"></i>{{ tour.price }}AC</span>
+        </h2>
+      </div>
+      <div class="row-fluid hidden">
+        <span class="badge bgc-primary rounded-pill p-2 m-1" *ngFor="let c of categories">{{ c }}</span>
+      </div>
+
+      <div class="row-fluid hidden">
+        <span class="badge fs-6 rounded-pill ms-1 px-4 difficulty">{{
+          tour ? tourDifficulty[tour.difficulty] : ''
+          }}</span>
+      </div>
+
+      <hr class="hr" />
+      <div class="d-flex justify-content-between">
+        <div>
+          <h4 class="display-4 mt-2 hidden">
+            {{ tour.description }}
+          </h4>
+        </div>
+        <div>
+          <button mat-raised-button class="recommendation-button" *ngIf="isPersonIdInTourRatings()" (click)="showTourRecommendations()">Recommendations</button>
+        </div>
+      </div>
+      <hr class="hr" />
+      <div class="container-md hidden">
+        <div class="row">
+          <div class="col-sm-12 col-md-6 px-0 position-relative">
+            <div>
+              <i class="bi bi-bus-front fs-2"></i>
+              <span class="ms-2 fs-5 text-wrap">{{ firstKeyPoint.name }}</span>
+            </div>
+            <div class="mt-3 hidden">
+              {{ firstKeyPoint.description }}
+            </div>
+          </div>
+          <div class="col-sm-6 px-0 col-md-3 d-flex justify-content-between">
+            <div class="box box2 d-flex">
+              <div class="evenboxinner">
+                <img class="img-fluid" src="{{ firstKeyPoint.image }}" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 px-0 col-md-3 d-flex justify-content-between">
+            <div class="box box2 d-flex">
+              <div class="evenboxinner map-container">
+                <xp-map class="map" [mapId]="'tour-details-map'"></xp-map>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="hr" />
+      <div>
+        <h3><i>For more details about this tour (display of all key points of the complete tour),
+            you must first purchase the tour. How to buy this tour
+            <i class="bi bi-patch-question-fill custom-green" matTooltip="Go back to the display of all tours and select the tour or tours you want to purchase by 
+              pressing the Add to cart button. Then, go to your cart located in the navbar where you will see a display of the selected tours. 
+                Press the checkout button to complete the purchase."></i></i></h3>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tour-ratings-wrapper">
+  <div class="tour-ratings-bg container-fluid justify-content-center align-items-center">
+    <div class="row hidden">
+      <div class="col-6 col-md-6 mt-4">
+        <h1 class="display-1 p-5 ms-xl-5">Tourist's ratings</h1>
+      </div>
+      <div class="col-6 col-md-6 mt-4 text-end">
+        <h1 class="display-1 p-5 me-xl-5 fs-1">
+          <i class="bi bi-bar-chart-line-fill me-3"></i> {{ tourGrade }}/5
+        </h1>
+      </div>
+    </div>
+
+    <div *ngIf="validForForm" class="centered-form mb-5">
+      <form [formGroup]="tourratingForm" class="rate-form">
+        <div class="form-group">
+          <div class="display-6 ps-2 py-2 text-success ">
+            Write about tour
+          </div>
+          <mat-form-field>
+            <mat-label for="grade">Grade</mat-label>
+            <mat-select matInput formControlName="grade">
+              <mat-option value="1">1</mat-option>
+              <mat-option value="2">2</mat-option>
+              <mat-option value="3">3</mat-option>
+              <mat-option value="4">4</mat-option>
+              <mat-option value="5">5</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label for="comment">Comment</mat-label>
+            <textarea matInput formControlName="comment" cdkTextareaAutosize></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="image">Image</mat-label>
+            <input matInput formControlName="image" type="text" />
+          </mat-form-field>
+          <div class="buttons">
+            <button class="btn btn-light px-5" (click)="closeForm()">Close</button>
+            <button class="btn btn-success px-5" *ngIf="validForTouristUpdateComment"
+              (click)="updateTourRating()">Update</button>
+            <button class="btn btn-success px-5" *ngIf="validForTouristComment" (click)="addTourRating()">Rate</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="container hidden pb-3">
+      <div class="row rating-card border mt-3" *ngFor="let tr of tourRatings">
+        <div class="col-12 col-md-2 mt-3">
+          <div class="rating-img-wrapper border evenboxinner">
+            <img [src]="tr.images[0]" alt="x" />
+          </div>
+          <div class="container-fluid text-center mt-3">
+            <i class="bi bi-star-fill" style="color: #000000" *ngFor="let m of getStarsArray(tr.mark)"></i>
+          </div>
+        </div>
+        <div class="col-12 col-md-9 mt-3">
+          {{ tr.comment }}
+        </div>
+        <div class="col-md-1 mt-3 text-end">
+          {{ tr.dateOfCommenting | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="noTourRatings" class="no-tourratings">
+      <img src="../../../assets/images/no-tourratings.png" alt="no picture">
+      <br>
+      <b><i>This tour still has no reviews. <br>In order to leave or modify your review, you first need to purchase this
+          tour and complete it by more than 35%. <br> Additionally, it is important that your last activity on this tour
+          is within the last 7 days in order to do so.</i></b>
+    </div>
+
+  </div>
+</div>

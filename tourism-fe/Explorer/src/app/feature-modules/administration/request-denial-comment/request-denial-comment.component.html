@@ -1,0 +1,11 @@
+<div class="centered-container">
+    <form class="denyRequestForm" [formGroup]="denyRequestForm">
+        <div>
+            <mat-form-field class="example-form-field">
+                <mat-label>Comment</mat-label>
+                <textarea matInput formControlName="comment" type="text" style="height: 300px;"></textarea>
+            </mat-form-field>
+            <button type="submit" (click)="denyRequest()" mat-raised-button style="float: right;">Deny</button>
+        </div>
+    </form>
+</div>

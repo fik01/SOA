@@ -1,0 +1,20 @@
+<div class="keypoints-list">
+  <h1 class="card-title">Select public key point to add to your tour <i class="bi bi-patch-question-fill custom-green" matTooltip="For a key point on your tour, you can also choose one of the following public key points." matTooltipPosition="right"></i></h1>
+  <div class="cards">
+    <mat-card class="keypoint-card" *ngFor="let kp of publicKeyPoints">
+      <mat-card-header>
+        <img mat-card-image [src]="kp.image" alt="Photo of a Shiba Inu">
+        
+      </mat-card-header>
+      <h1>{{kp.name}}</h1>
+      <mat-card-content class="keypoint-card-content">
+        <p>{{kp.description}}</p>
+      </mat-card-content>
+        <div class="button-container">
+          <button mat-button (click)="addToKeypoints(kp)">Add to tour</button>
+        </div>
+
+    </mat-card>
+    
+  </div>
+</div>

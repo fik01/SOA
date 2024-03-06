@@ -1,0 +1,77 @@
+.club {
+  padding: 100px;
+}
+
+.main-container {
+  background-image: url("../../../../assets/images/explore.jpg");
+  min-height: 100%;
+  height: auto;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+  grid-gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 85%;
+}
+
+.card {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  flex: 0 0 calc(33.33%);
+  margin-bottom: 20px;
+}
+
+.card-actions {
+  position: relative;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+  justify-content: center;
+}
+
+.card-actions button {
+  color: var(--secondary-color);
+}
+
+p {
+  font-size: 20px;
+}
+
+.owner-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+.card-img-top {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  width: 25%;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.card-title {
+  font-size: 30px;
+}
+
+.card-text {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.bottom-right-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}

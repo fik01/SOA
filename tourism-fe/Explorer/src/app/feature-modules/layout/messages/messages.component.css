@@ -1,0 +1,352 @@
+.mat-card-wrapper {
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.message-container {
+    width: 25%;
+    height: 65%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    max-height: 400px;
+    background-color: var(--white);
+  }
+
+  .message-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .message {
+    background-color: rgb(245, 247, 210);
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+body {
+  background-image: url(../../../../assets/images/resized/2K/explore.webp);
+  background-size: cover;
+  overflow-y: auto;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+}
+
+.new-message-button-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px; /* Add padding to provide some space from the top and left edges */
+}
+
+.new-message-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.chats-container{
+  position: relative;
+  background-color: var(--white);
+  color: black;
+  margin: 20px;
+  margin-top: 20px;
+  margin-left: 50px;
+  padding: 30px;
+  border-radius: 20px;
+  height: 80vh;
+  width: 90%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.just-all-chats{
+  height: 60vh;
+}
+
+.chats {
+  padding: auto;
+  height: 20vh;
+  margin-top: 20px;
+  overflow-y: auto; /* Add overflow-y: auto for scrollability */
+  overflow: auto;
+}
+
+.chats:hover{
+  cursor: pointer;
+  scale: 1.02;
+}
+
+.chats-container .chat{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 15%;
+  border-radius: 20px;
+  background-color: var(--primary-color);
+  /*height: 15vh; */
+}
+
+.chats-container .chat img {
+  height: 5vh;
+  width: 5vh;
+  background: none;
+  :hover {
+    height: 4vh;
+    width: 4vh;
+  }
+}
+
+/* .chats-container .chat :hover {
+  font-size: medium;
+} */
+
+.chats-container p{
+  font-size: 17px;
+  font-weight: bolder;
+  color: var(--third-color);
+  margin-left: 15px;
+  margin-top: 20px;
+}
+
+.opened-chat{
+  position: relative;
+  background-color: var(--white);
+  margin: 20px;
+  margin-top: 100px;
+  padding: 0.5%;
+  border-radius: 20px;
+  height: 80vh;
+  width: 95%;
+}
+
+.scroll-chat{
+  margin-top: 7vh;
+  height: 60vh;
+  overflow: hidden; /* Hide overflow for the opened chat container */
+  overflow-y: scroll;
+}
+
+.opened-chat p {
+  padding-left: 0.2%;
+  align-self: center;
+  margin-top: 0.5%;
+  font-weight: bolder;
+}
+
+.chat-content{
+  overflow-y: auto; /* Add overflow-y: auto for scrollability */
+  height: 100%; /* Set height to 100% to fill the container */
+  padding-top: 200px;
+}
+
+.sender-message {
+  height: max-content;
+  display: flexbox;
+  color: #000;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  align-self: flex-end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.receiver-message {
+  height: max-content;
+  display: flexbox;
+  color: #000;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.receiver-message .message-content{
+  background-color: rgb(186, 193, 154) ;
+}
+
+.sender-message .message-content{
+  background-color: #f1d2b6;
+}
+
+.message-content {
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.message-timestamp {
+  font-size: 12px;
+  color: #888;
+}
+
+.sender-message .message-timestamp {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.delete-icon {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.delete-icon .mat-icon {
+  font-size: 25px;
+}
+
+.chat-title {
+  display: flex;
+  top: auto;
+  position: fixed;
+  top: 100px;
+  height: max-content;
+  width: fit-content;
+  border-top-left-radius: 8%;
+  border-top-right-radius: 8%;
+  align-items: flex-start;
+  background-color: var(--white);
+  position: absolute;
+  top: 0;
+  width: 99%;
+  z-index: 1;
+}
+
+.chat-title p{
+  margin-left: 2%;
+  margin-top: 12px;
+  font-size: larger;
+}
+
+.chat-title img{
+  margin-left: 4%;
+  margin-top: auto;
+  align-items: flex-start;
+  height: 5%;
+  width: 5%;
+}
+
+.create-message {
+  background-color: var(--white);
+  width: 45%; /* Adjust the width as needed */
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a box shadow for a subtle effect */
+}
+
+/* Style the select and other elements inside create-message */
+.create-message select, .create-message textarea, .create-message button {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.create-message textarea {
+  height: 100px; /* Adjust the height as needed */
+}
+
+.create-message button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  float: right;
+  width: 14vh;
+  height: 4vh;
+  text-justify: auto;
+}
+
+.create-message button:disabled {
+  background-color: #ccc; /* Set the disabled button background color */
+  cursor: not-allowed;
+}
+
+.container-fluid {
+  align-items: center;
+}
+
+.new-message-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f0f0f0; /* Adjust the background color as needed */
+}
+
+.new-message-container textarea {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.new-message-container button {
+  background-color: var(--primary-color); /* Set the button background color */
+  color: #fff; /* Set the button text color */
+  cursor: pointer;
+}
+
+.no-messages{
+  text-align: center;
+  padding-top: 10%;
+}
+
+.no-messages img{
+  /* filter: invert(1); */
+  padding-top: 30%;
+  width: 50%;
+  height: 50%;
+}
+
+.no-messages p {
+  color: var(--third-color);
+  padding-top: 5%;
+  font-size: 30px;
+}
+
+.no-followers{
+  text-align: center;
+}
+
+.no-followers p {
+  color: var(--third-color);
+  padding-top: 5%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.no-followers img{
+  /* filter: invert(1); */
+  /* padding-top: 30%; */
+  width: 10%;
+  height: 10%;
+}
+
+.header-div{
+  font-size: 32px;
+  color: var(--white);
+  /* margin-right: 10%; */
+  margin-top: 4%;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--white);
+  max-width: 90%;
+  font-weight: bold;
+}

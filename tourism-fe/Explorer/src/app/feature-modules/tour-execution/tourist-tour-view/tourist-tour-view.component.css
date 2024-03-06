@@ -1,0 +1,348 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+.tour {
+  padding: 100px;
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+}
+
+  .tour-card {
+    width: 30%;
+    height: 18vh;
+    min-height: 300px;
+    border-radius: 15px;
+    background-color: transparent; 
+    overflow: hidden;
+    margin: 8px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .add-to-cart-btn{
+    border-radius: 15px;
+    transition: all 0.5s ease;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+    font-size: 16px;
+    width: 80%;
+    position: absolute;
+    bottom: 8px;
+  }
+  .add-to-cart-btn:hover{
+    background-color: var(--fourth-color);
+    border-color: var(--fourth-color);
+  }
+  .add-to-cart-btn:disabled{
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration:underline;
+    color: var(--primary-color);
+  }
+
+  .tour-img{
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .tour-header {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    color: var(--white);
+    width: 100%;
+  }
+  .tour-header-span{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .tour-footer{
+    font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    background-color: var(--white);
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+    width: 100%;
+    height: 0%;
+    transition: 0.5s ease;
+    cursor: pointer;
+    color: var(--third-color);
+  }
+  .tour-card:hover .tour-footer{
+    height: 60%;
+  }
+  .difficulty-badge{
+    border-radius: 15px;
+    font-size: 16px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+.bundle-card {
+  width: 100%;
+  border: 2px solid var(--white);
+  border-radius: 52px;
+  background-color: var(--white);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.bundle-tour-images{
+  display: flex;
+  flex-direction: row;
+  height: 24vh;
+}
+.bundle-name-div{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.bundle-tour-div{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  top: 0;
+  color: var(--white);
+}
+.bundle-tour-image{
+  flex: 1;
+  border: 3px solid var(--white);
+  position: relative;
+}
+
+.card-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 150px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-description {
+  font-size: 16px;
+}
+
+.bottom-right-button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.bottom-left-button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.bottom-left-button-2 {
+  position: fixed;
+  bottom: 20px;
+  left: 80px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.circles-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.filled-circle {
+  color: var(--secondary-color);
+}
+
+.empty-circle {
+  color: #ccc;
+}
+
+
+.overlay {
+  position: absolute;
+  background-color: rgba(128, 128, 128, 0.7);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  height: 0;
+  transition: 0.5s ease;
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info {
+  flex: 1;
+  padding: 20px;
+}
+
+.info>h4,
+p {
+  color: var(--white);
+  margin: 0;
+  font-size: 18px;
+}
+
+.slika {
+  padding: 20px;
+}
+
+.slika>img {
+  max-width: 100%;
+  display: block;
+}
+
+.keypoint-description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+  .nav-link{
+    color: var(--white);
+    font-weight: 400;
+    background-color: transparent;
+    margin-bottom: 30px;
+    transition: background-color 0.5s ease;
+  }
+.tour-tags {
+  color: var(--black);
+}
+
+.tour-difficulty {
+  color: var(--black);
+}
+
+.nav-link {
+  color: var(--white);
+  font-weight: 400;
+  background-color: transparent;
+  margin-bottom: 30px;
+}
+
+.nav-pills {
+  font-size: 24px;
+  border-bottom: 1px solid var(--white);
+}
+
+.nav-pills .nav-link.active {
+  background-color: var(--white);
+  border-radius: 3px 20px 0 0;
+  color: var(--primary-color);
+}
+
+.nav-link:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  opacity: 0;
+  transition: all .2s ease-in-out;
+}
+
+.show-scrollTop {
+  opacity: 1 !important;
+  transition: all .2s ease-in-out;
+}
+
+h2{
+  font-size: 30px;
+  color: var(--white);
+}
+
+
+.radio-button-color{
+  color: var(--white);
+}
+
+form {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+  color: white;
+}
+
+label {
+	display: flex;
+	cursor: pointer;
+	font-weight: 500;
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 0.375em;
+	/* Accessible outline */
+	/* Remove comment to use */ 
+	/*
+		&:focus-within {
+				outline: .125em solid $primary-color;
+		}
+	*/
+	input {
+		position: absolute;
+		left: -9999px;
+		&:checked + span {
+			background-color: mix(#fff, var(--secondary-color), 84%);
+			&:before {
+				box-shadow: inset 0 0 0 0.4375em var(--secondary-color);
+			}
+		}
+	}
+	span {
+		display: flex;
+		align-items: center;
+		padding: 0.375em 0.75em 0.375em 0.375em;
+		border-radius: 99em; 
+		transition: 0.25s ease;
+		&:hover {
+			background-color: mix(#fff, var(--secondary-color), 84%);
+		}
+		&:before {
+			display: flex;
+			flex-shrink: 0;
+			content: "";
+			background-color: #fff;
+			width: 1.5em;
+			height: 1.5em;
+			border-radius: 50%;
+			margin-right: 0.375em;
+			transition: 0.25s ease;
+			box-shadow: inset 0 0 0 0.125em var(--secondary-color);
+		}
+	}
+}
+
+.container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+}

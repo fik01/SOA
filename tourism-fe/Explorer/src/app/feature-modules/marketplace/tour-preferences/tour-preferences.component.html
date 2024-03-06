@@ -1,0 +1,43 @@
+<div class="tour-preferences-wrapper">
+    <div *ngIf="hasPreferences" class="centered">
+        <div>
+            <table>
+                <tr>
+                    <td>Difficulty level</td>
+                    <td>{{tourPreference.difficultyLevel}}</td>
+                </tr>
+                <tr>
+                    <td>Walking</td>
+                    <td>{{tourPreference.walkingRate}}</td>
+                </tr>
+                <tr>
+                    <td>Bicycle</td>
+                    <td>{{tourPreference.bicycleRate}}</td>
+                </tr>
+                <tr>
+                    <td>Car</td>
+                    <td>{{tourPreference.carRate}}</td>
+                </tr>
+                <tr>
+                    <td>Boat</td>
+                    <td>{{tourPreference.boatRate}}</td>
+                </tr>
+                <tr>
+                    <td>Tags</td>
+                    <td>{{tourPreference.tags}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="example-button-container">
+            <button mat-icon-button color="primary" (click)="deletePreferences()"
+                aria-label="Example icon button with a delete icon">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="!hasPreferences">
+        <p>You have no preferences</p>
+        <button mat-raised-button color="primary" [routerLink]="['tour-preferences-form']">Add preference</button>
+    </div>
+
+</div>

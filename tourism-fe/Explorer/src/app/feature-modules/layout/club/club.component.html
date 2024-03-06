@@ -1,0 +1,29 @@
+<div class = "main-container">
+<div class="club">
+    <p>Clubs</p>
+    <hr>
+    <div class="card-container">
+        <mat-card *ngFor="let c of club" class="card">
+            <img [src]="c.clubPicture" alt="Club Picture" class="card-img-top" />
+            <br>
+            <div class="card-body">
+                <h5 class="card-title">{{c.name}}</h5>
+                <p class="card-text">{{c.description}}</p>
+            </div>
+            <mat-card-actions *ngIf="canUserDelete(c) || canUserEdit(c) || clubExistsInAvailableClubs(c)" class="card-actions">
+                <button *ngIf="canUserDelete(c)" class="card-button" (click)="deleteClub(c)" mat-icon-button>
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button   *ngIf="canUserEdit(c)" class="card-button" (click)="onEditClicked(c)" mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button *ngIf="clubExistsInAvailableClubs(c)" class="card-button" (click)="joinClub(c)" mat-icon-button>
+                    <mat-icon>login</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <button class="bottom-right-button" (click)="onAddClicked()" [disabled]="userHasCreatedClub" mat-icon-button>
+        <mat-icon>add</mat-icon>
+    </button>
+</div>

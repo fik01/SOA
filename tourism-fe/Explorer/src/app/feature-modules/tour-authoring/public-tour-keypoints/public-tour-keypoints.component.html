@@ -1,0 +1,57 @@
+<div class="form-container">
+    <form>
+      
+    </form>
+    <div class="create-tour">
+        <button class="close-button">X</button>
+        <form class="needs-validation align-items-start" [formGroup]="publicKeyPointForm">
+        <div class="mb-2">
+            <h1 class="header">Create new public keypoint <i class="bi bi-patch-question-fill custom-green" matTooltip="Here, you can create a key point that will be added to your tour. It is necessary to mark the location of that key point on the map, as well as fill in the fields on the left side for the name, image, and description. When you fill out the information, press the Create button." matTooltipPosition="right"></i></h1>
+        </div>
+        <div class="mb-2">
+            <label for="exampleInputTourName" class="form-label text-start">Keypoint name</label>
+            <input type="text" formControlName="name" class="form-control form-input" autocomplete="off" id="exampleInputTourName" placeholder="Enter keypoint name" >
+        </div>
+        <div class="mb-2">
+          <label for="exampleInputTourName" class="form-label text-start">Keypoint image</label>
+          <input type="text" formControlName="image" type="url" class="form-control form-input" autocomplete="off" id="exampleInputTourName" placeholder="Insert keypoint image"
+        >
+        </div>
+        <div class="mb-2">
+          <label for="description" class="form-label text-start">Description</label>
+          <textarea formControlName="description" class="form-control form-input" placeholder="Type your description here..." id="description" rows="3">
+        </textarea>
+        </div>
+        <button type="submit" (click)="createPublicKeyPoint()" class="btn create-button">Create</button>
+        </form>
+    </div>
+    <div class="map-container">
+      <xp-map class="map" [mapId]="'public-tour-keypoints-map'"></xp-map>
+    </div>
+  </div>
+
+
+
+<!--<div class="centered-container">
+    <form class="publicKeyPointsForm" [formGroup]="publicKeyPointForm">
+        <div>
+            <mat-form-field class="example-form-field">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" type="text" />
+            </mat-form-field>
+            <mat-form-field class="example-form-field">
+                <mat-label>Description</mat-label>
+                <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="description"
+                    cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+            <mat-form-field class="example-form-field">
+                <mat-label>Image</mat-label>
+                <input matInput formControlName="image" type="text">
+            </mat-form-field>
+            <div class="map">
+                <xp-map [mapId]="'public-tour-keypoints-map'" class="map"></xp-map>
+            </div>
+            <button type="submit" class="mat-raised-button" (click)="createPublicKeyPoint()">Create</button>
+        </div>
+    </form>
+</div>-->

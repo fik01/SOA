@@ -1,0 +1,62 @@
+<div class="questions-overview">
+    <div>
+        <p class="text-center title-p">Frequently asked questions</p>
+        <p class="text-center subtitle-p">Solve your doubts and explore</p>
+    
+        <mat-card  class="example-card" (click)="toggleExpand(0)">
+            <mat-card-header>
+            <mat-card-title>How can I book a tour through your website?</mat-card-title>
+            <mat-card-subtitle>Click to expand or collapse</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content *ngIf="isExpanded[0]" >
+            <p>Booking a tour through our website is a straightforward process designed for your convenience. Begin by navigating to the "Tours" section, where you'll find an array of exciting destinations. Once you've selected your preferred location, proceed to choose your desired dates and follow the simple booking process. Should you encounter any difficulties, our user-friendly interface is complemented by detailed instructions at every step, ensuring a seamless booking experience.</p>
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="example-card" (click)="toggleExpand(1)">
+            <mat-card-header>
+            <mat-card-title>Can I customize my tour itinerary?</mat-card-title>
+            <mat-card-subtitle>Click to expand or collapse</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content *ngIf="isExpanded[1]">
+            <p>Absolutely! Recognizing that every traveler has unique preferences, we provide the option to customize your tour itinerary. Connect with our dedicated customer support team, and they will be more than happy to discuss your specific interests, offering tailored recommendations and crafting a personalized itinerary to ensure your journey is exactly as you envision.</p>
+            
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="example-card">
+            <mat-card-header  (click)="toggleExpand(2)">
+            <mat-card-title>What types of tours do you offer?</mat-card-title>
+            <mat-card-subtitle>Click to expand or collapse</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content *ngIf="isExpanded[2]">
+            <p> Our offerings cater to diverse interests, encompassing a wide range of tour experiences. Whether you're an adventure enthusiast, cultural explorer, or someone seeking the vibrant pulse of city life, our collection of tours has something for everyone. Explore our website's "Tours" section to discover the variety of experiences waiting for you.</p>
+            
+            </mat-card-content>
+        </mat-card>
+     
+        <mat-card class="example-card" (click)="toggleExpand(3)">
+            <mat-card-header>
+            <mat-card-title>How do I communicate with other tour participants?</mat-card-title>
+            <mat-card-subtitle>Click to expand or collapse</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content *ngIf="isExpanded[3]">
+            <p>Connecting with fellow travelers is an integral part of the experience. Through our website, you can join a dedicated blog for each tour. This interactive platform allows you to engage with other participants, share insights, and even make plans together. It's a fantastic way to build a sense of community before, during, and after your adventure.</p>
+            
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="example-card" (click)="toggleExpand(4)">
+            <mat-card-header>
+            <mat-card-title>Is it possible to get real-time updates during the tour?</mat-card-title>
+            <mat-card-subtitle>Click to expand or collapse</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content *ngIf="isExpanded[4]">
+            <p>Yes, absolutely! We understand the importance of staying informed during your travels. Our tour blogs are equipped to provide real-time updates directly from our guides. Receive notifications about the day's itinerary, important information, and any changes that may arise, ensuring you are always well-informed and able to fully enjoy your journey.</p>
+            
+            </mat-card-content>
+        </mat-card>
+    </div>   
+</div>
+
+    

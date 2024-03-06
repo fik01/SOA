@@ -1,0 +1,125 @@
+.red
+{
+    background-color: red;
+}
+#equipment {
+    margin-top: 100px;
+    margin-left: 20px;
+    color: var(--white);
+}
+
+#equipment2 {
+    margin-top: 30px;
+    margin-left: 20px;
+    color: var(--white);
+}
+
+#equipment-details {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    align-items: flex-start;
+}
+
+p {
+    font-size: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 300px;
+    background-color: white;
+    color: black;
+}
+
+thead tr {
+    background-color: #3f51b5;
+    color: #ffffff;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #3f51b5;
+}
+
+tbody tr.active-row {
+    font-weight: bold;
+    color: #3f51b5;
+}
+.deny-button {
+    padding: 10px 20px;
+    background-color: var(--fourth-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.deny-button:hover {
+    background-color: #ff3333;
+}
+
+.approve-button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.approve-button:hover {
+    background-color: #14ca23;
+}
+
+.showOnMap-button {
+    padding: 10px 20px;
+    background-color: var(--fifth-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.showOnMap-button:hover {
+    background-color: var(--secondary-color);
+}
+
+img { width: 200px; height: 120px; }
+
+.mapdiv {
+    height: 800px;
+    margin-top: 100px;
+    margin-right: 20px;
+}
+
+.row {
+    display: flex;
+    background-image: url("../../../../assets/images/resized/2K/background.webp");
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.column {
+    flex: 1;
+}

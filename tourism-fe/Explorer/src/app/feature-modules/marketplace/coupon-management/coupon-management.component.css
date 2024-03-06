@@ -1,0 +1,85 @@
+.mat-card-wrapper {
+    background-image: url("../../../../assets/images/resized/2K/explore.webp");
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    padding-top: 100px;
+    overflow-y: auto;
+}
+
+.example-card {
+    width: 65vw;
+    height: 210px;
+    margin: 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+    border: 1px solid grey;
+    border-radius: 30px;
+    transition: transform 0.3s ease;
+}
+
+.action-buttons:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.action-buttons {
+    margin-top: 30px;
+    background-color: var(--primary-color);
+    border-radius: 50px;
+}
+
+.content {
+    margin-top: 40px;
+    font-size: 40px;
+}
+
+.edit-button {
+    font-size: 30px;
+}
+
+.coupon-code {
+    margin-top: 30px;
+    font-size: 40px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    color: red;
+}
+
+.delete-button mat-icon {
+    font-size: 30px;
+}
+
+.coupon-title {
+    font-size: 20px;
+}
+
+.bottom-right-button {
+    position: absolute;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    bottom: 20px;
+    right: 20px;
+}
+
+.is-used {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    border: 3px solid var(--secondary-color);
+    border-radius: 30px;
+    background-color: var(--secondary-color);
+    color: white;
+}

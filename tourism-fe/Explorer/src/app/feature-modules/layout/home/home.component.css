@@ -1,0 +1,244 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+#home-page {
+  overflow-y: hidden;
+}
+
+.background-wrapper {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Poppins";
+}
+.background-wrapper-2 {
+  margin: 0;
+  padding: 0;
+  height: 170vh;
+  overflow: hidden;
+  font-family: "Poppins";
+  position: relative;
+}
+.vh110{
+  height: 110vh;
+}
+.user-select{
+  user-select: none;
+}
+
+.goals-img{
+  object-fit:contain;
+  background-position: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.goals-img-div{
+  overflow: hidden;
+  box-shadow: rgba(255, 255, 255, 0.25) 0px 5px 15px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#full-page-bg {
+  background-image: url("../../../../assets/images/resized/2K/background.webp");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  padding-top: 14%;
+  box-shadow: inset 0 -16em 60em var(--third-color);
+}
+#explore-page-bg {
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  box-shadow: inset 0 10em 6em rgb(0.1377, 0.458, 0.4565, 0.65);
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.divider
+{
+	position: relative;
+	height: 2px;
+}
+
+.div-transparent:before
+{
+	content: "";
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 2px;
+	background-image: linear-gradient(to right, var(--third-color), var(--white), var(--third-color));
+}
+
+.footer-div {
+  position: absolute;
+  width: 100vw;
+  bottom: 0;
+  left: 0;
+}
+
+.card {
+  overflow: hidden;
+  height: 500px;
+  box-shadow: 17px 12px 12px -5px rgb(0.1377, 0.458, 0.4565, 0.65);
+  border: 6px solid  var(--third-color);
+  border-bottom: 12px solid var(--third-color);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  background-color: transparent;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  width: 100%;
+  height: 0;
+  transition: 0.5s ease;
+  cursor: pointer;
+  color: var(--white);
+}
+
+.card-desc{
+  overflow: scroll;
+  scroll-behavior: smooth;
+}
+
+.card-btn{
+  border: 1px solid var(--primary-color);
+  background-color: var(--primary-color);
+  color: var(--white);
+  transition: all 0.5s ease;
+}
+.card-btn:hover{
+  border-radius: 15px;
+  transform: scale(1.1);
+  background-color: var(--third-color);
+  border-color: var(--third-color);
+}
+
+.card:hover .overlay {
+  height: 100%;
+  width: 100%;
+}
+
+.card > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: transparent;
+  padding: 20px;
+  text-align: left;
+  font-size: 26px;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.align-middle {
+  text-align: center;
+}
+
+.content h1 {
+  font-size: 48px;
+  font-weight: 700;
+}
+.content p {
+  font-weight: lighter;
+}
+.feat-tours-header{
+  color: var(--white);
+}
+
+.btn-container {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  display: inline-block;
+}
+
+.center {
+  width: 250px;
+  height: 60px;
+  position: relative;
+}
+
+.cta-btn {
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--white);
+  outline: none;
+  position: relative;
+  transition: 1s ease-in-out;
+}
+
+svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 1;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 200;
+  transition: 1s ease-in-out;
+}
+
+.cta-btn:hover {
+  transition: 1s ease-in-out;
+  background: var(--white);
+}
+
+.cta-btn:hover svg {
+  stroke-dashoffset: -50;
+}
+
+.cta-btn span {
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 100;
+}
+.cta-btn:hover span {
+  color: var(--third-color) !important;
+  transition: 1s ease-in-out;
+}
+
+.hidden {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateX(-50%);
+  transition: all 1s;
+}
+.show-main {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateX(0);
+  transition: all 1s;
+}
+
+.trees{
+  background-image: url(../../../../assets/images/footer1.png);
+  object-fit: cover;
+  font-size: 14px;
+  font-family: "Poppins";
+  color: var(--white);
+  position: relative;
+  width: 100vw;
+  height: 450px;
+}

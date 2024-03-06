@@ -1,0 +1,152 @@
+  .tour {
+    padding: 100px;
+    background-image: url("../../../../assets/images/resized/2K/explore.webp");
+    height: auto;
+    min-height: 100%;
+  }
+
+  .card-container {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-direction: column;
+  }
+  .tour-card:hover{
+    transform: scale(1.01);
+    cursor: pointer;
+  }
+
+  .tour-card {
+    position: relative;
+    width: 85%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+  }
+
+  .card-image{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color:white;
+    padding:20px;
+  }
+
+  .card-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 150px;
+    display:flex;
+    justify-content: space-between;
+
+  }
+
+  .card-description {
+    font-size: 16px;
+
+  }
+
+  .bottom-right-button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+  }
+  .bottom-left-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+  }
+  .bottom-left-button-2 {
+    position: fixed;
+    bottom: 20px;
+    left: 80px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+  }
+
+  .bottom-right-button-container {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    gap: 20px
+  }
+
+  .circles-container {
+    display:flex;
+    flex-direction: row;
+    gap:10px;
+  }
+
+  .filled-circle {
+    color: var(--secondary-color);
+  }
+
+  .empty-circle {
+    color: #ccc;
+  }
+
+  .error-message{
+    color: red;
+  }
+
+  .price-wrapper{
+    display: block;
+  }
+
+  .price-wrapper .discount-btn{
+    margin-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: red;
+    color: white;
+    border: 0;
+    font-size: 14px;
+    border-radius: 5px;
+  }
+
+  .discounted-price {
+    text-decoration: line-through red;
+  }
+
+  .no-tours{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center; 
+  }
+  
+  .no-tours img{
+    width: 300px;
+    height: 300px;
+  }
+
+  .to-top {
+    position: fixed;
+    bottom: 20px;
+    right : 100px;
+    background-color: var(--primary-color); 
+    color: white; 
+    border: none;
+    border-radius: 50%; 
+    padding: 10px;
+    opacity: 0;
+    transition: all .2s ease-in-out;
+   }
+   .show-scrollTop {
+    opacity: 1 !important;
+    transition: all .2s ease-in-out;
+   }

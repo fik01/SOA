@@ -1,0 +1,22 @@
+<div>
+    <div class="create-tour">
+        <button class="close-button" (click)="onCancelClick()">X</button>
+        <form [formGroup]="campaignForm" class="needs-validation align-items-start">
+        <div class="mb-3">
+            <h1 class="header">Create new tour</h1>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputTourName" class="form-label text-start">Tour name</label>
+            <input type="text" formControlName="name" class="form-control form-input" autocomplete="off" id="exampleInputTourName" placeholder="Enter tour name"
+            [ngClass]="{'red-border':  campaignForm.get('name')?.hasError('required') && (campaignForm.get('name')?.touched || submitted)}">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputTourName" class="form-label text-start">Description</label>
+            <textarea formControlName="description" class="form-control form-input" placeholder="Type your description here..." id="description" rows="3"
+            [ngClass]="{'red-border':  campaignForm.get('description')?.hasError('required') && (campaignForm.get('description')?.touched || submitted)}"></textarea>
+        </div>
+        <button type="submit" class="btn create-button" (click)="createCampaign()">Create</button>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,35 @@
+<div  class="createFacility">
+    <div>
+        <form [formGroup]="facilityCreation" autocomplete="off">
+            <div class="createForm">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name">
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label>Description</mat-label>
+                    <textarea class="styleTextarea" matInput formControlName="description" cdkTextareaAutosize></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>ImageUrl</mat-label>
+                    <input matInput type="text" formControlName="image">
+                </mat-form-field>
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="category">
+                        <mat-option value="wc">WC</mat-option>
+                        <mat-option value="restaurant">Restaurant</mat-option>
+                        <mat-option value="parking">Parking lot</mat-option>
+                        <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                <button mat-raised-button type="submit" (click)="createFacility()" color="primary">Save</button>
+            </div>
+        </form>
+        
+    </div>
+    <div class="mapdiv">
+        <xp-map [mapId]="'facility-create-map'"></xp-map>
+        
+    </div>
+    
+</div>
+

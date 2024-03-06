@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~font-awesome/css/font-awesome.css';
+* {
+  scroll-behavior: smooth !important;
+  font-family: "Poppins";
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Poppins";
+}
+
+:root {
+  --primary-color: #6d7c4b;
+  --secondary-color: #a67041;
+  --third-color: #2b271a;
+  --fourth-color: #592d1d;
+  --fifth-color: #a65b4b;
+  --white: #ffff;
+
+  --primary-color-rgb: 109, 124, 75;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}

@@ -1,0 +1,165 @@
+<div class="my-profile-wrapper">
+    <div class="row m-0">
+        <div class="col-sm-6 d-flex justify-content-end">
+            <div class="profile-info position-relative">
+                <form [formGroup]="profileDetailsForm">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="d-flex justify-content-start pt-3 pb-3 ps-5">
+                                <div class="box box2 d-flex">
+                                    <div class="evenboxinner">
+                                        <img mat-card-image [src]="profileDetailsForm.get('profilePic')!.value"
+                                            alt="avatar" class="avatar" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7 follow-info">
+                            <div class="d-flex justify-content-around">
+                                <div class="d-flex flex-column mx-3">
+                                    <p class="mb-0">{{balance}} AC</p>
+                                    <p class="follower-link">wallet</p>
+                                </div>
+                                <div class="d-flex flex-column mx-3">
+                                    <p class="mb-0">{{ purchased_tours }}</p>
+                                    <p class="follower-link">tours</p>
+                                </div>
+                                <div class="d-flex flex-column mx-3">
+                                    <p class="mb-0">{{ myFollowers.length }}</p>
+                                    <p class="follower-link" (click)="showFollowers()">
+                                        followers
+                                    </p>
+                                </div>
+                                <div class="d-flex flex-column mx-3">
+                                    <p class="mb-0">{{ myFollowings.length }}</p>
+                                    <p class="follower-link" (click)="showFollowings()">
+                                        following
+                                    </p>
+                                </div>
+                            </div>
+                            <div *ngIf="userXP" class="d-flex justify-content-around">
+                                <div class="d-flex flex-column mx-3">
+                                    <p class="mb-0">{{ userXP.level }}</p>
+                                    <p class="follower-link">Level</p>
+                                </div>
+                                <div class="d-flex flex-column mx-3">
+                                    <p class="mb-0">{{ userXP.xp }}</p>
+                                    <p class="follower-link">Total XP</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex justify-content-center flex-column ps-2 pe-2 w-100">
+                            <div class="profile-form mx-auto">
+                                <div class="row mb-3 fs-6">
+                                    <div class="col-lg-6">
+                                        <label for="name" class="form-label text-start">Name</label>
+                                        <input formControlName="name" [ngClass]="{'disable-input': isDisabled}"
+                                            [readonly]="isDisabled" [attr.aria-readonly]="isDisabled.toString()"
+                                            type="text" class="form-control form-input" id="name" />
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="surname" class="form-label text-start">Surname</label>
+                                        <input formControlName="surname" [ngClass]="{'disable-input': isDisabled}"
+                                            [readonly]="isDisabled" [attr.aria-readonly]="isDisabled.toString()"
+                                            type="text" class="form-control form-input" id="surname" />
+                                    </div>
+                                </div>
+                                <div class="mb-3 fs-6">
+                                    <label for="biography" class="form-label text-start">Biography</label>
+                                    <textarea formControlName="biography" [ngClass]="{'disable-input': isDisabled}"
+                                        [readonly]="isDisabled" [attr.aria-readonly]="isDisabled.toString()"
+                                        class="form-control" id="biography" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3 fs-6">
+                                    <label for="motto" class="form-label text-start">Motto</label>
+                                    <input formControlName="motto" [ngClass]="{'disable-input': isDisabled}"
+                                        [readonly]="isDisabled" [attr.aria-readonly]="isDisabled.toString()" type="text"
+                                        class="form-control form-input" id="motto" />
+                                </div>
+                                <div class="mb-3 fs-6">
+                                    <label for="profilePic" class="form-label text-start">Profile picture URL</label>
+                                    <input formControlName="profilePic" [ngClass]="{'disable-input': isDisabled}"
+                                        [readonly]="isDisabled" [attr.aria-readonly]="isDisabled.toString()" type="text"
+                                        class="form-control form-input" id="profilePic" />
+                                </div>
+
+                                <label *ngIf="isDisabled === false && user.role === 'tourist'">How often do you want news?</label>
+                                <label *ngIf="isDisabled === true && user.role === 'tourist'">You will receive news:</label>
+                                <mat-radio-group [disabled]="isDisabled" *ngIf="user.role === 'tourist'" aria-label="How often do you want news?">
+                                    <mat-radio-button value="1" [checked]="userNews.sendingPeriod === 1" (click)="setNewsUpdate(1)">Daily</mat-radio-button>
+                                    <mat-radio-button value="3" [checked]="userNews.sendingPeriod === 3" (click)="setNewsUpdate(3)">Every 3 days</mat-radio-button>
+                                    <mat-radio-button value="7" [checked]="userNews.sendingPeriod === 7" (click)="setNewsUpdate(7)">Weekly</mat-radio-button>
+                                    <mat-radio-button value="0" [checked]="userNews.sendingPeriod === 0" (click)="setNewsUpdate(0)">Never</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="d-flex justify-content-end pe-2 pb-2 position-absolute bottom-0 end-0">
+                                <button class="btn update-button" (click)="enableUpdate()"
+                                    *ngIf="isDisabled">Edit</button>
+                                <button (click)="update()" class="btn update-button" *ngIf="!isDisabled">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-6 flex-column">
+            
+            <div class="bubbles">
+
+            </div>
+            <div class="bubbles-bottom">
+                <div *ngIf="user && user.role === 'author'" class="container px-4">
+                    <div class="row pt-3 mb-5">
+                        <div class="col-lg-7 profit-header d-flex flex-column justify-content-center align-items-start">
+                            My Profit
+                            <div class="mt-2 profit-description">
+                                This profit was calculated based on <span style="color: var(--secondary-color);">{{this.earnings?.length}} tours</span>.
+                            </div>
+                        </div>
+                        <div class="py-0 col-lg-5 d-flex align-items-center flex-row-reverse">
+                            <div class="profit-value p-3">
+                                <i class="bi bi-currency-dollar"></i>{{this.totalProfit}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-3 ps-2">
+                        <div class="col-12 p-3 profit-graph mt-4">
+                            <div *ngFor="let i of calculateRows()" class="pt-4 pb-1 d-flex flex-row justify-content-around align-items-center">
+                                <div *ngFor="let e of displayBars(i)" class="d-flex flex-column justify-content-center">
+                                    <div class="position-relative bar-boundary py-5 px-1">
+                                        <div [ngStyle]="calculateBarFill(e)" class="p-1 bar-fill d-flex flex-column-reverse">
+                                            {{e?.earning?.toFixed(1)}}
+                                        </div>
+                                    </div>
+                                    <div class="bar-tour-name">
+                                        {{e?.tourName}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center m-0" >
+        <div class="tour-info">
+            <p class="paragrpah-tour">Used tours</p>
+            <div *ngFor="let tour of tours" class="tour-card" (click)="showTourAllDetails(tour.id)" matTooltip="Show more details" matTooltipPosition="above"
+                    style="background-image: url('https://www.flimslaax.com/fileadmin/Daten/0Flims_Laax_Bilder/3-Outdoor/3-2-Wandern/3-2-1-Wanderwege/flims_laax_falera_wanderwege2.jpg');">
+                        <h3> <b>{{ tour.name }} </b></h3>
+                        <p>{{ tour.description }}</p>
+                        <p class="price">Price: {{ tour.price }}</p>
+                    </div>
+
+            <div *ngIf="notUsedTours" class="no-tours">
+                <img src="../../../assets/images/no-tours-darkmode.png" alt="no picture">
+                <b>There are currently no tours that you have used yet.To have a used tour, you need to buy it first, start it, and finish it. For an overview of all tours, go to the <a href="http://localhost:4200/tours" matTooltip="Show all tours">all tours.</a>.</b>
+            </div>
+
+
+        </div>  
+    </div>
+</div>

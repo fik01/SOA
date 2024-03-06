@@ -1,0 +1,27 @@
+.mapdiv{
+    width: 600px;
+    height: 600px;
+}
+
+.updateFacility{
+    display: flex;
+    gap: 50px;
+    flex-direction: row;
+    height: 800px;
+    justify-content: space-evenly;
+    margin-top: 100px;
+    
+    
+}
+.updateForm{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    
+}
+
+.styleTextarea{
+    min-height: 500px;
+    height: 100%;
+    resize: none;
+}

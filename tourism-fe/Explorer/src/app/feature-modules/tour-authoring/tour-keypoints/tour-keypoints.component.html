@@ -1,0 +1,72 @@
+<div class="form-container">
+  <form>
+    
+  </form>
+  <div class="create-tour">
+      <button class="close-button" (click)="closeForm()">X</button>
+      <form [formGroup]="tourKeyPointForm" class="needs-validation align-items-start">
+      <div class="mb-2">
+          <h1 class="header">Create new keypoint <i class="bi bi-patch-question-fill custom-green" matTooltip="Here, you can create a key point that will be added to your tour. It is necessary to mark the location of that key point on the map, as well as fill in the fields on the left side for the name, image, and description. When you fill out the information, press the Create button." matTooltipPosition="right"></i></h1>
+      </div>
+      <div class="mb-2">
+          <label for="exampleInputTourName" class="form-label text-start">Keypoint name</label>
+          <input type="text" formControlName="name" class="form-control form-input" autocomplete="off" id="exampleInputTourName" placeholder="Enter keypoint name" 
+          [ngClass]="{'red-border':  tourKeyPointForm.get('name')?.hasError('required') && (tourKeyPointForm.get('name')?.touched || submitted)}">
+      </div>
+      <div class="mb-2">
+        <label for="exampleInputTourName" class="form-label text-start">Keypoint image</label>
+        <input type="text" formControlName="image" pl type="url" class="form-control form-input" autocomplete="off" id="exampleInputTourName" placeholder="Insert keypoint image"
+        [ngClass]="{'red-border':  tourKeyPointForm.get('image')?.hasError('required') && (tourKeyPointForm.get('image')?.touched || submitted)}">
+      </div>
+      <div class="mb-2">
+        <label for="description" class="form-label text-start">Description</label>
+        <textarea formControlName="description" class="form-control form-input" placeholder="Type your description here..." id="description" rows="3"
+        [ngClass]="{'red-border':  tourKeyPointForm.get('description')?.hasError('required') && (tourKeyPointForm.get('description')?.touched || submitted)}">
+      </textarea>
+      </div>
+      <div class="mb-2">
+        <label for="exampleInputTourName" class="form-label text-start">Keypoint secret</label>
+        <textarea formControlName="secret" class="form-control form-input" id="exampleInputTourName" placeholder="Enter keypoint secret" rows="2"
+        [ngClass]="{'red-border':  tourKeyPointForm.get('secret')?.hasError('required') && (tourKeyPointForm.get('secret')?.touched || submitted)}"></textarea>
+      </div>
+      <button type="submit" (click)="addTourKeyPoint()" class="btn create-button">Create</button>
+      </form>
+  </div>
+  <div class="map-container" [ngClass]="{'red-border': !coordinates && submitted}">
+    <xp-map class="map" [mapId]="'tour-keycasdpoints-map'"></xp-map>
+  </div>
+</div>
+
+
+
+
+
+
+<!--<div id="tourKeyPoints">
+    <div>
+      <form [formGroup]="tourKeyPointForm">
+        <div class="form">
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" type="text"/>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <textarea matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              formControlName="description"
+              cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Image</mat-label>
+                <input matInput formControlName="image" type="url"/>
+            </mat-form-field>
+            <button color="primary" type="submit" (click)="addTourKeyPoint()" mat-raised-button>Done</button>
+        </div>
+    </form>
+    </div>
+    <div>
+      <xp-map [mapId]="'tour-keypoints-map'" class="map"></xp-map>
+    </div>
+  </div>-->

@@ -1,0 +1,39 @@
+<div id="tourrating">
+    <p>TourRating</p>
+    <hr>
+    <div id="tourrating-details">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>Comment</th>
+                    <th>Date of visit</th>
+                    <th>Date of commenting</th>
+                    <th>Images</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tr of tourrating">
+                    <td class="mark">{{tr.mark}}</td>
+                    <td class="comment">{{tr.comment}}</td>
+                    <td>{{tr.dateOfVisit | date: 'dd.MM.yyyy'}}</td>
+                    <td>{{tr.dateOfCommenting | date: 'dd.MM.yyyy'}}</td>
+                    <td>
+                        <ng-container *ngFor="let image of tr.images">
+                            <img [src]="image" alt="Slika" class="small-image">
+                        </ng-container>
+                    </td>
+                </tr>
+                <tr><button color="primary" (click)="onAddClicked()"  mat-icon-button>
+                    <mat-icon>add</mat-icon>
+                </button></tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <div>
+        <xp-tourrating-form *ngIf="shouldRenderTourRatingForm" (tourratingUpdated)="getTourRating()"></xp-tourrating-form>
+    </div>
+</div>
+

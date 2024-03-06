@@ -1,0 +1,42 @@
+<div class="full-page-bg"></div>
+<div class="login">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="needs-validation align-items-start">
+    <div class="mb-3">
+        <h1 class="header">Log in</h1>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputUsername1" class="form-label text-start">Username</label>
+        <input type="text" required="true" formControlName="username" class="form-control form-input" [ngClass]="{'red-border': loginForm.get('username')?.hasError('required') && (loginForm.get('username')?.touched || this.submitted)}"  autocomplete="off" id="exampleInputUsername1">
+        <!-- <span *ngIf="!usernameFilled" class="red">Username must be filled</span> -->
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label text-start">Password</label>
+        <div class="input-group">
+            <input  [type]="fieldTextType ? 'text' : 'password'" 
+                    formControlName="password" 
+                    class="form-control form-input" 
+                    id="exampleInputPassword1"
+                    autocomplete="off"
+                    [ngClass]="{'red-border':loginForm.get('password')?.hasError('required') && (loginForm.get('password')?.touched || this.    submitted)}" 
+            />
+            
+            <div class="input-group-append">
+                <span class="input-group-text eye-icon"  [ngClass]="{'red-border': loginForm.get('password')?.hasError('required') && (loginForm.get('password')?.touched || this.submitted )}"  (click)="toggleFieldTextType()">
+                    <i
+                    class="bi"
+                    [ngClass]="{
+                        'bi-eye-slash': fieldTextType,
+                        'bi-eye': !fieldTextType
+                    }"
+                    ></i>
+                </span>
+            </div>
+            
+        </div>
+        <!-- <span *ngIf="!passFilled"  class="red">Password must be filled</span> -->
+    </div>
+    <button type="submit" class="btn sign-in-button">Log in</button>
+    <p class="sign-up">Don't have an account yet? <a href="/register" class="link">Register</a></p>
+    <p class="sign-up">Forgot your password? <a href="/change-password-request" class="link">Change password</a></p>
+    </form>
+</div>

@@ -1,0 +1,53 @@
+<div class="main-container">
+    <div class="centered-container">
+      <h1 style="font-size: 46px; font-weight: bold;">Make campaign <i class="bi bi-patch-question-fill custom-green" matTooltip="In order to create a campaign, choose atleast 2 tours that you want to combine(in right order). Press 'Create' button, fill input fields with valid data and press 'Create'. " matTooltipPosition="right"></i></h1>
+        <div class="no-bought-tours" *ngIf="tours.length == 0 && this.selectedTours.length == 0">
+          <img src="../../../../assets/images/noboughttours.png">
+          <p>You didn't buy any tours yet. Continue shopping to explore more!</p>
+          <button class="explore-items-button" mat-raised-button color="primary" (click)="goToTours()">Explore items</button>
+        </div>
+
+        <div class="panel">
+          <div *ngIf="tours.length > 0" style="position: relative; border: 5px solid rgb(0, 0, 0); border-radius: 25px;">
+            <div matTooltip="Select this tour" matTooltipPosition="above" *ngFor="let tour of [tours[currentTourIndex]];" (click)="selectTour(tour)" style="position: relative;">
+              <img src="../../../../assets/images/card4.jpg" class="d-block w-100 card" style="border-radius: 20px;">
+              <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 1;">
+                <h1 style=" cursor: pointer; color: white; font-size: 30px; font-weight: bold; text-align: center;">{{tour.name}}</h1>
+              </div>
+            </div>
+            <button matTooltip="Next tour" matTooltipPosition="right" class="carousel-control-next" type="button" (click)="showNextTour()" style="position: absolute; top: 50%; transform: translateY(-50%); right: 0; z-index: 2;">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+            <button matTooltip="Previous tour" matTooltipPosition="left" class="carousel-control-prev" type="button" (click)="showPreviousTour()" style="position: absolute; top: 50%; transform: translateY(-50%); left: 0; z-index: 2;">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+          </div>
+
+        <p *ngIf="tours.length > 0" style="font-weight: bold; margin-top: 2%;">Select tours and make your own composite tour</p>
+        
+
+        <div style="justify-content: left !important; margin-left: 0px;">
+            <h2 *ngIf="this.selectedTours.length !== 0">Selected tours:</h2>
+            <mat-list *ngFor="let t of selectedTours">
+                <div class="list">
+                <mat-list-item>
+                    <button mat-button matTooltip="Remove from selected tours" (click)="removeSelectedTourFromList(t)">
+                        <mat-icon>highlight_off</mat-icon>
+                    </button>
+                    <div class="list-item-string">{{t.name}}</div>
+                </mat-list-item>
+                </div>
+            </mat-list>
+        </div>
+  
+        <div class="buttons-container">
+          <button class="create-button" mat-raised-button (click)="onCancel()" style="background-color: #7C8C5A; color: white; width: 300px;">Cancel</button>
+          <button class="create-button" type="submit" mat-raised-button (click)="onCreate()" style="background-color: #7C8C5A; color: white; width: 300px;">
+            Create
+          </button>
+        </div>
+    </div>
+  </div>
+  

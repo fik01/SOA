@@ -1,0 +1,125 @@
+.navbar-wrapper {
+  position: fixed;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  z-index: 1001;
+  background-color: transparent;
+  width: 100%;
+}
+
+.navbar-brand img.logo {
+  max-height: 40px;
+  margin-left: 10px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: white !important;
+}
+
+
+.navbar-light .navbar-toggler-icon {
+  background-color: white;
+}
+.shopping-cart label{
+  font-size: small;
+}
+
+.navbar-light .navbar-nav .nav-link svg,
+.navbar-light .navbar-toggler-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  margin: 0 10px;
+  margin-right: 6px;
+}
+
+.navbar-light .navbar-nav .dropdown-menu .dropdown-item {
+  color: black;
+}
+
+.navbar-light .navbar-nav .dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-light .navbar-nav .nav-item.active .nav-link {
+  color: #17a2b8 !important;
+}
+
+
+.navbar-light .navbar-nav .nav-item:hover .nav-link {
+  color: var(--primary-color) !important;
+}
+
+.navbar-light.navbar-wrapper {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.notifications{
+  margin: 0 10px;
+  margin-left: 14px;
+}
+
+.notifications ul {
+  z-index: 1000;
+  border-radius: 10px 0px 10px 10px;
+}
+
+.notifiction-bell{
+  color: var(--white) !important;
+  fill: currentColor;
+}
+
+.dropdown > a {
+  text-decoration: none;
+  font-family: "Poppins";
+  font-size: 16px;
+  margin: 10px;
+  position: relative;
+  border: 0;
+}
+
+.dropdown-menu{
+  background-color: rgba(25,19,7, 1.0) !important; 
+  border-top: 0px;
+  border-color: rgba(90,90,90,0.6);
+  border-radius: 0px 10px 10px 10px;
+  color: white;
+} 
+
+
+.dropdown-item{
+  color: white !important;
+  font-family: "Poppins";
+  font-size: 15px;
+  min-height: 5vh;
+  margin:auto;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown-item:hover{
+  background-color: var(--primary-color);
+}
+
+.dropdown-toggle{
+  color:white;
+}
+
+.profile-dropdown{
+  border-radius: 10px 0px 10px 10px;
+}
+
+.wallet{
+  font-size: small;
+  color: var(--white);
+  margin-top: 5px;
+}
+
+.sign-button{
+  font-weight: bold;
+}
+
+.notif-badge {
+  transform: scale(0.5);
+}

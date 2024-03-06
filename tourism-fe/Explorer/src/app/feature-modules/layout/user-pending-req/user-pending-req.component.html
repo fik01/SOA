@@ -1,0 +1,19 @@
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let request of requests">
+                <td>{{request.username}}</td>
+                <td>
+                    <button mat-button color="green" (click)="acceptRequest(request)">Accept</button>
+                    <button mat-button color="warn" (click)="declineRequest(request)">Decline</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

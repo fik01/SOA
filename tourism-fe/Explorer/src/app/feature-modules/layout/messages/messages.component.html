@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <symbol id="message" viewBox="0 0 16 16"> 
+      <path d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z"/>
+      <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"/>
+    </symbol>
+  </svg>
+  <div class="hidden ps-0 header-div container-fluid fs-1 bold text-start">Messages</div>
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-3">
+        <div class="chats-container">
+
+          <div class="new-message-button-container">
+            <button matTooltip="Send message" matTooltipPosition="right" mat-button (click)="toggleCreateMessage()" class="new-message-button">
+              <svg width="20" height="20">
+                <use xlink:href="#message" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="just-all-chats"> 
+            <div class="no-messages" *ngIf="this.messagesAreEmpty">
+              <img src="../../../../assets/images/nomessages.png">
+              <p>No messages yet? Send one!</p>
+            </div>
+            <div class="chats" matTooltip="Open this chat" matTooltipPosition="right" *ngFor="let person of messagedPeople">
+              <div class="chat" (click)="openChat(person)">
+                <img class="img-fluid" src="{{ person.profilePic }}" alt="avatar"/>
+                <p>{{ person.name }} {{ person.surname }}</p>
+              </div>
+            </div>
+          </div>
+
+        </div> 
+      </div>
+
+      <div class="col-md-9">
+        <div *ngIf="selectedFollowerChat" class="opened-chat">
+          <div class="chat-title">
+            <img [src]="selectedFollowerChat.profilePic" alt="">
+            <p>{{ selectedFollowerChat.name }} {{ selectedFollowerChat.surname }}</p>
+          </div>
+          <div class="scroll-chat">
+            <div class="chat-content" *ngFor="let message of chatMessages" [ngClass]="{'sender-message': message.senderId === user.id, 'receiver-message': message.recipientId === user.id}">
+            <div class="message-content">
+              <p>{{ message.content }}</p>
+            </div>
+            <div class="message-timestamp">
+              <div class="delete-icon" *ngIf="message.senderId === user.id" matTooltip="Delete this message" (click)="deleteMessage(message)">
+                <mat-icon>delete-button</mat-icon>
+              </div>
+              <p>
+                {{ message.creationTime | date:'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="new-message-container">
+          <textarea [(ngModel)]="messageContent" placeholder="Type your message..."></textarea>
+          <button [disabled]="messageContent === ''" (click)="sendMessageFromChat()">
+            <mat-icon>send-button</mat-icon>
+          </button>
+        </div>          
+      </div>
+    </div>
+    <div *ngIf="isCreateMessageVisible" class="create-message">
+        <div class="no-followers" *ngIf="this.followersAreEmpty">
+          <img src="../../../../assets/images/nofollowers.png">
+          <p>You have no followers. In order to start conversation, somebody has to follow you.</p>
+        </div>
+        <div *ngIf="!this.followersAreEmpty">
+            <select [(ngModel)]="selectedRecipientId"  (change)="selectReceiver(selectedRecipientId)">
+                <option *ngFor="let follower of myFollowers" [ngValue]="follower.id">
+                    {{ follower.name }} {{ follower.surname }}
+                </option>
+            </select>
+        </div>
+        <div *ngIf="!this.followersAreEmpty">
+            <textarea [(ngModel)]="newMessageContent" placeholder="Type your message..."></textarea>
+            <button class="send-button" [disabled]="newMessageContent === '' || !selectedRecipientId" (click)="sendMessage()">Send</button>
+        </div>
+    </div>
+    
+    </div>
+  </div>
+
+<!-- Bootstrap JS and Popper.js (Optional) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

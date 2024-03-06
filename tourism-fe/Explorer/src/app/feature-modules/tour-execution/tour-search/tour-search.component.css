@@ -1,0 +1,59 @@
+mat-slider {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+}
+
+.search-container {
+  color: var(--white);
+}
+
+.search-properties-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-button-container button {
+  background-color: var(--primary-color);
+  color: white;
+  width: 100%;
+  height: 45px;
+}
+
+.search-properties-container button {
+  margin-top: 10px;
+}
+
+.tags-for-search {
+  align-self: flex-start;
+}
+
+.form-fields-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search-form {
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  height: 70px;
+}
+
+.add-button {
+  background-color: var(--secondary-color) !important;
+  color: white !important;
+  width: 100%;
+  height: 48px;
+}
+
+.chips-wrapper{
+  background-color: var(--secondary-color) !important;
+  margin: 0 0px 20px 10px;
+}
+
+.mat-mdc-standard-chip {
+  --mdc-chip-label-text-color: #fff;
+}

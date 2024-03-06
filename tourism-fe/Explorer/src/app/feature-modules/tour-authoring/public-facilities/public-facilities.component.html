@@ -1,0 +1,30 @@
+<div class="centered-container">
+    <form class="publicFacilitiesForm" [formGroup]="publicFacilitiesForm">
+        <div>
+            <mat-form-field class="example-form-field">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" type="text" />
+            </mat-form-field>
+            <mat-form-field class="example-form-field">
+                <mat-label>Description</mat-label>
+                <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="description"
+                    cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+            <mat-form-field class="example-form-field">
+                <mat-label>Image</mat-label>
+                <input matInput formControlName="image" type="text">
+            </mat-form-field>
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category" class="example-form-field">
+                <mat-option value="wc">WC</mat-option>
+                <mat-option value="restaurant">Restaurant</mat-option>
+                <mat-option value="parking">Parking lot</mat-option>
+                <mat-option value="other">Other</mat-option>
+            </mat-select>
+            <div class="map">
+                <xp-map [mapId]="'public-facilities-map'" class="map"></xp-map>
+            </div>
+            <button type="submit" class="mat-raised-button" (click)="createFacility()">Create</button>
+        </div>
+    </form>
+</div>

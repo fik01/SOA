@@ -1,0 +1,30 @@
+.main-container {
+    min-height: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+div {
+    display:flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.add-club-button {
+    margin-left: 60px;
+    margin-right: 60px;
+    height: 50px;
+    text-decoration-color: white;
+    background-color: green;
+}
+
+.paragraph {
+    margin-left: 210px;
+    font-style: oblique;
+    font-weight: bold;
+    font-size: 25px;
+   }
+
+.mat-icon {
+    vertical-align: middle;
+}

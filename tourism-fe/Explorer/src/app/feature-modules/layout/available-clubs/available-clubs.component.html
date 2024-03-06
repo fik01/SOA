@@ -1,0 +1,20 @@
+<p>Klubovi U kojima niste član i niste poslali zahtjev</p>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Naziv</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let club of clubs">
+                <td>{{club.name}}</td>
+                <td>{{club.description}}</td>
+                <td>
+                    <button mat-raised-button color="primary" (click)="acceptRequest(club.id!)">Send Join Request</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

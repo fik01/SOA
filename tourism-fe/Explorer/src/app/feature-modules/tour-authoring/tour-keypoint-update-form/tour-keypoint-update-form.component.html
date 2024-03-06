@@ -1,0 +1,29 @@
+<div id="tourKeyPoints">
+    <div>
+      <form [formGroup]="tourKeyPointForm">
+        <div class="form">
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" type="text"/>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <textarea matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              formControlName="description"
+              cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Image</mat-label>
+                <input matInput formControlName="image" type="url"/>
+            </mat-form-field>
+            <button color="primary" type="submit" mat-raised-button (click)="updateKeyPoint()">Save</button>
+            <button color="primary" type="submit" mat-raised-button (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+    </div>
+    <div>
+      <xp-map [mapId]="'tour-keypoints-update-map'" class="map"></xp-map>
+    </div>
+  </div>

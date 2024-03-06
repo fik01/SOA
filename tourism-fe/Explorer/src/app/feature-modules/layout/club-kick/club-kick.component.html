@@ -1,0 +1,15 @@
+<div class="list-container">
+
+
+  <mat-list>
+    <mat-list-item *ngFor="let member of ClubMembers">
+      {{member.username}}
+      <button mat-raised-button color="primary" class="kick-button" (click)="kickMember(member.id!)" >Kick</button>
+    </mat-list-item>
+
+  </mat-list>
+
+  <mat-paginator style="background: #edebdf" [length]="TotalCount" [pageSizeOptions]="[5]" (page)="onPageChange($event)" aria-label="Select page">
+  </mat-paginator>
+
+</div>

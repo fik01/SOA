@@ -1,0 +1,42 @@
+<div class="main-container">
+  <div class="flex-container">
+    <xp-application-rating-form class="rating-form"
+      (applicationRatingUpdated)="getApplicationRatings()"
+      *ngIf="user && (user.role === 'tourist' || user.role === 'author')"
+    ></xp-application-rating-form>
+    <mat-card *ngFor="let a of ApplicationRatings">
+      <mat-card-header>
+        <div>
+          <mat-card-title>
+            <span>
+              <mat-icon color="warn" *ngFor="let i of getStarsArray(a.grade)"
+                >star</mat-icon
+              >
+            </span>
+          </mat-card-title>
+          <mat-card-subtitle>{{ a.comment }}</mat-card-subtitle>
+        </div>
+  
+        <div class="date-container">
+          <mat-card-actions align="end">
+            <mat-card-subtitle>
+              {{ a.issueDate | date : "dd/MM/yyyy" }}
+            </mat-card-subtitle>
+          </mat-card-actions>
+        </div>
+      </mat-card-header>
+      <mat-card-actions align="end"> </mat-card-actions>
+      <mat-card-actions align="end">
+        <button
+          *ngIf="user.role === 'administrator'"
+          color="warn"
+          (click)="deleteRating(a)"
+          mat-button
+        >
+          DELETE
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+

@@ -1,0 +1,55 @@
+<div class="mainDiv">
+    <div class="tableDiv">
+      <mat-table class="table-container" [dataSource]="tours">
+          
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="difficulty">
+            <mat-header-cell *matHeaderCellDef>Difficulty</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ tourDifficulty[element.difficulty] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="tags">
+            <mat-header-cell *matHeaderCellDef>Tags</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ element.tags }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ element.price }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="addNewKeyPoint">
+            <mat-header-cell *matHeaderCellDef>Key point</mat-header-cell>
+            <mat-cell *matCellDef="let element"><button color="primary" (click)="onCreateNewKeyPoint(element.id)" mat-icon-button>
+              <mat-icon>add</mat-icon>
+            </button></mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayed"></mat-header-row>
+
+          <mat-row *matRowDef="let row; columns: displayed" (click)="onRowClick(row)" ></mat-row>
+      </mat-table>
+    </div>
+  
+    <div class="mapdiv">
+        <xp-map [mapId]="'tour-view-map'"></xp-map>
+        <mat-radio-group [(ngModel)]="selectedCategory">
+          <mat-radio-button [value]="'Wc'" (change)="onCategoryChange(0)">Wc</mat-radio-button>
+          <mat-radio-button [value]="'Restaurant'" (change)="onCategoryChange(1)">Restaurant</mat-radio-button>
+          <mat-radio-button [value]="'Parking'" (change)="onCategoryChange(2)">Parking</mat-radio-button>
+          <mat-radio-button [value]="'Other'" (change)="onCategoryChange(3)">Other</mat-radio-button>
+        </mat-radio-group>
+        <br>
+        <button color="primary" mat-raised-button (click)="onCreateFacility()">Create facility</button>
+    </div>
+
+
+  
+
+    
+    
+  </div>

@@ -1,0 +1,153 @@
+<div>
+  <div class="home-page">
+    <div class="background-wrapper" d-flex justify-content-center align-items-center>
+      <div id="full-page-bg">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <div class="content">
+                <h1 class="hidden">Travelo</h1>
+                <p class="hidden">
+                  Travel is good for soul!<br />
+                  We have chosen for you the best adventures that you can embark
+                  on
+                </p>
+                <div class="btn-container hidden">
+                  <div class="center">
+                    <button (click)="scrollToExplorePage()" class="cta-btn">
+                      <svg width="200px" height="50px" viewBox="0 0 200 50">
+                        <polyline points="0,0 200,0 200,50 0,50 0,0" class="hl-line" />
+                      </svg>
+                      <span>Explore more</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider div-transparent"></div>
+    <div class="background-wrapper-2 vh110" d-flex justify-content-center align-items-center>
+      <div id="explore-page-bg">
+        <div class="container-fluid p-4 user-select">
+          <div class="row">
+            <div style="color: var(--white);" class="col-12 col-md-6 p-2 mt-3 p-5 d-flex justify-content-center align-items-center flex-column">
+              <div class="hidden fs-1 mb-4  pb-2">
+                <i class="bi bi-globe-americas me-2"></i>
+                Our Goals
+              </div>
+              <div class="hidden fs-4 mt-2 pe-lg-4 font-italic text-center" style="text-align: start;">
+                <i style="line-height: 1.3em;">
+                  "Provide seamless trip planning and easy access for young adventurers, empowering tour
+                   authors with a means of earning. This ensures everyone can contribute to and 
+                   <span style="color: var(--primary-color);text-decoration: underline;">
+                    enjoy unforgettable journeys,
+                    all in one place.
+                   </span>"
+                </i>
+              </div>
+            </div>
+            <div style="background-color: transparent;" class= "hidden position-relative col-12 col-md-6 p-2 mt-lg-5">
+              <div class="goals-img-div container-fluid rounded-pill border border-4">
+                <img class="goals-img" src="../../../../assets/images/campers.jpg" alt="...">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider div-transparent"></div>
+    <div class="background-wrapper-2" d-flex justify-content-center align-items-center>
+      <div id="explore-page-bg" #explorePage>
+        <div class="container">
+          <div class="row">
+            <div class="col-12 mt-5">
+              <div class="feat-tours-header text-center fs-1 mt-5 mb-3">
+                <span class="hidden"><i class="bi bi-suitcase2-fill me-2"></i>Featured tours</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid hidden px-5">
+          <div class="row">
+            <div class="col-12 col-md-4 px-5 pt-4">
+              <div class="card mx-3">
+                <img src="../../../../assets/images/skilift.jpg" loading="lazy" alt="..." />
+                <div class="overlay d-flex align-items-center flex-column">
+                  <div style="line-height: 1.2;" class="fs-3 text-break d-flex align-items-center text-center mx-1 mt-5 mb-2">
+                    {{ featuredTours[1]?.name}}
+                  </div>
+                  <div class=" mb-2 pt-2 container-fluid d-flex justify-content-center mt-2">
+                    <span class="fs-6 badge bg-primary px-2 py-1 me-1" style="background-color: var(--secondary-color) !important;">
+                      <i class="bi bi-bus-front-fill me-1"></i>
+                      {{ featuredTours[1]?.keyPoints?.length}}
+                    </span>
+                    <span class="fs-6 badge bg-primary px-2 py-1 ms-1" style="background-color: var(--fifth-color) !important;">
+                      {{ featuredTours[1]!.price}} AC
+                    </span>
+                  </div>
+                  <div class="mx-5 fs-7 mt-2 card-desc mb-4" style="text-align: justify;">
+                    {{ featuredTours[1]?.description}}
+                  </div>
+                  <button *ngIf="user?.username === '' || user?.role==='tourist'" class="card-btn px-4 py-2 mb-4" (click)="navigateToLogin(featuredTours[1]?.id)">Book a tour</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4 px-5 pt-4">
+              <div class="card mx-3">
+                <img src="../../../../assets/images/restaurant.jpg" loading="lazy" alt="..." />
+                <div class="overlay d-flex align-items-center flex-column">
+                  <div style="line-height: 1.2;" class="fs-3 text-break d-flex align-items-center text-center mx-1 mt-5 mb-2">
+                    {{ featuredTours[0]?.name}}
+                  </div>
+                  <div class=" mb-2 pt-2 container-fluid d-flex justify-content-center mt-2">
+                    <span class="fs-6 badge bg-primary px-2 py-1 me-1" style="background-color: var(--secondary-color) !important;">
+                      <i class="bi bi-bus-front-fill me-1"></i>
+                      {{ featuredTours[0]?.keyPoints?.length}}
+                    </span>
+                    <span class="fs-6 badge bg-primary px-2 py-1 ms-1" style="background-color: var(--fifth-color) !important;">
+                      {{ featuredTours[0]!.price }} AC
+                    </span>
+                  </div>
+                  <div class="mx-5 fs-7 mt-2 card-desc mb-4" style="text-align: justify;">
+                    {{ featuredTours[0]?.description}}
+                  </div>
+                  <button *ngIf="user?.username === '' || user?.role==='tourist'" class="card-btn px-4 py-2 mb-4" (click)="navigateToLogin(featuredTours[0]?.id)">Book a tour</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4 px-5 pt-4">
+              <div class="card mx-3">
+                <img src="../../../../assets/images/monastery.jpg" loading="lazy" alt="..." />
+                <div class="overlay d-flex align-items-center flex-column">
+                  <div style="line-height: 1.2;" class="fs-3 text-break d-flex align-items-center text-center mx-1 mt-5 mb-2">
+                    {{ featuredTours[2]?.name}}
+                  </div>
+                  <div class=" mb-2 pt-2 container-fluid d-flex justify-content-center mt-2">
+                    <span class="fs-6 badge bg-primary px-2 py-1 me-1" style="background-color: var(--secondary-color) !important;">
+                      <i class="bi bi-bus-front-fill me-1"></i>
+                      {{ featuredTours[2]?.keyPoints?.length}}
+                    </span>
+                    <span class="fs-6 badge bg-primary px-2 py-1 ms-1" style="background-color: var(--fifth-color) !important;">
+                      {{ featuredTours[2]!.price}} AC
+                    </span>
+                  </div>
+                  <div class="mx-5 fs-7 mt-2 card-desc mb-4" style="text-align: justify;">
+                    {{ featuredTours[2]?.description}}
+                  </div>
+                  <button *ngIf="user?.username === '' || user?.role==='tourist'" class="card-btn px-4 py-2 mb-4" (click)="navigateToLogin(featuredTours[2]?.id)">Book a tour</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid"></div>
+      <div class="footer-div">
+        <div class="trees"></div>
+      </div>
+    </div>
+  </div>
+</div>

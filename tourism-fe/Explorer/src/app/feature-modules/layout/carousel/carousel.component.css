@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+.size-div{
+    width: 90vw;
+
+}
+
+.text-color{
+    color: var(--third-color);
+}
+.text-color2{
+    color: var(--white);
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-direction: row;
+    height: 60vh;
+    overflow: auto;
+    transition: left 0.5s ease-in-out;
+
+}
+.card-1 {
+    position: relative;
+    width: 30%;
+    background-image: url("../../../../assets/images/resized/FHD/card1.webp");
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+
+}
+
+.card-2 {
+    position: relative;
+    width: 30%;
+    background-image: url("../../../../assets/images/resized/FHD/card6.webp");
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+
+}
+.card-3 {
+    position: relative;
+    width: 30%;
+    background-image: url("../../../../assets/images/resized/FHD/card3.webp");
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+
+}
+.card-4 {
+    position: relative;
+    width: 30%;
+    background-image: url("../../../../assets/images/resized/FHD/card4.webp");
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+
+}
+
+.card-5 {
+    position: relative;
+    width: 30%;
+    background-image: url("../../../../assets/images/resized/FHD/card5.webp");
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+
+}
+.card-6 {
+    position: relative;
+    width: 30%;
+    background-image: url("../../../../assets/images/resized/FHD/card2.webp");
+    background-size: cover;
+    background-position: center;
+
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+
+}
+
+
+.card-title {
+    padding-top: 1.5vh;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    margin-left: 20px;
+}
+
+.card-content {
+    margin-top: 10px;
+    margin-left: 20px;
+    font-size: 14px;
+    max-height: 200px;
+    overflow: hidden;
+
+}
+.card-card-title {
+    padding-left: 1vh;
+    padding-right: 1vh;
+    padding-top: 2vh;
+    opacity: 0.9;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.fade-background {
+    position: relative;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to right, rgb(255, 55, 0), rgb(155, 123, 90)); /* You can use any background here */
+    animation: fadeAnimation 5s infinite alternate;
+  }
+  .fade-background2 {
+    position: relative;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to right, rgb(74, 62, 59), rgb(107, 97, 87)); /* You can use any background here */
+    animation: fadeAnimation 5s infinite alternate;
+  }

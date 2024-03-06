@@ -1,0 +1,21 @@
+.preference-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 100px;
+}
+
+.tag-text{
+    color: lightgray;
+}
+
+
+.mat-icon {
+    vertical-align: middle;
+}
+
+textarea{
+    width: 1000px;
+}

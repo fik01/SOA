@@ -1,0 +1,28 @@
+<div class="centered-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title-group>
+            <mat-card-title>{{ data.name }}<p></p></mat-card-title>
+            </mat-card-title-group>
+        </mat-card-header>
+        <p></p>
+        <mat-card-content>
+            <img mat-card-sm-image [src]="data.image">
+        </mat-card-content>
+        <p></p><p></p>
+        <mat-card-content>
+            {{ data.description }}
+        </mat-card-content>
+        <mat-card-content>
+            <button *ngIf="user && user.role === 'author'" color="basic" mat-icon-button (click)="showChallengeForm()">
+            <mat-icon>explore</mat-icon>
+            </button>
+            <button color="primary" mat-icon-button (click)="updateKeyPoint()">
+                <mat-icon>edit</mat-icon>
+                </button>
+            <button color="accent" mat-icon-button (click)="deleteKeypoint()" [disabled]="numberOfKeypoints === 2">
+            <mat-icon>delete</mat-icon>
+            </button>
+        </mat-card-content>
+    </mat-card>
+</div>

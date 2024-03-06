@@ -1,0 +1,24 @@
+.container {
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px; 
+    box-sizing: border-box;
+  }
+
+form {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.mat-icon {
+    vertical-align: middle;
+}
+
+.add-club-button {
+    padding-left: 20px;
+    background-color: green;
+}
+.red-border{
+    border: 1px solid red;
+  }

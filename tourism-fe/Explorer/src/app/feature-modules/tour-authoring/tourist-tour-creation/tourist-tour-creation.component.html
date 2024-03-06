@@ -1,0 +1,241 @@
+<div class="main-container pb-5">
+  <div class="form-container">
+    <div class="tour-form">
+      <form class="needs-validation align-items-start" [formGroup]="tourForm">
+      <div class="mb-3">
+          <h1 *ngIf="!editMode" class="header">Tour creation <i class="bi bi-patch-question-fill custom-green" matTooltip="In order to save tour, fill every input field with valid data, you need atleast 2 keypoints. After that pick transportation method and press 'Save' button." matTooltipPosition="right"></i></h1>
+          <h1 *ngIf="editMode" class="header">Edit tour <i class="bi bi-patch-question-fill custom-green" matTooltip="In order to edit tour, fill every input field with valid data, you need atleast 2 keypoints. After that pick transportation method and press 'Save' button." matTooltipPosition="right"></i></h1>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputUsername1" class="form-label text-start">Tour name</label>
+        <input formControlName="name" type="text" placeholder="Enter tour name" class="form-control form-input" autocomplete="off" id="exampleInputUsername1"
+        [ngClass]="{'red-border':  tourForm.get('name')?.hasError('required') && (tourForm.get('name')?.touched || submitted)}">
+      </div>
+    
+
+      <div class="mb-3">
+        <label for="exampleInputUsername1" class="form-label text-start">Transportation methods</label>
+        <mat-expansion-panel [ngClass]="{'red-border':  
+        (tourForm.get('walkTime')?.hasError('required') && tourForm.get('carTime')?.hasError('required') && tourForm.get('bicycleTime')?.hasError('required')) 
+        && (tourForm.get('walkTime')?.touched || tourForm.get('carTime')?.touched || tourForm.get('bicycleTime')?.touched || submitted)}"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon style="margin-right: 10px;">directions_car</mat-icon>
+              Select transportation methods
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container-fluid" >
+              <div class="row mb-2 d-flex flex-row justify-content-start align-items-center" > 
+                <div class="col-6 m-0 p-0 form-check form-check-inline d-flex flex-row align-items-stretch">
+                  <div class="checkbox-wrapper-13 me-2">
+                    <input id="c1-13" type="checkbox" class="example-margin custom-checkbox" (change)="toggleFieldWalk()" [checked]="isWalkChecked">
+                  </div>
+                  <mat-icon class="me-2">directions_walk</mat-icon> 
+                  <p style="margin-top: auto; margin-bottom: auto;">Walking</p>
+                </div>
+                <div class="col-6" *ngIf="showFieldWalk">
+                  <p>{{ walkTimeMin }} min</p>
+                </div>
+              </div>
+        
+
+              <div class="row mb-2 d-flex flex-row justify-content-start align-items-center">
+                <div class="col-6 m-0 p-0 form-check form-check-inline d-flex flex-row align-items-stretch">
+                  <div class="checkbox-wrapper-13 me-2">
+                    <input id="c1-13" type="checkbox" class="example-margin custom-checkbox" (change)="toggleFieldCar()" [checked]="isCarChecked">
+                  </div>
+                  <mat-icon class="me-2">directions_car</mat-icon> 
+                  <p style="margin-top: auto; margin-bottom: auto;">Car</p>
+                </div>
+                <div class="col-6" *ngIf="showFieldCar">
+                  <p>{{ carTimeMin }} min</p>
+                </div>
+              </div>
+
+              <div class="row mb-2 d-flex flex-row justify-content-start align-items-center">
+                <div class="col-6 m-0 p-0 form-check form-check-inline d-flex flex-row align-items-stretch">
+                  <div class="checkbox-wrapper-13 me-2">
+                    <input id="c1-13" type="checkbox" class="example-margin custom-checkbox" (change)="toggleFieldBicycle()" [checked]="isBicycleChecked">
+                  </div>
+                  <mat-icon class="me-2">directions_bike</mat-icon> 
+                  <p style="margin-top: auto; margin-bottom: auto;">Bicycle</p>
+                </div>
+                <div class="col-6" *ngIf="showFieldBicycle">
+                  <p>{{ bicycleTimeMin }} min</p>
+                </div>
+              </div>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <div *ngIf="!editMode" class="mb-3">
+        <label for="exampleInputUsername1" class="form-label text-start">Our recommendations</label>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon style="margin-right: 10px;">thumb_up</mat-icon>
+              Recommended tours
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div id="carouselExampleFade" *ngIf="recommendedTours.length > 0" class="carousel slide carousel-fade">
+            <div class="carousel-inner">
+              <div class="carousel-item" *ngFor="let tour of recommendedTours; let i = index" [class.active]="i === 0">
+                <img src="../../../../assets/images/card4.jpg" class="d-block w-100" alt="Image {{ i + 1 }}">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 style="font-weight: bold;">{{tour.name}}</h1>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          <div *ngIf="recommendedTours.length == 0">
+            <p>Select at least one public keypoint to see recommended tours</p>
+          </div>
+        </mat-expansion-panel>
+      </div>
+
+
+      <button *ngIf="!editMode" type="submit" class="btn save-button" (click)="createTour()">Create</button>
+      <button *ngIf="editMode" type="submit" class="btn save-button" (click)="updadeTour()">Save</button>
+      </form>
+    </div>
+    <div class="map-container">
+      <xp-map class="map" [mapId]="'tourist-tour-form-map'"></xp-map>
+      <button class="public-keypoints-button" (click)="addPublicKeyPoint()" matTooltip="Add public key point" matTooltipPosition="right" mat-icon-button>
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!--<div class="main-container">
+  <div class="centered-container">
+    <h1><b>Make your own tour</b></h1>
+    <form class="tourCreationForm" [formGroup]="tourForm">
+      <div class="inputFieldContainer">
+        <div class="inputFieldContainer--row">
+          <mat-form-field class="form-field">
+            <mat-label>Name:</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
+        </div>
+      </div>
+      <label>Key points: </label>
+      <button mat-button (click)="addPublicKeyPoint()">
+        <mat-icon>add</mat-icon>
+        Select public key point
+      </button>
+      <xp-map class="map" [mapId]="'tourist-tour-form-map'" (removeKeyPointEmitter)="getTour(6)"></xp-map>
+
+      <div *ngIf="publicKeyPoints.length !== 0">
+          <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Recommended tours  -  contain selected keypoints
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div>
+                <div class="recommended">
+                  <section class="container" [ngStyle]="{'maxWidth': '1100px'}">
+                      <div class="card__container swiper mySwiper" [ngStyle]="{'maxWidth': '1200px'}" #container>
+                          <div class="left" *ngIf="totalPages > 1" (click)="currentPage != 1 && changePage(-1)" [ngClass]="{'disabled':currentPage === 1}"><i class="ri-arrow-left-s-line"></i></div>
+              
+                          <div class="card__content" [ngClass]="{'w-100': totalPages === 1}" [ngStyle]="{'maxWidth': '1200px'}">
+                              <div class="swiper-wrapper" [ngStyle]="{'width': overflowWidth, 'left': pagePosition, 'transition': 'left 0.5s ease-in-out'}">
+                                  <article class="card__article swiper-slide" *ngFor="let t of recommendedTours" (click)="tourShow(t.id || 0)">
+              
+                                      <div class="card__data">
+                                          <h3 class="card__name mt-3 mb-4">{{t.name}}</h3>
+                                          <p class="card__description">
+                                              {{t.description}}
+                                          </p>
+                                      </div>
+                                  </article>
+                              </div>
+                          </div>
+              
+                          <div class="right" *ngIf="totalPages > 1" (click)="currentPage < totalPages && changePage(+1)" [ngClass]="{'disabled':currentPage === totalPages}"><i class="ri-arrow-right-s-line"></i></div>
+                      </div>
+                  </section>
+                </div>
+              </div>
+          </mat-expansion-panel>
+      </div>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Transportation methods
+          </mat-panel-title>
+          <mat-panel-description>
+            Select transportation methods
+            <mat-icon>directions_car</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+      
+        <div class="p-3">
+          <div class="row">
+            <div class="col-4">
+              <div class="form-check form-check-inline">
+                <mat-checkbox class="example-margin" (change)="toggleFieldWalk()" [checked]="isWalkChecked">
+                  <mat-icon>directions_walk</mat-icon> Walking
+                </mat-checkbox>
+                <div *ngIf="showFieldWalk" class="mt-2">
+                  <p>{{ walkTimeMin }} min</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-4">
+              <div class="form-check form-check-inline">
+                <mat-checkbox class="example-margin" (change)="toggleFieldBicycle()" [checked]="isBicycleChecked">
+                  <mat-icon>directions_bike</mat-icon> Bicycle
+                </mat-checkbox>
+                <div *ngIf="showFieldBicycle" class="mt-2">
+                  <p>{{ bicycleTimeMin }} min</p>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-4">
+              <div class="form-check form-check-inline">
+                <mat-checkbox class="example-margin" (change)="toggleFieldCar()" [checked]="isCarChecked">
+                  <mat-icon>directions_car</mat-icon> Car
+                </mat-checkbox>
+                <div *ngIf="showFieldCar" class="mt-2">
+
+                  <p>{{ carTimeMin }} min</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+
+      <div class="buttons-container">
+        <button class="custom-button" mat-raised-button>Cancel</button>
+        <button *ngIf="!editMode" class="custom-button" (click)="createTour()" type="submit" mat-raised-button>
+          Create
+        </button>
+        <button *ngIf="editMode" class="custom-button" (click)="updadeTour()" type="submit" mat-raised-button>
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>-->

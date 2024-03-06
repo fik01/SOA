@@ -1,0 +1,19 @@
+.main-container{
+  background-image: url("../../../../assets/images/challenges-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100hv;
+}
+.rating-form{
+  margin-top: 100px;
+}
+.flex-container {
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.date-container {
+  align-self: flex-start;
+  margin-left: auto;
+}

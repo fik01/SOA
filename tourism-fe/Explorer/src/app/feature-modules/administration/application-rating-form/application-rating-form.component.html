@@ -1,0 +1,49 @@
+<div class="centered-form mb-5">
+  <form  class="rate-form" [formGroup]="applicationRatingForm">
+    <div class="form-group">
+      <div class="display-6 ps-2 py-2 text-success ">
+        Write about tour
+      </div>
+      <mat-form-field>
+        <mat-label for="grade">Grade</mat-label>
+        <mat-select matInput formControlName="grade">
+          <mat-option value="1">1</mat-option>
+          <mat-option value="2">2</mat-option>
+          <mat-option value="3">3</mat-option>
+          <mat-option value="4">4</mat-option>
+          <mat-option value="5">5</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label for="comment">Comment</mat-label>
+        <textarea matInput formControlName="comment" ></textarea>
+      </mat-form-field>
+      
+      <div class="buttons">
+        <button class="btn btn-success px-5" (click)="addApplicationRating()">Rate</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
+
+<!--<div class="application-rating-form-wrapper">
+  <form [formGroup]="applicationRatingForm">
+    <div class="form-div">
+      <mat-form-field>
+        <mat-label>Grade</mat-label>
+        <input matInput formControlName="grade" type="text" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Comment</mat-label>
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="comment"
+          cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+      <button color="primary" type="submit" (click)="addApplicationRating()" mat-raised-button>
+        Done
+      </button>
+    </div>
+  </form>
+</div>-->

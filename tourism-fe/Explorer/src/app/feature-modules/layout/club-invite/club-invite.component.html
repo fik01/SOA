@@ -1,0 +1,14 @@
+<div class="list-container">
+
+
+  <mat-list>
+    <mat-list-item *ngFor="let user of InvitableUsers">
+      {{user.username}}
+      <button mat-raised-button color="primary" class="invite-button" (click)="inviteUser(user.id!)" >Invite</button>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-paginator style="background: #edebdf" [length]="TotalCount" [pageSizeOptions]="[5]" (page)="onPageChange($event)" aria-label="Select page">
+  </mat-paginator>
+
+</div>

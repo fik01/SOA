@@ -1,0 +1,17 @@
+<div id="challenges">
+    <xp-map class="map" [mapId]="'challenges-view-map'"></xp-map>
+    
+    <div class="btn-wrapper">
+        <button class="btn-setlocation" (click)="setLocation()" *ngIf="isSetLocation">Set your location</button>
+        
+        <button class="btn-update" *ngIf="isUpdateLocation" (click)="updateLocation()">
+          Update location
+        </button>
+    
+        <button class="btn-activate" *ngIf="isActivateChallenge" (click)="activateChallenge()">Activate challenge</button>
+        <button class="btn-complete" *ngIf="isCompleteChallenge" (click)="completeChallenge()">Complete challenge</button>
+        <button class="btn-picture" *ngIf="isShowPicture" (click)="showPictureAgain()">Show picture again</button>
+        <button class="btn-abandon" *ngIf="isAbandonChallenge" (click)="abandonChallenge()">Abandon challenge</button>
+        
+    </div>
+</div>

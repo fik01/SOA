@@ -1,0 +1,11 @@
+/administrator
+/tour-preferences
+/tourrating
+/rate-us
+/tourProblems
+/facilities
+
+izbaciti home i pritiskom na logo se user vraca na home
+myProfile ne radi ukoliko nema nijedne kupljene ture za user-a
+pozadina za dropdown za notifikacije ne radi kako treba ako joj se doda slika koja je stajala pre
+shopping cart icon dodat - ali nece da prikaze ikonicu

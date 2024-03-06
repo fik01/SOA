@@ -1,0 +1,31 @@
+.misc-challenge-wrapper{
+  width: 100%;
+  height: 100%;
+  color: var(--fourth-color);
+}
+.challenge-description{
+  border-radius: 20px;
+  font-size: 24px;
+  color: black;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  overflow-y: scroll;
+}
+.close-btn{
+  border-radius: 20px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  cursor: pointer;
+  transition: all 1s ease;
+  width: 40%;
+  font-size: 16px;
+}
+.close-btn:hover{
+  background-color: var(--fourth-color);
+  color: var(--white);
+  transform: scale(1.05);
+  width: 70%;
+}

@@ -1,0 +1,33 @@
+<div id="equipment">
+    <p>Unnecessary equipment</p>
+    <div class="no-equipment" *ngIf="unusedEquipment.length == 0">
+        <img src="../../../../assets/images/noequipment.png">
+        <p>There is no available equipment at the moment.</p>
+    </div>
+    <hr>
+    <div *ngIf="unusedEquipment.length != 0" id="equipment-details">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Naziv</th>
+                        <th>Opis</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let eq of unusedEquipment">
+                        <td>{{eq.name}}</td>
+                        <td>{{eq.description}}</td>
+                        <td>
+                            <button matTooltip="Add equipment" color="primary" (click)="moveToUsed(eq)" mat-icon-button>
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

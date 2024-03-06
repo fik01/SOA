@@ -1,0 +1,13 @@
+<div>
+    <div>
+      <label class="search-title">Search by location</label>
+      <xp-map class="map" [mapId]="'tour-search-map'"></xp-map>
+      <mat-slider min="100" max="30000" step="100"  showTickMarks discrete [displayWith]="formatLabel">
+        <input [(ngModel)]="radius" (change)="onSliderChange($event)" matSliderThumb>
+      </mat-slider>
+      <div class="button-container">
+        <button mat-raised-button color="primary" (click)="search()">Search</button>
+        <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+      </div>
+    </div>
+</div>

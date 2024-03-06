@@ -1,0 +1,189 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css");
+
+.tour-details-wrapper {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Poppins";
+}
+.tour-details-bg {
+  object-fit: cover;
+  background-image: url("../../../../assets/images/resized/2K/background.webp");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  box-shadow: inset 0 -16em 60em var(--third-color);
+  padding-top: 18vh;
+}
+.details-base {
+  background-color: var(--white);
+  backdrop-filter: blur(5px);
+  filter: drop-shadow(6px 7px 23px var(--third-color));
+  border-radius: 15px 0px 15px 0px;
+  overflow: scroll;
+}
+.details-base h1 {
+  font-weight: 700;
+  font-size: 32px;
+  color: var(--third-color);
+}
+.bgc-primary {
+  background-color: var(--primary-color);
+}
+.evenboxinner {
+  transform: rotate(2deg);
+  margin: auto;
+  padding: 0;
+  background: #ddd;
+  border: 1px solid #222;
+  box-shadow: 3px 3px 0 #222;
+  width: 90%;
+  height: 90%;
+  overflow: hidden;
+}
+.box2 {
+  width: 400px;
+  border-width: 3px 3px 5px 5px;
+  border-radius: 4% 95% 6% 95%/95% 4% 92% 5%;
+}
+.box {
+  margin: 25px;
+  width: 300px;
+  height: 300px;
+  background: transparent;
+  border: solid black;
+  border-color: black;
+}
+.evenboxinner img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.tour-ratings-bg {
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  object-fit: cover;
+  box-shadow: inset 0 10em 6em rgb(0.1377, 0.458, 0.4565, 0.65);
+  overflow-y: scroll;
+  position: absolute;
+  color: var(--white);
+}
+
+.tour-ratings-wrapper {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Poppins";
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+.tour-ratings-bg h1 {
+  font-size: 32px;
+  font-weight: 700;
+}
+.rating-card {
+  background-color: var(--white);
+  backdrop-filter: blur(5px);
+  filter: drop-shadow(6px 7px 23px var(--third-color));
+  border-radius: 0px 35px 35px 35px;
+  overflow: scroll;
+  color: var(--third-color);
+  font-weight: 500;
+}
+.hidden {
+  opacity: 0;
+  filter: blur(2px);
+  transform: translateY(30%);
+  transition: all 1s;
+}
+.show-main {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateX(0);
+  transition: all 1s;
+}
+.evenboxinner > img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+.rating-img-wrapper {
+  width: 100%;
+  height: 60%;
+  background-size: cover !important;
+  background-position: center !important;
+}
+.rating-img-wrapper img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.cart-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.map-container {
+  padding-bottom: 0;
+
+}
+/*Forma*/
+.centered-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rate-form {
+  width: 500px;
+  padding: 20px;
+  background-color: var(--white);
+  border-radius: 0px 35px 35px 35px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Odstojanje između polja */
+}
+
+.buttons{
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.custom-green{
+  color: var(--primary-color);
+  font-size: 25px;
+}
+
+.custom-green:hover{
+  color: var(--third-color);
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.no-tourratings{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center; 
+}
+
+.no-tourratings img{
+  width: 400px;
+  height: 400px;
+}
+
+.recommendation-button{
+  background-color: var(--primary-color) !important;
+  color: var(--white) !important;
+}

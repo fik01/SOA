@@ -1,0 +1,103 @@
+.mat-toolbar {
+    position: absolute;
+    background-color: transparent;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .nav-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 12px;
+    font-family: "Poppins";
+    padding: 10px 10px;
+    position: relative;
+    border: 0;
+  }
+  
+  .arrow {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-family: "Poppins";
+    padding: 10px 20px;
+    position: relative;
+    border: 0;
+    position: absolute;
+    right: 0%;
+    margin-right: 20px;
+  }
+  
+  .nav-btn::after {
+    background-color: var(--white);
+    content: "";
+    width: 0;
+    height: 2px;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    transition: width 0.35s ease 0s, left 0.35s ease 0s;
+    position: absolute;
+  }
+  
+  .nav-btn:hover::after {
+    width: 100%;
+  }
+  
+  .logo {
+    margin-left: 50px;
+    margin-right: 50px;
+    width: 64px;
+    height: 64px;
+  }
+  
+  .navbar {
+    z-index: 5;
+  }
+  
+  .shopping-cart {
+    position: absolute;;
+    top: 15px;
+    right: 30px;
+    color: whitesmoke;
+  }
+  
+  .dropdown-container {
+    position: relative;
+    display: inline-block;
+    color: var(--white);
+  }
+  .dropdown > a {
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 12px;
+    font-family: "Poppins";
+    padding: 10px 10px;
+    position: relative;
+    border: 0;
+  }
+  
+  .dropdown-menu{
+    background-image: url("../../../../assets/images/followersBackground.jpg");
+    background-size: cover;
+  }
+  
+  .notifications ul {
+    z-index: 1000;
+  }
+  
+  .notifiction-bell{
+    color: var(--white)!;
+    fill: currentColor;
+  }
+  

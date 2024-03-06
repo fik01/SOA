@@ -1,0 +1,46 @@
+.custom-dialog-title {
+  color: #333;
+  font-size: 1.5em;
+  margin-left: 10px;
+}
+
+.custom-dialog-description{
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #333;
+  font-size: 1.0em;
+  text-align: left;
+}
+
+.custom-dialog-button {
+  color: #fff;
+  background-color: var(--primary-color);
+  margin: 5px;
+}
+
+.centered-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-dialog {
+  max-width: 60%;
+  max-height: 60%;
+}
+
+.custom-dialog-actions{
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+
+.custom-green{
+  color: var(--primary-color);
+  font-size: 25px;
+}
+
+.custom-dialog-title-first{
+  margin-top: 8px;
+  text-align: center;
+}

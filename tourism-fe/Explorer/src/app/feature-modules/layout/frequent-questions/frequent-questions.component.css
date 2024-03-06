@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+.questions-overview {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding-top: 10vh;
+    background-image: url("../../../../assets/images/resized/2K/explore.webp");
+    background-size: cover;
+    background-position: center;
+    height: 200%;
+    box-shadow: inset 0 -16em 60em var(--third-color);
+}
+
+.card-div{
+    height: 10vh;
+    border-radius: 20px;
+
+}
+.column-div{
+    padding: 3vh;
+}
+.example-card {
+    margin-left: 10vw;
+    margin-right: 10vw;
+    margin-bottom: 3vh;
+    transition: max-height 0.3s ease-in-out;
+    overflow: hidden;
+    opacity:0.9 ;
+  }
+
+
+  .mat-mdc-card.mdc-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: scale(1.03);
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+ }
+
+.title-p{
+
+    margin-top: 2vh;
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 3vh;
+}
+.subtitle-p{
+    margin-top: 2vh;
+    font-size: 20px;
+    color: var(--white);
+    margin-bottom:5vh ;
+}
+
+.main-card-div{
+    height: 18vh;
+}
+mat-card-content{
+    font-size: 17px;
+}
+
+mat-card-title{
+    font-size: 25px;
+}

@@ -1,0 +1,75 @@
+<div class="background-wrapper" style="background-image: url('../../../../assets/images/explore.jpg');">
+    <div class="container">
+
+        <div class="card left-card">
+            <div class="card-body">
+                <p class="paragraph">Club information</p>
+                <form [formGroup]="clubForm">
+
+                    <mat-form-field class="full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput type="text" formControlName="name">
+                    </mat-form-field>
+                
+                    <mat-form-field class="full-width">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                    </mat-form-field>
+                
+                    <mat-form-field class="full-width">
+                        <mat-label>Logo Uri</mat-label>
+                        <input matInput type="text" formControlName="clubPicture">
+                    </mat-form-field>
+
+                </form>
+
+                
+                <div>
+                    <button mat-button class="accept-button" (click)="enableUpdate()">Update</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card right-card" *ngIf="ClubMembers.length > 0">
+            <div class="card-body">
+                <p class="paragraph"> Club members</p>
+                  
+                  <div class="table-cont">
+                    <table>
+                        <tbody>
+                            <tr *ngFor="let member of ClubMembers">
+                                <td>{{member.username}}</td>
+                                <td>
+                                    <button mat-button color="success" class="kick-button" (click)="kickMember(member.id!)" >Kick</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                  
+
+            </div>
+        </div>
+
+        <div class="card right-card" *ngIf="requests.length > 0">
+            <div class="card-body">
+                <p class="paragraph">Join requests</p>
+                <div class="table-cont">
+                    <table>
+                        <tbody>
+                            <tr *ngFor="let request of requests">
+                                <td>{{request.username}}</td>
+                                <td>
+                                    <button mat-button class="accept-button" (click)="acceptRequest(request)">Accept</button>
+                                    <button mat-button class="decline-button" (click)="declineRequest(request)">Decline</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

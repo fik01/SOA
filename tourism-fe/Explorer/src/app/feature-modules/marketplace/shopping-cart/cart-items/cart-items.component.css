@@ -1,0 +1,112 @@
+body{
+    background-image: url(../../../../../assets/images/resized/2K/explore.webp);
+    background-size: cover;
+    min-height: 100vh;
+    height: auto;
+    font-family: "Poppins";
+}
+
+.table-wrapper{
+    padding-top: 20px;
+}
+
+.mat-table {
+    width: 50%;
+    margin: auto;
+    border: 2px solid var(--primary-color);
+}
+
+.mat-table th{
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 12px;
+}
+
+.mat-table td{
+    font-style: italic;
+    font-size: 12px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mat-table th, .mat-table td {
+    padding: 15px;
+    text-align: center;
+}
+
+p{
+    font-size: 20px;
+    padding-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    color: white;
+}
+
+
+.checkout-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding-bottom: 40px;
+}
+
+.checkout-button-container button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.checkout-button-container button:disabled{
+  filter: brightness(0.6);
+}
+
+.coupon-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.coupon-button-container button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+
+.bundle-border {
+    border: 5px solid var(--secondary-color); /* Adjust the border style as needed */
+  }
+
+.coupon-button-container button:disabled{
+  filter: brightness(0.6);
+}
+
+
+.no-cart-items{
+    text-align: center;
+    padding-top: 2%;
+}
+
+.no-cart-items img{
+    filter: invert(1);
+    width: 20%;
+    height: 20%;
+}
+
+.no-cart-items p {
+    color: var(--white);
+    padding-bottom: 2%;
+    font-size: 25px;
+}
+
+.header-div{
+    font-size: 32px;
+    color: var(--white);
+    padding-top: 4%;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--white);
+    max-width: 90%;
+    font-weight: bold;
+}

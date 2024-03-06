@@ -1,0 +1,36 @@
+<div class="whole-page">
+    <div class="meat__the__team conatiner-fluid">
+        <div class="row d-flex justify-content-center">Meet the team</div>
+    </div>
+    <section class="container" [ngStyle]="{'maxWidth': '1500px'}">
+        <div class="card__container swiper mySwiper" [ngStyle]="{'maxWidth': '1600px'}" #container>
+            <div class="left" *ngIf="totalPages > 1" (click)="currentPage != 1 && changePage(-1)" [ngClass]="{'disabled':currentPage === 1}"><i class="ri-arrow-left-s-line"></i></div>
+
+            <div class="card__content" [ngClass]="{'w-100': totalPages === 1}" [ngStyle]="{'maxWidth': '1600px'}">
+                <div class="swiper-wrapper" [ngStyle]="{'width': overflowWidth, 'left': pagePosition, 'transition': 'left 0.5s ease-in-out'}">
+                    <article class="card__article swiper-slide" *ngFor="let m of teamMembers">
+                        <div class="card__image">
+                            <img src={{m.avatar}} alt="image" class="card_img">
+                            <div class="card__shadow">
+                            </div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name mt-3 mb-4">{{m.name}}</h3>
+                            <p class="card__description">
+                                {{m.description}}
+                            </p>
+
+                            <div class="media-icons" [ngStyle]="{'display': 'flex', 'margin-top': '30px', 'justify-content': 'center'}">
+                                <a href={{m.githubLink}} [ngStyle]="{'color': 'white', 'height': '44px', 'width': '44px', 'background': '#333', 'margin': '0 4px', 'border-radius': '50%', 'text-align': 'center', 'line-height': '50px'}"><i class="fa fa-github" style="font-size:26px" [ngStyle]="{'margin-top': '10px'}"></i></a>
+                                <a href={{m.linkedin}} [ngStyle]="{'color': 'white', 'height': '44px', 'width': '44px', 'background': '#0a66c2', 'margin': '0 4px', 'border-radius': '50%', 'text-align': 'center', 'line-height': '50px'}"><i class="fa fa-linkedin" style="font-size:26px" [ngStyle]="{'margin-top': '10px'}"></i></a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div class="right" *ngIf="totalPages > 1" (click)="currentPage < totalPages && changePage(+1)" [ngClass]="{'disabled':currentPage === totalPages}"><i class="ri-arrow-right-s-line"></i></div>
+        </div>
+    </section>
+</div>

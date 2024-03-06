@@ -1,0 +1,66 @@
+<div class="preference-form">
+    <div *ngIf="!preferenceCreated">
+        <form [formGroup]="preferencesForm">
+            <div>
+                <mat-radio-group formControlName="difficultyLevel"
+                aria-label="difficultyLevel">Difficulty level
+                    <mat-radio-button [value]="1">1</mat-radio-button>
+                    <mat-radio-button [value]="2">2</mat-radio-button>
+                    <mat-radio-button [value]="3">3</mat-radio-button>
+                    <mat-radio-button [value]="4">4</mat-radio-button>
+                    <mat-radio-button [value]="5">5</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div>
+                <mat-radio-group formControlName="walkingRate"
+                aria-label="Walking">Walking
+                    <mat-radio-button [value]="0">0</mat-radio-button>
+                    <mat-radio-button [value]="1">1</mat-radio-button>
+                    <mat-radio-button [value]="2">2</mat-radio-button>
+                    <mat-radio-button [value]="3">3</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div>
+                <mat-radio-group formControlName="bicycleRate"
+                aria-label="Bicycle">Bicycle
+                    <mat-radio-button [value]="0">0</mat-radio-button>
+                    <mat-radio-button [value]="1">1</mat-radio-button>
+                    <mat-radio-button [value]="2">2</mat-radio-button>
+                    <mat-radio-button [value]="3">3</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div>
+                <mat-radio-group formControlName="carRate"
+                aria-label="Car">Car
+                    <mat-radio-button [value]="0">0</mat-radio-button>
+                    <mat-radio-button [value]="1">1</mat-radio-button>
+                    <mat-radio-button [value]="2">2</mat-radio-button>
+                    <mat-radio-button [value]="3">3</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div>
+                <mat-radio-group formControlName="boatRate"
+                aria-label="Boat">Boat
+                    <mat-radio-button [value]="0">0</mat-radio-button>
+                    <mat-radio-button [value]="1">1</mat-radio-button>
+                    <mat-radio-button [value]="2">2</mat-radio-button>
+                    <mat-radio-button [value]="3">3</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </form>
+        <div>
+            <tag-input [(ngModel)]='Tags' 
+                        [identifyBy]="'id'"
+                        [displayBy]="'name'"
+                        [editable]="true" ></tag-input>
+            <p class="tag-text">Press Enter to confirm one tag</p>
+        </div>
+        <div>
+            <button mat-raised-button type="submit" color="primary"
+            (click)="createPreferences()" value="Submit">Create</button>
+        </div>
+    </div>
+    <div *ngIf="preferenceCreated">
+        <p>Preference created succesfully. Go to Tour preferences to see your preference.</p>
+    </div>
+</div>

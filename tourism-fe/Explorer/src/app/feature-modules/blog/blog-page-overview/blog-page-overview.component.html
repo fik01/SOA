@@ -1,0 +1,87 @@
+<div class="blogPage-overview">
+    <hr>
+    <div class="card-container">
+        <mat-card class="blog-card">
+            <div class="metadata">
+                Posted by <span class="user-subreddit">{{blog.username}}</span>
+            </div>
+            <mat-card-title class="blog-title">
+                <p>{{blog.title}}</p>
+                <p *ngIf="blog.status==0">Draft</p>
+                <p *ngIf="blog.status==1">Published</p>
+                <p *ngIf="blog.status==2">Closed</p>
+                <p *ngIf="blog.status==3">Famous</p>
+                <p *ngIf="blog.status==4">Active</p>
+            </mat-card-title>
+            <mat-card-content class="blog-content"  [innerHTML]="renderMarkdown(blog.description)">
+            </mat-card-content>
+            <div class="bottom-buttons">
+                <button class="upvote-button" (click)="rateBlog(true,$event)" [ngClass]="{ 'orange-button': flag>=1}"  matTooltip="Like">
+                    <mat-icon>thumb_up</mat-icon> 
+                </button>
+                {{blog.ratingSum}}
+                <button class="downvote-button" (click)="rateBlog(false,$event)" [ngClass]="{ 'orange-button': flag<=-1}"  matTooltip="Unlike">
+                    <mat-icon>thumb_down</mat-icon>
+                </button>
+                <button class="comment-button" mat-icon-button  matTooltip="Comment">
+                    <mat-icon>comment</mat-icon>
+                </button>
+            </div>
+            <div class="be-comment-block">
+                <div id="comments">
+                    <form [formGroup]="commentForm">
+                        <h3 class="pull-left">New Comment</h3>
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-3 col-lg-2 hidden-xs">
+                                    <img class="img-responsive" src="{{person.profilePic}}" alt="">
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                    <textarea class="form-control" id="message" placeholder="Your comment" required="" formControlName="description"
+                                    [ngClass]="{'red-border':  (commentForm.get('description')?.touched && commentForm.get('description')?.hasError('required')) && (commentForm.get('description')?.touched || submitted)}">{{newComment}}</textarea>
+                                    <div class="send-container"><button type="submit" class="send-button" (click)="createComment()">Send</button></div>
+                                </div>
+                            </div>  	
+                        </fieldset>
+                    </form>
+                </div>
+                <h1 class="comments-title">Comments ({{commentLength}})</h1>
+                <div *ngFor="let c of comments" class="media">
+                    <a *ngIf="editedComment !== c" class="pull-left" href="#"><img class="media-object" src="{{c.profilePic}}" alt=""></a>
+                    <div *ngIf="editedComment !== c" class="media-body">
+                        <h4 class="media-heading">{{c.username}}</h4>
+                        <p>{{c.description}}</p>
+                        <ul class="list-unstyled list-inline media-detail pull-left">
+                            <li *ngIf="c.creationDate!==c.lastEditDate"><i>Edited:</i><i class="fa fa-calendar"></i>{{c.lastEditDate| date: 'dd.MM.yyyy'}}</li>
+                            <li *ngIf="c.creationDate==c.lastEditDate"><i class="fa fa-calendar"></i>{{c.creationDate| date: 'dd.MM.yyyy'}}</li>
+                        </ul>
+                        <ul class="list-unstyled list-inline media-detail pull-right">
+                            <li class="" *ngIf="c.userId==user.id"><a (click)="editComment(c)"><i class="fa fa-edit"></i> Edit</a></li>
+                            <li class="" *ngIf="c.userId==user.id"><a (click)="deleteComment(c)"><i class="fa fa-trash"></i> Delete</a></li>
+                        </ul>
+                    </div>
+                    <div *ngIf="editedComment === c && editMode==true" id="comments">
+                        <form [formGroup]="editCommentForm">
+                            <h3 class="pull-left">Edit Comment</h3>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-sm-3 col-lg-2 hidden-xs">
+                                        <img class="img-responsive" src="{{editedComment.profilePic}}" alt="">
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                        <textarea class="form-control" id="message" placeholder="Your comment" required="" formControlName="description"
+                                        [ngClass]="{'red-border':  (editCommentForm.get('description')?.touched && editCommentForm.get('description')?.hasError('required')) && (editCommentForm.get('description')?.touched || submitted)}">{{newComment}}</textarea>
+                                        <div class="send-container">
+                                            <button type="submit" class="cancel-button" (click)="cancel()">Cancel</button>
+                                            <button type="submit" class="send-button" (click)="saveChanges()">Save</button>
+                                        </div>
+                                    </div>
+                                </div>  	
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

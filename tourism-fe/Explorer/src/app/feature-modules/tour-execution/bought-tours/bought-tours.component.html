@@ -1,0 +1,109 @@
+<div class="tour px-5">
+  <div class="hidden header-div container-fluid fs-1 bold text-start">Purchased tours</div>
+  <ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+      <a class="nav-link p-3" style="font-size: 30px;" [class.active]="activeTab === 1" (click)="setActiveTab(1)">Purchased tours</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link p-3" style="font-size: 30px;" [class.active]="activeTab === 2" (click)="setActiveTab(2)">My tours</a>
+    </li>
+  </ul>
+  <div *ngIf="activeTab == 1" class="card-container" style="overflow-y: scroll;height: 130vh;scroll-behavior: smooth;">
+    <button matTooltip="You need atleast 2 bought tours in order to create a campaign" matTooltipPosition="right" class="new-tour-button" (click)="createCampaign()">Create campaign</button>
+    <div class="no-bought-tours" *ngIf="tours.length == 0">
+      <img src="../../../../assets/images/noboughttours.png">
+      <p>You didn't buy any tours yet. Continue shopping to explore more!</p>
+      <button class="explore-items-button" mat-raised-button color="primary" (click)="goToTours()">Explore items</button>
+    </div>
+    <mat-card matTooltip="See more details about tour" matTooltipPosition="right" *ngFor="let t of tours" class="tour-card" (click)="tourShow(t.id)">
+      <div class="card-image"
+      style="background-image: url('{{ t?.image }}');">
+        <div class="row">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <div *ngIf="session === null || session.sessionStatus === 1; else noSession">
+              <button mat-raised-button class="start-tour-button"  (click)="startTour($event, t.id)">
+                Start tour
+              </button>
+            </div>
+            <ng-template #noSession>
+              <button mat-raised-button class="start-tour-button" *ngIf="t.id == session.tourId; else disabledButton" (click)="viewTourProggres($event)">
+                View progress
+              </button>
+              <ng-template #disabledButton>
+                <button mat-raised-button class="start-tour-button disabled" disabled>
+                  Start tour
+                </button>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+        <mat-card-title class="card-title">
+          <p>{{t.name}}</p>
+          <p>{{t.price}} AC</p>
+        </mat-card-title>
+        <!-- <p>{{t.status}}</p> -->
+        <p class="card-description">{{t.description}}</p>
+      </div>
+      <br>
+      <mat-card-content class="card-content">
+        <div class="circles-container">
+          <p>Difficulty</p>
+          <mat-icon
+            [ngClass]="{'filled-circle': t.difficulty == 0, 'empty-circle': t.difficulty != 0}">fiber_manual_record</mat-icon>
+          <mat-icon
+            [ngClass]="{'filled-circle': t.difficulty == 1, 'empty-circle': t.difficulty != 1}">fiber_manual_record</mat-icon>
+          <mat-icon
+            [ngClass]="{'filled-circle': t.difficulty == 2, 'empty-circle': t.difficulty != 2}">fiber_manual_record</mat-icon>
+          <mat-icon
+            [ngClass]="{'filled-circle': t.difficulty == 3, 'empty-circle': t.difficulty != 3}">fiber_manual_record</mat-icon>
+        </div>
+        <br>
+        <div>
+          <p></p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+      <!--MY TOURS-->
+      <div *ngIf="activeTab == 2" class="card-container" style="overflow-y: scroll;height: 130vh;scroll-behavior: smooth;">
+        <button class="new-tour-button" (click)="createNewTour()">Create new tour</button>
+        <mat-card class="tour-card" *ngFor="let t of touristTours; let idx = index" class="tour-card" (click)="openTouristTour(t.id)">
+          <div class="card-image" style="background-image: url('{{ t?.image }}');">
+            <div class="row">
+              <div class="col-sm-12 d-flex justify-content-end">
+                <div *ngIf="session === null || session.sessionStatus === 1; else noSession">
+                  <button mat-raised-button class="start-tour-button"  (click)="startTour($event, t.id)">
+                    Start tour
+                  </button>
+                </div>
+                <ng-template #noSession>
+                  <button mat-raised-button class="start-tour-button" *ngIf="t.id == session.tourId; else disabledButton" (click)="viewTourProggres($event)">
+                    View progress
+                  </button>
+                  <ng-template #disabledButton>
+                    <button mat-raised-button class="start-tour-button disabled" disabled>
+                      Start tour
+                    </button>
+                  </ng-template>
+                </ng-template>
+              </div>
+            </div>
+            <mat-card-title class="card-title">
+              <p>{{t.name}}</p>
+            </mat-card-title>
+            <p class="card-description">{{t.description}}</p>
+          </div>
+        </mat-card>
+        
+        <div *ngIf="noTouristTours" class="no-tours">
+          <img src="../../../assets/images/no-tours-lightmode.png" alt="no picture">
+          <h3 style="color: white;"> <b>There are currently no tours created by you. <br> To create your own tour, click on the green button 'Create new tour'. </b></h3>
+      </div>
+
+      </div>
+      <div>
+        <button class="to-top" (click)="scrollToTop()" mat-icon-button [ngClass]="{ 'show-scrollTop': windowScrolled }">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+    </div>
+</div>

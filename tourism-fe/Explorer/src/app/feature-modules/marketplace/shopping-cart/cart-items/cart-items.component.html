@@ -1,0 +1,52 @@
+<body>
+  <div class="hidden ps-0 header-div container-fluid fs-1 bold text-start">Shopping Cart</div>
+  <div class="no-cart-items" *ngIf="isCartEmpty">
+    <p>Wallet balance: {{ balance }} AC</p>
+    <img src="../../../../../assets/images/emptycart.png">
+    <p>No items yet? Continue shopping to explore more!</p>
+    <button class="explore-items-button" mat-raised-button color="primary" [routerLink]="['../tours']">Explore items</button>
+  </div>
+  <div class="table-wrapper">
+    <table class="mat-table" *ngIf="!isCartEmpty">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Difficulty</th>
+            <th>Distance(km)</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let tour of shoppingCart.itemsInCart" class="tour-row" [ngClass]="{'bundle-border': tour.bundleId}">
+            <td *ngIf="!tour.firstInBundle"> {{tour.name}}</td>
+            <td *ngIf="tour.firstInBundle"> {{tour.name}}</td>
+            <td  matTooltip="{{ tour.description }}" [matTooltipShowDelay]="1500" matTooltipPosition="below">{{ tour.description.length > 35 ? (tour.description | slice:0:35) + '...' : tour.description }}</td>
+            <td>{{ statusMap.get(tour.difficulty) }}</td>
+            <td>{{ tour.distanceInKm.toFixed(2) }}</td>
+            <td *ngIf="!tour.firstInBundle && !tour.bundleId">{{ tour.price.toFixed(2) }} AC</td>
+            <td *ngIf="!tour.firstInBundle && tour.bundleId"> {{ 0 }} AC</td>
+            <td *ngIf="tour.firstInBundle">{{ tour.price.toFixed(2)}} AC</td>
+            <td>
+              <button mat-icon-button matTooltip="Remove from cart" matTooltipPosition="right" (click)="removeFromCart(tour)" *ngIf="tour.firstInBundle || !tour.bundleId">
+                <mat-icon style="color: red;">delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="!isCartEmpty">Wallet balance: {{ balance }} AC</p>
+      <p *ngIf="!isCartEmpty">Total Price: {{ total }} AC</p>
+  </div>
+
+ 
+
+  <div *ngIf="!isCartEmpty" class="checkout-button-container">
+    <button mat-raised-button color="primary" (click)="checkout()" [disabled]="isCartEmpty || total > balance">Checkout</button>
+  </div>
+
+
+</body>

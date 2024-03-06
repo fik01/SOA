@@ -1,0 +1,27 @@
+<form [formGroup]="tourratingForm">
+    <div>
+        <mat-form-field>
+            <mat-label>Grade</mat-label>
+            <mat-select matInput formControlName="grade">
+                <mat-option value="1">1</mat-option>
+                <mat-option value="2">2</mat-option>
+                <mat-option value="3">3</mat-option>
+                <mat-option value="4">4</mat-option>
+                <mat-option value="5">5</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Comment</mat-label>
+            <textarea matInput formControlName="comment" cdkTextareaAutosize></textarea>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Date of visit</mat-label>
+            <input matInput formControlName="dateofvisit" type="datetime-local"/>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Image</mat-label>
+            <input matInput formControlName="image" type="text"/>
+        </mat-form-field>
+        <button mat-raised-button type="submit" (click)="addTourRating()" color="primary">Rate</button>
+    </div>
+</form>

@@ -1,0 +1,29 @@
+<div class="centered-container">
+    <div class="avatar-container">
+        <div mat-card-avatar><img mat-card-image src="{{data.image}}" alt="avatar" class="avatar"></div>
+    </div>
+    <mat-form-field class="example-form-field">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" [(ngModel)]="data.name" readonly>
+    </mat-form-field><br>
+
+    <mat-form-field class="example-form-field">
+        <mat-label>Description</mat-label>
+        <input matInput type="text" [(ngModel)]="data.description" readonly>
+    </mat-form-field><br>
+
+    <mat-form-field class="example-form-field">
+        <mat-label>Latitude</mat-label>
+        <input matInput type="text" [(ngModel)]="data.latitude" readonly>
+    </mat-form-field><br>
+
+    <mat-form-field class="example-form-field">
+        <mat-label>Longitude</mat-label>
+        <input matInput type="text" [(ngModel)]="data.longitude" readonly>
+    </mat-form-field><br>
+    <div>
+        <button mat-raised-button color="primary" *ngIf="user.role=='author'" (click)="updateMarker()">Update</button>
+        <button mat-raised-button color="primary" *ngIf="user.role=='author'" (click)="deleteMarker()">Delete</button>
+    </div>
+</div>
+

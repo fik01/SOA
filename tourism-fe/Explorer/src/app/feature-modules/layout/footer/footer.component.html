@@ -1,0 +1,40 @@
+<footer class="p-3 container-fluid footer">
+    <div class="row m-2 gx-5 justify-content-evenly">
+        <div class="col-12 col-md-6 col-lg-4 footer-section mt-3 mb-3">
+            <div class="hidden mb-3 header pb-2">Travelo</div>
+            <div class=" footer-label fw-light me-5">
+                <a class="hidden text-decoration-none" href="/home">   
+                    Explore the unknown, where every step unfolds a story. Marvel at wonders, embrace surprises,
+                     and let the journey mold your spirit.
+                </a>
+            </div>
+            
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 footer-section mt-3 mb-3">
+            <div class="hidden mb-3 header pb-2">Quick Links</div>
+            <div class="hidden mb-2 footer-label fw-light"><a class="text-decoration-none" href="/frequent-questions">FAQ</a></div>  
+            <div class="hidden mb-2 footer-label fw-light"><a class="text-decoration-none" href="/about-us">About us</a></div>
+            <div *ngIf="user.username === ''" class="hidden mb-2 footer-label fw-light"><a class="text-decoration-none" href="/login">Sign in</a></div>  
+            <div class="hidden mb-2 footer-label fw-light"><a class="text-decoration-none" href="/register">Sign up</a></div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 footer-section mt-3 mb-3">
+            <div class="hidden mb-3 header pb-2">Contacts</div>
+            <div class="d-flex flex-row">
+                <div class="hidden p-2 m-2 mt-0 social-btn fw-light"><i class="p-0 m-0 bi bi-instagram"></i></div>
+                <div class="hidden p-2 m-2 mt-0 social-btn fw-light"><i class="p-0 m-0 bi bi-twitter-x"></i></div>  
+                <div class="hidden p-2 m-2 mt-0 social-btn fw-light"><i class="p-0 m-0 bi bi-facebook"></i></div>
+                <div class="hidden p-2 m-2 mt-0 social-btn fw-light"><i class="p-0 m-0 bi bi-github"></i></div> 
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-2 footer-section mt-3 mb-3">
+            <div class="hidden mb-3 header pb-2 text-nowrap">Tech Stack</div>
+            <div class="hidden mb-2 footer-label fw-light"><a class="text-decoration-none" href="http://angular.io">Angular</a></div>
+            <div class="hidden mb-2 footer-label fw-light"><a class="text-decoration-none" href="https://dotnet.microsoft.com/en-us/apps/aspnet">ASP.NET</a></div>
+        </div>
+    </div>
+    <div class="hidden row px-5 mx-5 pt-4">
+        <div class="col-12 copyright-div text-center">
+            Copyright @ 2023 Travelo. All rights reserved
+        </div>
+    </div>
+</footer>

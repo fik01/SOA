@@ -1,0 +1,8 @@
+.confirm-button:hover {
+    color: #4caf50;
+}
+
+.button-wrapper {
+    margin-bottom: 0;
+    min-height: 100%;
+}

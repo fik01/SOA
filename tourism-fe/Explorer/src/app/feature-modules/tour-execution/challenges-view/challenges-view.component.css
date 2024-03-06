@@ -1,0 +1,31 @@
+#challenges {
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  height: 100vh;
+  min-height: auto;
+  padding: 100px 300px 0 300px;
+}
+
+.btn-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.btn-setlocation, .btn-update, .btn-activate, .btn-complete, .btn-picture{
+  background-color: var(--primary-color);
+  color: white;
+  margin: 10px;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+}
+
+.btn-abandon{
+  background-color: var(--fifth-color);
+  color: white;
+  margin: 10px;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+}

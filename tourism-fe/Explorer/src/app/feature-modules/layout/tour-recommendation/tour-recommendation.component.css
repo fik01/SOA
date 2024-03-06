@@ -1,0 +1,193 @@
+.tour {
+  padding: 100px;
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  background-size: contain;
+  background-repeat: round;
+  height: auto;
+  min-height: 100%;
+}
+
+.card-container,
+.bundle-container {
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.tour-card {
+  position: relative;
+  width: 85%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+}
+
+.bundle-card {
+  position: relative;
+  width: 85%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+}
+
+.bundle-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 150px;
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.card-description {
+  font-size: 16px;
+}
+
+.bottom-right-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.bottom-left-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.bottom-left-button-2 {
+  position: fixed;
+  bottom: 20px;
+  left: 80px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.circles-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.filled-circle {
+  color: var(--secondary-color);
+}
+
+.empty-circle {
+  color: #ccc;
+}
+
+.tour-card:hover .overlay,
+.bundle-card:hover .overlay {
+  height: 100%;
+  width: 100%;
+  transform: scale(1.02);
+}
+
+.overlay {
+  position: absolute;
+  background-color: rgba(128, 128, 128, 0.7);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  height: 0;
+  transition: 0.5s ease;
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info {
+  flex: 1;
+  padding: 20px;
+}
+
+.info>h4,
+p {
+  color: var(--white);
+  margin: 0;
+  font-size: 18px;
+}
+
+.slika {
+  padding: 20px;
+}
+
+.slika>img {
+  max-width: 100%;
+  display: block;
+}
+
+.keypoint-description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.tour-tags {
+  color: var(--black);
+}
+
+.tour-difficulty {
+  color: var(--black);
+}
+
+.rating {
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.active {
+  color: gold;
+}
+
+.bigger-font {
+  font-size: 40px;
+}
+
+.padding-for-stars {
+  padding-right: 10px;
+}
+.btn-complete{
+  background-color: var(--primary-color);
+    color: white;
+    margin: 10px;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 5px;
+}
+
+h2 {
+  color: var(--white);
+  font-weight: bold;
+}

@@ -1,0 +1,48 @@
+<div class="bundles-overview ">
+    <div class="hidden ps-0 header-div container-fluid fs-1 bold text-start">Bundles <i class="bi bi-patch-question-fill custom-green" matTooltip="Bundles are packages that contain multiple different tours, they are usually cheaper so die-hard tourists love them! " matTooltipPosition="right"></i></div>
+    <div class="card-container">
+        <div class="no-bundles" *ngIf="bundles.length == 0">
+            <img src="../../../../assets/images/nobundles.png">
+            <p>You currently have no bundles. Create one!</p>
+        </div>
+        <div class="bundle-card" *ngFor="let bundle of bundles">
+            <mat-card class="card-example">
+                <mat-card-title class="card-title-div">
+                    <p>{{bundle.name}}</p>
+                    <div class="buttons-div">
+                        
+                        <button mat-icon-button matTooltip="Delete" class="delete-button" *ngIf="user.id==bundle.authorId && bundle.bundleState==0" (click)="deleteBundle(bundle, bundle.authorId)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+
+                        <button mat-icon-button matTooltip="Edit" class="edit-button" *ngIf="user.id==bundle.authorId && bundle.bundleState==0" (click)="navigateUpdate(bundle.id || 0,bundle.authorId)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+
+                        <button matTooltip="Archive bundle so tourists can no longer see it." mat-raised-button class="archive-button" *ngIf="user.id==bundle.authorId && bundle.bundleState==1" (click)="archiveBundle(bundle)">
+                            Archive
+                        </button>
+
+                        <button matTooltip="Publish bundle so tourists can see it." mat-raised-button class="publish-button" *ngIf="user.id==bundle.authorId && bundle.bundleState==0 && numberOfPublishedToursInBundle(bundle)>=2" (click)="publishBundle(bundle)">
+                            Publish
+                        </button>
+                    </div>
+                </mat-card-title>
+                <mat-card-content>
+                    <p>Price: {{bundle.price}} AC</p>
+                </mat-card-content>
+                <mat-card-content>
+                    <p *ngIf="bundle.bundleState==0">Draft</p>
+                    <p *ngIf="bundle.bundleState==1">Published</p>
+                    <p *ngIf="bundle.bundleState==2">Archived</p>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+    </div>
+</div>
+<button class="bottom-right-button"  (click)="navigateCreate()">
+    <div class="icon-container">
+        <mat-icon>add</mat-icon>
+    </div>
+</button>

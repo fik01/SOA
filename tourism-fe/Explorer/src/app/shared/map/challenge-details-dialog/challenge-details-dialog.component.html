@@ -1,0 +1,15 @@
+<div class="centered-container">
+    <mat-card class="card">
+        <mat-card-header>
+            <mat-card-title-group>
+            <mat-card-title>{{ data.name }}</mat-card-title>
+            </mat-card-title-group>
+        </mat-card-header>
+        <mat-card-content>
+            {{ data.description }}
+        </mat-card-content>
+        <mat-card-content>
+            {{ challengeType[data.type !== undefined ? data.type : 0] }}
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css");
+
+/*Forma*/
+.centered-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rate-form {
+  width: 500px;
+  padding: 20px;
+  background-color: var(--white);
+  border-radius: 35px 35px 35px 35px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Odstojanje između polja */
+}
+
+.buttons{
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

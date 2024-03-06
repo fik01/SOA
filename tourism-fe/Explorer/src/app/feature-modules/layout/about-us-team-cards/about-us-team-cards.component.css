@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;1,400&display=swap');
+
+.whole-page {
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    padding-top: 6%;
+    box-shadow: inset 10em 0 6em rgb(0.1377, 0.458, 0.4565, 0.65);
+    overflow-y: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+    width: 100%;
+}
+
+.meat__the__team {
+    font-size: 48px;
+    color: var(--white);
+    font-family: 'Poppins';
+    font-weight: 700;
+}
+
+.w-100 {
+    width: 100%!important;
+}
+
+.overflow {
+    position: relative;
+    transition: left 0.5s ease-in-out;
+    width: 100%;
+}
+
+.card__container {
+    padding-block: 5rem;
+    display: flex;
+    position: relative;
+    justify-content: center;
+}
+
+.card__content {
+    margin-inline: 1.75rem;
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.card__article {
+    width: 300px;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    margin: 0 1.75rem;
+    display: inline-block;
+}
+
+.card__image {
+    position: relative;
+    background-color: #B4E8C5;
+    padding-top: 1.5rem;
+    margin-bottom: -.75rem;
+    text-align: center;
+}
+
+.card__data {
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.card_img {
+    width: 180px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+    /* vidi zasto nije na centru */
+}
+
+.card__shadow {
+    width: 200px;
+    height: 200px;
+    background-color: #A2A77F;
+    border-radius: 50%;
+    position: absolute;
+    top: 3.75rem;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    filter: blur(45px);
+}
+
+.card__name {
+    color: #7C8C5A;
+    margin-bottom: .75rem;
+    font-family: 'Poppins';
+    font-weight: 650;
+    font-size: 23px;
+}
+
+.card__description {
+    font-weight: 500;
+    margin-bottom: 1.75rem;
+    font-family: 'Poppins';
+    text-align: justify;
+    color: #7C8C5A;
+    border-left: #7C8C5A 2px solid;
+    padding-left: 10px;
+    max-height: 222px;
+    overflow-y: auto;
+}
+
+.card__button {
+    display: inline-block;
+    background-color: #7C8C5A;
+    padding: .75rem 1.5rem;
+    border-radius: .25rem;
+    color: white;
+    font-weight: 600;
+}
+
+.media_icons {
+    display: flex;
+    height: 50px;
+}
+
+.card__data .media_icons a {
+    height: 50px;
+    width: 50px;
+    background: #7C8C5A;
+}
+
+.left::after,
+.right::after {
+    content: '';
+}
+
+.left::before,
+.right::before {
+    content: '';
+}
+
+.left,
+.right {
+    width: initial;
+    height: initial;
+    font-size: 3rem;
+    color: #7C8C5A;
+    position: absolute;
+    top: 50%;
+}
+
+.left:hover,
+.right:hover {
+    cursor: pointer;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}

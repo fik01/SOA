@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="column">
+    <div id="equipment">
+      <p>Keypoint requests</p>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Image</th>
+          <th>Location</th>
+          <th>Status</th>
+        </tr>
+        <tr *ngFor="let pkp of pendingKeyPoints">
+          <td>{{ pkp.name }}</td>
+          <td>{{ pkp.description }}</td>
+          <td><img [src]="pkp.image" /></td>
+          <td>
+            <button class="showOnMap-button" (click)="showMarkerLocation(pkp.latitude, pkp.longitude)">
+              Show
+            </button>
+          </td>
+          <td>{{ pkp.status }}</td>
+          <td>
+            <button class="approve-button" (click)="approveKeypointRequest(pkp!)">
+              Approve
+            </button>
+          </td>
+          <td>
+            <button class="deny-button" (click)="denyKeypointRequest(pkp!, 'keypoint')">
+              Deny
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="equipment2">
+      <p>Facility requests</p>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Image</th>
+          <th>Location</th>
+          <th>Status</th>
+        </tr>
+        <tr *ngFor="let pf of pendingFacilities">
+          <td>{{ pf.name }}</td>
+          <td>{{ pf.description }}</td>
+          <td *ngIf="pf.category == 0">WC</td>
+          <td *ngIf="pf.category == 1">Restaurant</td>
+          <td *ngIf="pf.category == 2">Parking</td>
+          <td *ngIf="pf.category == 3">Other</td>
+          <td><img [src]="pf.image" /></td>
+          <td>
+            <button class="showOnMap-button" (click)="showMarkerLocation(pf.latitude, pf.longitude)">
+              Show
+            </button>
+          </td>
+          <td>{{ pf.status }}</td>
+          <td>
+            <button class="approve-button" (click)="approveFacilityRequest(pf!)">
+              Approve
+            </button>
+          </td>
+          <td>
+            <button class="deny-button" (click)="denyFacilityRequest(pf!, 'facility')">
+              Deny
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="column">
+    <div class="mapdiv">
+      <xp-map [mapId]="'marker-view-map'"></xp-map>
+    </div>
+  </div>
+</div>

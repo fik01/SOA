@@ -1,0 +1,35 @@
+<div id="tour-problems" class="p-5">
+    <div class="hidden ps-0 header-div container-fluid fs-1 text-light bold text-start">Equipment</div>
+    <div class="hidden col-lg-12 p-3 pe-lg-0 table-wrapper d-flex justify-content-center align-items-start">
+        <table class="challenges-table text-start">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th></th>
+                    <th>
+                        <button mat-icon-button (click)="openForm()" class="button-color mb-1">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eq of equipment">
+                    <td>{{eq.name}}</td>
+                    <td>{{eq.description}}</td>
+                    <td>
+                        <button mat-icon-button (click)="deleteEquipment(eq)" class="button-color mb-1">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+
+                    </td>
+                    <td>                        
+                        <button mat-icon-button (click)="updateForm(eq)" class="button-color mb-1">
+                        <mat-icon>edit</mat-icon>
+                    </button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

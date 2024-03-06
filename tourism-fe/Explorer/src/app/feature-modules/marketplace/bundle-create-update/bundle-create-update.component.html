@@ -1,0 +1,49 @@
+<div class="main-container">
+    <div class="form-container">
+        <div class="bundle-form">
+            <div class="mb-3">
+                <h1 class="header" *ngIf="id==null">Create bundle <i class="bi bi-patch-question-fill custom-green" matTooltip="In order to create a bundle, drag atleast 2 'Available tours' to 'Bundle tours' section, and fill input fields with valid data, then press 'Create' button." matTooltipPosition="right"></i></h1>
+                <h1 class="header" *ngIf="id!=null">Update bundle <i class="bi bi-patch-question-fill custom-green" matTooltip="In order to update a bundle, you can drag tours from 'Available tours' to 'Bundle tours'(has to contain atleast 2 at the end) and vice versa. Also, you can edit input fields. When you're done editing, press 'Update' button. " matTooltipPosition="right"></i></h1>
+            </div>
+            <form class="needs-validation align-items-center" [formGroup]="bundleCreateForm" autocomplete="off">
+                <div class="row mb-5 fs-6">
+                    <div class="col-lg-6">
+                        <label for="name" class="form-label">Bundle title</label>
+                        <input formControlName="name" type="text" class="form-control form-input" id="name"
+                            placeholder="Type bundle title here..." />
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="price" class="form-label">Bundle price</label>
+                        <input formControlName="price" type="number" class="form-control" id="price">
+                    </div>
+                </div>
+                <div class="row mb-5 fs-6">
+                    <div class="col-lg-6 fs-6">
+                        <label for="name" class="form-label">Available tours</label>
+                        <div class="example-container">
+                            <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="tours"
+                                [cdkDropListConnectedTo]="[doneList]" class="example-list"
+                                (cdkDropListDropped)="drop($event)">
+                                <div class="example-box" *ngFor="let item of tours" cdkDrag>{{item.name}} ( {{item.price}}
+                                    AC)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 fs-6">
+                        <label for="name" class="form-label text-start">Bundle tours ({{calculate_sum}} AC)</label>
+                        <div class="example-container">
+                            <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="selectedTours"
+                                [cdkDropListConnectedTo]="[todoList]" class="example-list"
+                                (cdkDropListDropped)="drop($event)">
+                                <div class="example-box" *ngFor="let item of selectedTours" cdkDrag>{{item.name}} (
+                                    {{item.price}} AC)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button  type="submit" class="btn save-button mx-2" *ngIf="id==null" (click)="createBundleClick()">Create</button>
+                <button  type="submit" class="btn save-button mx-2" *ngIf="id!=null" (click)="updateBundleClick()">Update</button>
+            </form>
+        </div>
+    </div>
+</div>

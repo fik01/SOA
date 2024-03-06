@@ -1,0 +1,46 @@
+<div id="container" class="p-5">
+  <div class="hidden ps-0 header-div container-fluid fs-1 text-light bold text-start">Users</div>
+  <div class="hidden col-lg-12 p-3 pe-lg-0 table-wrapper d-flex justify-content-center align-items-start">
+    <table class="challenges-table text-start">
+      <thead>
+        <tr>
+          <th>UserId</th>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Balance</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users"
+          [ngClass]="{'red-background': !user.isActive,'white-background': user.isActive }">
+          <td>{{ user.userId }}</td>
+          <td>{{ user.username }}</td>
+          <td>********</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td *ngIf="user.role === 'Tourist';else elseBlock">{{ user.balance }}</td>
+          <ng-template #elseBlock>
+            <td>NaN</td>
+          </ng-template>
+          <td *ngIf="user.isActive && user.role === 'Tourist';else elseBlock1">
+            <div class="input-group">
+              <input class="coin-input" type="number" class="form-control form-input" min="0" #coinInput
+                style="width: 40px;">
+              <div class="input-group-append">
+                <button (click)="addCoins(user,coinInput.value)" class="add-coins-button">Add Coins</button>
+              </div>
+            </div>
+          </td>
+          <ng-template #elseBlock1>
+            <td></td>
+          </ng-template>
+          <td><button *ngIf="user.isActive" (click)="OnBlockClicked(user)" class="block-button">Block</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

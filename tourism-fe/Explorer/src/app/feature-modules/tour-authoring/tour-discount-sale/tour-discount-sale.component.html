@@ -1,0 +1,30 @@
+<div class="form-container">
+    <div class="close-container">
+        <button class="btn close-button mt-0" (click)="closeDialog()"><i class="bi bi-x mt-0"></i></button>
+    </div>
+    <div class="mb-3">
+        <h1 class="header">Set Your Discount!</h1>
+    </div>
+    <div class="discount-form">
+        <div class="mb-3 fs-4">
+            <label for="percentage" class="form-label text-start">Discount(%)</label>
+            <input [(ngModel)]="salesData.discountPercentage" type="number" class="form-control form-input"
+                id="percentage" />
+        </div>
+        <div class="mb-3 fs-4">
+            <label for="date" class="form-label text-start">End Date</label>
+            <input [(ngModel)]="salesData.endDate" [min]="minEndDate()" [max]="maxEndDate()" type="date"
+                class="form-control form-input" id="date" />
+        </div>
+        <div class="profile-form mx-auto">
+            <div class="row mb-3 fs-4">
+                <div class="col-lg-6">
+                    <button type="submit" class="btn remove-button" (click)="removeSaleDiscount()">Remove</button>
+                </div>
+                <div class="col-lg-6">
+                    <button type="submit" class="btn save-button" (click)="saveSaleDiscount()"
+                    [disabled]="isDiscountSaved">Save</button>
+                </div>
+            </div>
+    </div>
+</div>

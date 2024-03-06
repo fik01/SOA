@@ -1,0 +1,89 @@
+<div class="full-page-bg"></div>
+<div class="registration"  >
+    <form [formGroup]="registrationForm" (ngSubmit)="register()" class="row g-3 needs-validation align-items-start">
+        <div class="mb-3">
+            <h1 class="header" >Register</h1>
+        </div>
+        <div class="col-md-6">
+            <label for="inputName" class="form-label">First name</label>
+            <input type="text" class="form-control form-input" required="true" formControlName="name" autocomplete="off" id="inputName" [ngClass]="{'red-border':  registrationForm.get('name')?.hasError('required') && (registrationForm.get('name')?.touched || submitted)}">
+            
+        </div>
+        <div class="col-md-6">
+            <label for="inputLastName" class="form-label">Last name</label>
+            <input type="text" class="form-control form-input"  required="true" formControlName="surname" autocomplete="off" id="inputLastName" [ngClass]="{'red-border': registrationForm.get('surname')?.hasError('required') && (registrationForm.get('surname')?.touched|| submitted)}">
+            <!-- <span *ngIf="!surnameFilled" class="red">Surname must be filled</span> -->
+        </div>
+        <div class="col-12">
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="email" class="form-control form-input" required="true" id="inputEmail" autocomplete="off" formControlName="email" [ngClass]="{'red-border': (registrationForm.get('email')?.hasError('email') || registrationForm.get('email')?.hasError('required')) && (registrationForm.get('email')?.touched|| submitted)}">
+            <!-- <span *ngIf="!emailFilled" class="red">Email must be filled</span>
+            <span *ngIf="registrationForm.get('email')?.hasError('email') && registrationForm.get('email')?.touched" class="red">Wrong format of email</span> -->
+        </div>
+        <div class="col-12">
+            <label for="inputusername" class="form-label">Username</label>
+            <input type="text" class="form-control  form-input" required="true" formControlName="username" autocomplete="off" id="inputusername" [ngClass]="{'red-border':  registrationForm.get('username')?.hasError('required') && (registrationForm.get('username')?.touched|| submitted)}">
+<!--             <span *ngIf="!usernameFilled" class="red">Username must be filled</span>
+ -->        </div>
+        <div class="col-md-6">
+            <label for="exampleInputPassword1" class="form-label text-start">Password</label>
+            <div class="input-group">
+                <input  [type]="fieldTextType ? 'text' : 'password'" 
+                        formControlName="password" 
+                        class="form-control form-input" 
+                        id="exampleInputPassword1"
+                        autocomplete="off"
+                        [ngClass]="{'red-border':  registrationForm.get('password')?.hasError('required') && (registrationForm.get('password')?.touched || submitted)} "
+                        required="true"
+                />
+                
+                <div class="input-group-append">
+                    <span class="input-group-text eye-icon"  (click)="toggleFieldTextType()" [ngClass]="{'red-border': registrationForm.get('password')?.hasError('required') && (registrationForm.get('password')?.touched || submitted)}">
+                        <i
+                        class="bi"
+                        [ngClass]="{
+                            'bi-eye-slash': fieldTextType,
+                            'bi-eye': !fieldTextType
+                        }"
+                        ></i>
+                    </span>
+                </div> 
+            </div>
+            <!-- <span *ngIf="!passwordFilled" class="red">Password must be filled</span> -->
+        </div>
+        <div class="col-md-6">
+            <label for="confirmPassword" class="form-label text-start">Confirm password</label>
+            <div class="input-group">
+                <input  [type]="fieldTextTypeConfirm ? 'text' : 'password'" 
+                        formControlName="confirmPassword" 
+                        class="form-control form-input" 
+                        id="confirmPassword"
+                        autocomplete="off"
+                        [ngClass]="{'red-border': !samePasswords ||  registrationForm.get('confirmPassword')?.hasError('required') && (registrationForm.get('confirmPassword')?.touched || submitted)}"
+                        required="true"
+                />
+                <div class="input-group-append">
+                    <span class="input-group-text eye-icon"  (click)="toggleFieldTextTypeConfirm()" [ngClass]="{'red-border': !samePasswords ||  registrationForm.get('confirmPassword')?.hasError('required') && (registrationForm.get('confirmPassword')?.touched || submitted)}">
+                        <i
+                        class="bi"
+                        [ngClass]="{
+                            'bi-eye-slash': fieldTextTypeConfirm,
+                            'bi-eye': !fieldTextTypeConfirm
+                        }"
+                        ></i>
+                    </span>
+                </div>  
+            </div>
+            
+                <!-- <span *ngIf="!samePasswords && confirmPasswordFilled" class="red"> Passwords are not the same </span>
+                <span *ngIf="!confirmPasswordFilled" class="red">Confirm password must be filled</span>
+             -->
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn sign-up-button" >Register</button>
+            <p class="sign-in">Already a member? <a href="/login" class="link">Log in</a></p>
+        </div>
+    </form>
+</div>
+
+

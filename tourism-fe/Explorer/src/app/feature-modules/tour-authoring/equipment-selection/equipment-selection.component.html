@@ -1,0 +1,37 @@
+<div id="equipment">
+    <p>Necessary equipment<i class="bi bi-patch-question-fill custom-green" matTooltip="In order to add equipment for this tour, press '+' button and choose available equipment." matTooltipPosition="right"></i></p>
+    <hr>
+    <div id="equipment-details">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Naziv</th>
+                        <th>Opis</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let eq of usedEquipment">
+                        <td>{{eq.name}}</td>
+                        <td>{{eq.description}}</td>
+                        <td>
+                            <button matTooltip="Remove equipment" matTooltipPosition="right" color="accent" (click)="moveToUnused(eq)" mat-icon-button>
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="no-messages" *ngIf="usedEquipment.length == 0">
+                        <td class="empty-used-equipment" colspan="3">This tour is yet to have equipment added.</td>
+                    </tr>
+                    <tr><button color="primary" (click)="onAddClicked()" mat-icon-button>
+                            <mat-icon>{{displayIcon}}</mat-icon>
+                        </button></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <xp-unused-equipment *ngIf="shouldRenderUnusedEquipment" (equipmentMoved)="getEquipment()" [tour]="tour"
+            [usedChanged]="usedEquipment"></xp-unused-equipment>
+    </div>
+</div>

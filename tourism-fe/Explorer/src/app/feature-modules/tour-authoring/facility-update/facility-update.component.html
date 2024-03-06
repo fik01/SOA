@@ -1,0 +1,32 @@
+<div  class="updateFacility">
+    <div>
+        <form [formGroup]="facilityUpdateForm" autocomplete="off">
+            <div class="updateForm">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name">
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label>Description</mat-label>
+                    <textarea class="styleTextarea" matInput formControlName="description" cdkTextareaAutosize></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>ImageUrl</mat-label>
+                    <input matInput type="text" formControlName="image">
+                </mat-form-field>
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="category">
+                        <mat-option value="wc">WC</mat-option>
+                        <mat-option value="restaurant">Restaurant</mat-option>
+                        <mat-option value="parking">Parking lot</mat-option>
+                        <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                <button mat-raised-button type="submit" color="primary" (click)="cancelFacility()">Cancel</button>
+                <button mat-raised-button type="submit" color="primary" (click)="updateFacility()">Save</button>
+            </div>
+        </form>
+    </div>
+    <div class="mapdiv">
+        <xp-map [mapId]="'facility-update-map'"></xp-map>
+    </div>
+</div>

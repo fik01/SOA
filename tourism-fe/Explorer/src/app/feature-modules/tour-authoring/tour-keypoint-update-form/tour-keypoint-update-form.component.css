@@ -1,0 +1,20 @@
+#tourKeyPoints{
+    display: flex;
+    margin-top: 100px;
+    
+  }
+  div {
+      width: 400px;
+      display:flex;
+      gap: 20px;
+      flex-direction: column;
+  }
+  
+  .mat-icon {
+      vertical-align: middle;
+  }
+  
+  .map{
+      height: 300px;
+      width: 100%;
+  }

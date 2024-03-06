@@ -1,0 +1,16 @@
+<div class="whole-box" style="padding: 30px;">
+  <div class="icon">
+    <i class="material-icons" style="font-size: 72px; color: #F9A900">warning</i>
+  </div>
+  <h2 mat-dialog-titlev style="text-align: center; font-weight: bold;">Are you sure?</h2>
+  <mat-dialog-content style="text-align: center">
+    <p>This process cannot be undone.<br>Are you sure you want to {{data.operation}} this {{data.type}}:</p>
+    <p style="font-weight: bold">{{data.title}}</p>
+  </mat-dialog-content>
+  <div style="margin-left: 60px; margin-right: 60px; margin-bottom: 30px;">
+    <mat-dialog-actions style="display: inline">
+      <button class="confirm-button" mat-button style="float: left; background-color: #c1c1c1; color: #fff; font-weight: bold; width: 120px;" (click)="onNoClick()">Cancel</button>
+      <button class="confirm-button" mat-button style="float: right; background-color: #f15e5e; color: #fff; font-weight: bold; width: 120px; text-transform: capitalize;" (click)="onYesClick()">{{data.operation}}</button>
+    </mat-dialog-actions>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="blogs-overview">
+    <h1 class="title-label ">Blogs</h1>
+    <hr style="color: var(--white); border: 2px solid;">
+    <div class="row mt-3">
+        <div class="col-12 col-lg-2 search-wrapper ">
+            <div class="mt-2 center-div-radio">
+                <h3 class="white-label status-margin-left">Status</h3>
+                <div class="line-div"><hr style="color: var(--white); border: 2px solid;"></div>
+                <div class="radio-button-color">
+                    <label (click)="filterBlogs(0)">
+                      <input type="radio" name="radio"/>
+                      <span>Draft</span>
+                    </label>
+                    <label (click)="filterBlogs(1)">
+                      <input type="radio" name="radio" checked />
+                      <span>Published</span>
+                    </label>
+                    <label (click)="filterBlogs(2)">
+                        <input type="radio" name="radio" />
+                        <span>Closed</span>
+                    </label>
+                    <label (click)="filterBlogs(3)">
+                        <input type="radio" name="radio" />
+                        <span>Famous</span>
+                    </label>
+                    <label (click)="filterBlogs(4)">
+                        <input type="radio" name="radio" />
+                        <span>Active</span>
+                    </label>
+                  </div>
+                <!-- <mat-radio-group aria-label="Select an option">
+                    <mat-radio-button value="0" (click)="filterBlogs(0)" class="disable-selection"><h2 class="white-label">Draft</h2></mat-radio-button><br>
+                    <mat-radio-button value="1" (click)="filterBlogs(1)" class="disable-selection"><h2 class="white-label">Published</h2></mat-radio-button><br>
+                    <mat-radio-button value="2" (click)="filterBlogs(2)" class="disable-selection"><h2 class="white-label">Closed</h2></mat-radio-button><br>
+                    <mat-radio-button value="3" (click)="filterBlogs(3)" class="disable-selection"><h2 class="white-label">Famous</h2></mat-radio-button><br>
+                    <mat-radio-button value="4" (click)="filterBlogs(4)" class="disable-selection"><h2 class="white-label">Active</h2></mat-radio-button>
+                </mat-radio-group> -->
+            </div>
+        </div> 
+        <div class="col-12 col-lg-10">
+            <div class="mt-2">
+                <div class="card-container">
+                    <mat-card *ngFor="let b of blogs;let i = index" class="blog-card" (click)="openBlogPage(b)">
+                        <div class="metadata">
+                            Posted by <span class="user-subreddit">{{b.username}}</span>
+                        </div>
+                        <mat-card-title class="blog-title">
+                            <p>{{b.title}}</p>
+                            <p *ngIf="b.status==0">Draft</p>
+                            <p *ngIf="b.status==1">Published</p>
+                            <p *ngIf="b.status==2">Closed</p>
+                            <p *ngIf="b.status==3">Famous</p>
+                            <p *ngIf="b.status==4">Active</p>
+                        </mat-card-title>
+                        <mat-card-content class="blog-content" [innerHTML]="renderMarkdown(b.description)">
+                        </mat-card-content>
+                        <div class="bottom-buttons">
+                            <button class="upvote-button" (click)="rateBlog(true,$event,i,b)" [ngClass]="{ 'orange-button': flags[i]>=1 }" matTooltip="Like">
+                                <mat-icon>thumb_up</mat-icon>
+                            </button>
+                            {{b.ratingSum}}
+                            <button class="downvote-button" (click)="rateBlog(false,$event,i,b)" [ngClass]="{ 'orange-button': flags[i]<=-1 }" matTooltip="Unlike">
+                                <mat-icon>thumb_down</mat-icon> 
+                            </button>
+                            <button class="comment-button" mat-icon-button matTooltip="Comment">
+                                <mat-icon>comment</mat-icon>
+                            </button>
+                        </div>
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>   
+    </div>
+
+
+</div>
+<button class="bottom-right-button" mat-icon-button (click)="createBlog()">
+    <mat-icon>add</mat-icon>
+</button>

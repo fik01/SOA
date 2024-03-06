@@ -1,0 +1,12 @@
+<div class="misc-challenge-wrapper p-3">
+  <div class="container-fluid d-flex align-items-center" style="font-size: 24px;">
+    <i class="bi bi-arrow-90deg-down me-2 mt-3"></i>
+    {{data.name}}
+  </div>
+  <div class="challenge-description p-3 mt-4">
+    {{data.description}}
+  </div>
+  <div mat-dialog-actions class="custom-dialog-actions container-fluid d-flex justify-content-center">
+    <button mat-button (click)="closeDialog()" class="close-btn px-4 py-3 mt-5">Close</button>
+  </div>
+</div>

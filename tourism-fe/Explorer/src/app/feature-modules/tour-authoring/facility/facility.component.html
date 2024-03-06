@@ -1,0 +1,38 @@
+<div id="facilities">
+    <p>Facilities</p>
+    <hr>
+    <div id="facilities-details">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let fa of facilities" >
+                        <tr *ngIf="categoriesSelected[fa.category]">
+                            <td>{{fa.name}}</td>
+                            <td>{{fa.description}}</td>
+                            <td><a href="{{fa.image}}">{{fa.image}}</a></td>
+                            <td>{{facilityCategoryToString(fa.category)}}</td>
+                            <td>{{fa.latitude}}</td>
+                            <td>{{fa.longitude}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <mat-checkbox [(ngModel)]="categoriesSelected[0]">Wc</mat-checkbox>
+    <mat-checkbox [(ngModel)]="categoriesSelected[1]">Restaurant</mat-checkbox>
+    <mat-checkbox [(ngModel)]="categoriesSelected[2]">Parking</mat-checkbox>
+    <mat-checkbox [(ngModel)]="categoriesSelected[3]">Other</mat-checkbox>
+</div>
+
+

@@ -1,0 +1,196 @@
+<div class="overall-tour-statistics">
+    <div class="hidden ps-0 header-div container-fluid fs-1 bold text-start">Tour Statistics</div>
+
+    <div class="overall-stats-container">
+        <div class="cards-container">
+            <h2 class="completion-percentage-h2 first">Your Personal Statistics</h2>
+            <div class="stat-card rounded-pill my-1">
+                <p>Number of people that bought one of your tours: {{soldToursNumber}}</p>
+            </div>
+
+            <div class="stat-card rounded-pill my-1">
+                <p>Number of starts on your tours: {{startedToursNumber}}</p>
+            </div>
+
+            <div class="stat-card rounded-pill my-1">
+                <p>Number of completions on your tours: {{completedToursNumber}}</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <!-- <h2 class="completion-percentage-h2">Tour Completion % Statistics</h2> -->
+            <canvas id="MyChart">{{ chart }}</canvas>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row text-start separator"><h2>TOP 3 Attended Tours:</h2></div>
+            <div class="row">
+                <div class="no-stats" *ngIf="attendedTours.length == 0">
+                    <img src="../../../../assets/images/nostats.png">
+                    <p>No available statistics!</p>
+                </div>
+                <div *ngFor="let t of attendedTours;let i=index" class="col-4">
+                    <mat-card class="tour-card">
+                        <div class="card-image"
+                        style="background-image: url('{{ t?.image }}');">
+                            <mat-card-title class="card-title">
+                                <p class="title-name">{{t.name}}</p>
+                                <p class="title-price">{{t.price}}RSD</p>
+                            </mat-card-title>
+                            <p>{{tourStatus[t.status]}}</p>
+                            <p class="card-description">{{t.description}}</p>
+                        </div>
+                        <br>
+                        <mat-card-content class="card-content">
+                            <div class="circles-container">
+                                <p>Difficulty</p>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 0, 'empty-circle': t.difficulty !== 0}">fiber_manual_record</mat-icon>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 1, 'empty-circle': t.difficulty !== 1}">fiber_manual_record</mat-icon>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 2, 'empty-circle': t.difficulty !== 2}">fiber_manual_record</mat-icon>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 3, 'empty-circle': t.difficulty !== tourDifficulty.Pro}">fiber_manual_record</mat-icon>
+                            </div>
+                            <br>
+                            <div>
+                                <p>{{t.tags}}</p>
+                                <p>Number of people that attended this Tour: {{attendedToursStats[i].numberOfStats}}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="row text-start separator"><h2>TOP 3 Abandoned Tours:</h2></div>
+                <div class="row">
+                    <div class="no-stats" *ngIf="abandonedTours.length == 0">
+                        <img src="../../../../assets/images/nostats.png">
+                        <p>No available statistics!</p>
+                    </div>
+                <div *ngFor="let t of abandonedTours;let i=index" class="col-4">
+                    <mat-card class="tour-card">
+                            <div class="card-image"
+                            style="background-image: url('{{ t?.image }}');">
+                                <mat-card-title class="card-title">
+                                    <p class="title-name">{{t.name}}</p>
+                                    <p class="title-price">{{t.price}}RSD</p>
+                                </mat-card-title>
+                                <p>{{tourStatus[t.status]}}</p>
+                                <p class="card-description">{{t.description}}</p>
+                            </div>
+                            <br>
+                            <mat-card-content class="card-content">
+                                <div class="circles-container">
+                                    <p>Difficulty</p>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 0, 'empty-circle': t.difficulty !== 0}">fiber_manual_record</mat-icon>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 1, 'empty-circle': t.difficulty !== 1}">fiber_manual_record</mat-icon>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 2, 'empty-circle': t.difficulty !== 2}">fiber_manual_record</mat-icon>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 3, 'empty-circle': t.difficulty !== tourDifficulty.Pro}">fiber_manual_record</mat-icon>
+                                </div>
+                                <br>
+                                <div>
+                                    <p>{{t.tags}}</p>
+                                    <p>Number of people that abandoned this Tour: {{abandonedToursStats[i].numberOfStats}}</p>
+                                </div>
+                            </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="row text-start separator"><h2>TOP 3 Popular(Sold) Tours:</h2></div>
+            <div class="row">
+                    <div class="no-stats" *ngIf="mostSoldTours.length == 0">
+                        <img src="../../../../assets/images/nostats.png">
+                        <p>No available statistics!</p>
+                    </div>
+                    <div *ngFor="let t of mostSoldTours;let i=index" class="col-4">
+                        <mat-card class="tour-card">
+                            <div class="card-image"
+                            style="background-image: url('{{ t?.image }}');">
+                                <mat-card-title class="card-title">
+                                    <p class="title-name">{{t.name}}</p>
+                                    <p class="title-price">{{t.price}}RSD</p>
+                                </mat-card-title>
+                                <p>{{tourStatus[t.status]}}</p>
+                                <p class="card-description">{{t.description}}</p>
+                            </div>
+                            <br>
+                            <mat-card-content class="card-content">
+                                <div class="circles-container">
+                                    <p>Difficulty</p>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 0, 'empty-circle': t.difficulty !== 0}">fiber_manual_record</mat-icon>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 1, 'empty-circle': t.difficulty !== 1}">fiber_manual_record</mat-icon>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 2, 'empty-circle': t.difficulty !== 2}">fiber_manual_record</mat-icon>
+                                    <mat-icon
+                                        [ngClass]="{'filled-circle': t.difficulty === 3, 'empty-circle': t.difficulty !== tourDifficulty.Pro}">fiber_manual_record</mat-icon>
+                                </div>
+                                <br>
+                                <div>
+                                    <p>{{t.tags}}</p>
+                                    <p>Number of people that bought this Tour: {{mostSoldToursStats[i].numberOfStats}}</p>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>          
+            </div>
+
+            <div class="row text-start separator"><h2>TOP 3 Rated Tours:</h2></div>
+            <div class="row">
+                <div class="no-stats" *ngIf="bestRatedTours.length == 0">
+                    <img src="../../../../assets/images/nostats.png">
+                    <p>No available statistics!</p>
+                </div>
+                <div *ngFor="let t of bestRatedTours;let i=index" class="col-4">
+                    <mat-card class="tour-card">
+                        <div class="card-image"
+                        style="background-image: url('{{ t?.image }}');">
+                            <mat-card-title class="card-title">
+                                <p class="title-name">{{t.name}}</p>
+                                <p class="title-price">{{t.price}}RSD</p>
+                            </mat-card-title>
+                            <p>{{tourStatus[t.status]}}</p>
+                            <p class="card-description">{{t.description}}</p>
+                        </div>
+                        <br>
+                        <mat-card-content class="card-content">
+                            <div class="circles-container">
+                                <p>Difficulty</p>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 0, 'empty-circle': t.difficulty !== 0}">fiber_manual_record</mat-icon>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 1, 'empty-circle': t.difficulty !== 1}">fiber_manual_record</mat-icon>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 2, 'empty-circle': t.difficulty !== 2}">fiber_manual_record</mat-icon>
+                                <mat-icon
+                                    [ngClass]="{'filled-circle': t.difficulty === 3, 'empty-circle': t.difficulty !== tourDifficulty.Pro}">fiber_manual_record</mat-icon>
+                            </div>
+                            <br>
+                            <div>
+                                <p>{{t.tags}}</p>
+                                <p>Average Tour rating: {{bestRatedToursStats[i].numberOfStats}}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+
+        </div>
+    </div>    
+
+    <div>
+        <button class="to-top" (click)="scrollToTop()" mat-icon-button [ngClass]="{ 'show-scrollTop': windowScrolled }">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+    </div>
+</div>

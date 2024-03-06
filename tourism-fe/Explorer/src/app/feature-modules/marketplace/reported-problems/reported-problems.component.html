@@ -1,0 +1,71 @@
+<div id="reported-problems">
+    <div id="reported-problems-details">
+        <div class="reported-problems">
+            <div class="hidden ps-0 header-div container-fluid fs-1 text-start">Reported Tour Problems<i *ngIf="(user.role === 'tourist')" class="bi bi-patch-question-fill custom-green" matTooltip="Tour problems are used to report a problem that you encountered on the tour so that the tour author can resolve it as soon as possible." matTooltipPosition="right"></i>
+                <i *ngIf="(user.role === 'author')" class="bi bi-patch-question-fill custom-green" matTooltip="Tour problems are used to report a problem that tourist encountered on the tour so that you, as the tour author, can resolve it as soon as possible." matTooltipPosition="right"></i></div>
+            <div class="no-problems" *ngIf="reportedProblems.length == 0">
+                <img src="../../../../assets/images/noproblems.png">
+                <p>There are currently no tour problems available.</p>
+            </div>
+            <div class="card-container">
+                <mat-card *ngFor="let tp of reportedProblems" class="problem-card">
+                    <mat-card-subtitle class="subtitle-container">
+                        <div class="subtitle">
+                            <p> {{problemCategoryToString(tp.category)}}</p>
+                            <p> {{problemPriorityToString(tp.priority)}} priority</p>
+                        </div>
+                        <div class="subtitle">
+                            <p class="solved-badge" *ngIf="tp.isSolved">SOLVED</p>
+                            <p> {{ tp.time | date : "dd/MM/yyyy HH:mm" }}</p>
+                        </div>
+                    </mat-card-subtitle>
+                    <mat-card-title class="card-title">
+                        <p *ngIf="(user.role === 'tourist')" ><b>{{tp.tourName}}</b></p>
+                        <p *ngIf="(user.role === 'author')"> <b>{{tp.touristUsername}}</b> reported a problem for tour <b>{{tp.tourName}}</b>:</p>
+                        <p class="desc">{{tp.description}}</p>
+                    </mat-card-title>
+                    <mat-card-content class="card-content">
+                        <mat-checkbox class="solve-checkbox" *ngIf="(!tp.isSolved) && (user.role === 'tourist')" [(ngModel)]="tp.isSolved"
+                            (ngModelChange)="updateProblem(tp)">Mark as solved</mat-checkbox>
+                        <mat-expansion-panel class="messages-panel" (opened)="markMessagesAsRead(tp)">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Messages:
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="message-card-container">
+                                <div *ngIf="tp.messages.length == 0">
+                                    <div class="no-messages">There are currently no messages for this problem.</div>
+                                </div>
+                                <mat-card *ngFor="let m of tp.messages" class="message-card">
+                                    <mat-card-subtitle class="subtitle-container">
+                                        <div>{{ m.senderName === user.username ? 'You' : m.senderName }} :</div>
+                                        <div>{{m.creationTime | date : "dd/MM/yyyy HH:mm"}}</div>
+                                    </mat-card-subtitle>
+                                    <mat-card-title class="message-description">
+                                        <p>{{m.description}}</p>
+                                    </mat-card-title>
+                                </mat-card>
+                            </div>
+                            <form [formGroup]="messageForm" *ngIf="!tp.isSolved">
+                                <div class="row mb-3 fs-6">
+                                    <div class="col-lg-11">
+                                        <div class="mb-3 fs-6">
+                                            <textarea formControlName="description" type="text" class="form-control form-input"
+                                            placeholder="Type your message..." id="title"></textarea>
+                                          </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <button class="send-button" class="send-button" (click)="addMessage(tp)">
+                                            <mat-icon>send-button</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>    
+                            </form>
+                        </mat-expansion-panel>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

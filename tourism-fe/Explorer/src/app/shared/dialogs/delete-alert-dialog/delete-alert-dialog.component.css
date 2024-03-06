@@ -1,0 +1,14 @@
+  .icon {
+    text-align: center;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    border-radius: 50%;
+    z-index: 9;
+    text-align: center;
+    border: 3px solid #F9A900;
+  }
+
+  .confirm-button:hover {
+    color: #4caf50;
+  }

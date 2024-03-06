@@ -1,0 +1,103 @@
+.tour-card {
+  width: 100%;
+  height: 14vh;
+  min-height: 300px;
+  border-radius: 15px;
+  background-color: transparent; 
+  overflow: hidden;
+  margin: 8px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 8px solid var(--white);
+}
+
+#recomended-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+#recomended-scroll::-webkit-scrollbar-track {
+  background: var(--white);
+  border-radius: 20px;
+}
+
+#recomended-scroll::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 20px;
+}
+
+#recomended-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.recommended-header{
+  font-size: 26px;
+  color: var(--white);
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  line-height: 1.2;
+}
+.add-to-cart-btn{
+  border-radius: 15px;
+  transition: all 0.5s ease;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white);
+  font-size: 18px;
+  width: 80%;
+  position: relative;
+  bottom: 8px;
+}
+.add-to-cart-btn:hover{
+  background-color: var(--fourth-color);
+  border-color: var(--fourth-color);
+}
+.add-to-cart-btn:disabled{
+  background-color: transparent;
+  border-color: transparent;
+  text-decoration:underline;
+  color: var(--primary-color);
+}
+
+.tour-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter:contrast(75%);
+}
+.tour-header {
+  font-size: 22px;
+  position: absolute;
+  top: 0;
+  color: var(--white);
+  width: 100%;
+}
+.tour-header-span{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+.tour-footer{
+  font-size: 16px;
+  position: absolute;
+  bottom: 0;
+  background-color: var(--white);
+  border-radius: 15px 15px 0 0;
+  overflow: hidden;
+  width: 100%;
+  height: 0%;
+  transition: 0.5s ease;
+  cursor: pointer;
+  color: var(--third-color);
+}
+.tour-card:hover .tour-footer{
+  height: 60%;
+}
+.difficulty-badge{
+  border-radius: 15px;
+  font-size: 18px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}

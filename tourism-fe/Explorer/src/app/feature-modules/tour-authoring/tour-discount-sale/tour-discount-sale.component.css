@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; 
+  width: 100%;
+  margin: 0px auto;
+  background-color: white;
+}
+
+.close-container {
+  display: flex;
+  justify-content: end;
+  height: 30px;
+}
+
+.save-button{
+  background-color: var(--primary-color);
+  color: white;
+  margin: 20px auto 0px auto;
+  width: 100%;
+}
+
+.remove-button{
+    background-color: var(--third-color);
+    color: white;
+    margin: 20px auto 0px auto;
+    width: 100%;
+}
+
+.close-button{
+  font-size:20px;
+  border: none;
+}
+
+.close-button:hover{
+  color:var(--fifth-color)
+}
+
+.discount-form {
+  background-color: var(--white);
+  color: black;
+  font-weight: bold;
+  z-index: 2;
+  padding: 0px 50px;
+  flex: 1;
+}
+.form-label{
+    font-size: 16px;
+}
+
+.header {
+  font-family: Poppins;
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
+  color: black;
+}
+
+.form-label {
+  color: rgb(0, 0, 0);
+}
+
+.form-input {
+  background-color: rgb(255, 255, 255);
+}

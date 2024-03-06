@@ -1,0 +1,59 @@
+<div class="tour">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>People you are following also completed these tours</h2>
+            <div class="rating">
+                <span class="padding-for-stars">Filter:</span>
+                <span class="bigger-font" *ngFor="let star of stars; let i = index" (click)="rate(i + 1)" [class.active]="i < currentRate">&#9733;</span>
+                <div style="flex: 1;"></div>
+                <button class="btn-complete" (click)="sendEmail()">Send tours to email</button>
+            </div>
+            <br>
+            <div class="card-container">
+                <mat-card (mouseenter)="getFirstTourKeypointById(t.id)" *ngFor="let t of tours; let idx = index"
+                    class="tour-card" (click)="tourShow(t.id)">
+                    <div *ngIf="firstKeyPoint" class="overlay">
+                        <div class="info">
+                            <h4>Starting Key Point: <b>{{ firstKeyPoint.name }}</b></h4>
+                            <p class="keypoint-description">{{ firstKeyPoint.description }}</p>
+                            <p>Longitude: {{ firstKeyPoint.longitude }}</p>
+                            <p>Latitude: {{ firstKeyPoint.latitude }}</p>
+                        </div>
+                        <div class="slika">
+                            <img src="{{firstKeyPoint.image}}">
+                        </div>
+                    </div>
+                    <div class="card-image"
+                        style="background-image: url('https://www.flimslaax.com/fileadmin/Daten/0Flims_Laax_Bilder/3-Outdoor/3-2-Wandern/3-2-1-Wanderwege/flims_laax_falera_wanderwege2.jpg');">
+                        <mat-card-title class="card-title">
+                            <p>{{t.name}}</p>
+                            <p>{{t.price}} RSD</p>
+                        </mat-card-title>
+                        <p class="card-description">{{t.description}}</p>
+                    </div>
+                    <br>
+                    <mat-card-content class="card-content">
+                        <div class="circles-container">
+                            <p class="tour-difficulty">Difficulty</p>
+                            <mat-icon
+                                [ngClass]="{'filled-circle': t.difficulty === 0, 'empty-circle': t.difficulty !== 0}">fiber_manual_record</mat-icon>
+                            <mat-icon
+                                [ngClass]="{'filled-circle': t.difficulty === 1, 'empty-circle': t.difficulty !== 1}">fiber_manual_record</mat-icon>
+                            <mat-icon
+                                [ngClass]="{'filled-circle': t.difficulty === 2, 'empty-circle': t.difficulty !== 2}">fiber_manual_record</mat-icon>
+                            <mat-icon
+                                [ngClass]="{'filled-circle': t.difficulty === 3, 'empty-circle': t.difficulty !== 3}">fiber_manual_record</mat-icon>
+                        </div>
+                        <br>
+                        <div>
+                            <p class="tour-tags">{{t.tags}}</p>
+                            <button class="add-to-cart-button" type="submit" mat-raised-button
+                                (click)="handleButtonClick($event, t, idx)" [disabled]="buttonStatus[idx]">Add to
+                                cart</button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

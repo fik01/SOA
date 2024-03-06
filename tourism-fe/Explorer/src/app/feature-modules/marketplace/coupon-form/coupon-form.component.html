@@ -1,0 +1,52 @@
+<div class="form-container justify-content-center">
+  <div class="close-container mb-0">
+    <button class="btn close-button mt-0" (click)="closeDialog()"><i class="bi bi-x mt-0"></i></button>
+  </div>
+  <h1 class="header">{{title}} coupon</h1>
+  <div class="coupon-form">
+    <form class="needs-validation align-items-start" [formGroup]="couponForm">
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="code" class="form-label text-start">Code</label>
+          <input formControlName="code" type="text" readonly class="form-control form-input" id="code" />
+        </div>
+        <div class="col-lg-6">
+          <button type="submit" class="btn generate-button" (click)="generateCode()">Generate</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="discount" class="form-label text-start">Discount</label>
+          <div class="input-group">
+            <input formControlName="discount" type="number" class="form-control form-input" id="discount" />
+            <div class="input-group-append">
+              <span class="input-group-text bg-transparent rounded-right fw-bold">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row mb-3">
+            <label for="expirationDate" class="form-label text-start">Expiration date</label>
+            <div class="input-group">
+              <input matInput [matDatepicker]="picker" formControlName="expirationDate" class="form-control form-input">
+              <div class="input-group-append">
+                <span class="datepicker-toggle input-group-text bg-transparent rounded-right">
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="tour" class="form-label text-start">Tour</label>
+        <select formControlName="tourId" id="tour" class="form-control form-select" aria-label="Default select example">
+          <option value=0>All tours</option>
+          <option *ngFor="let tour of tours" [value]="tour.id">{{tour.name}}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn save-button" (click)="submit()" [disabled]="!couponForm.valid">{{title}}</button>
+    </form>
+  </div>
+</div>

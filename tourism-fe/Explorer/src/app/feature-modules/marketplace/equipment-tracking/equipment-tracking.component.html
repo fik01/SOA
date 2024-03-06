@@ -1,0 +1,59 @@
+<div class="equipment">
+    <p>My equipment</p>
+    <hr>
+    <div class="equipment-tracking-container">
+        <div>
+            <table class="container-element">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let eq of usedEquipment">
+                        <td>{{eq.name}}</td>
+                        <td>{{eq.description}}</td>
+                        <td>
+                            <button color="accent" (click)="deleteEquipment(eq.id || 0, eq)" mat-icon-button>
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+        </div>
+        <div>
+            <mat-expansion-panel class="container-element">
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Add more equipment
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                    <table class="equipment-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let eq of unusedEquipment">
+                                <td>{{eq.name}}</td>
+                                <td>{{eq.description}}</td>
+                                <td>
+                                    <button color="accent" (click)="addEquipment(eq.id || 0, eq)" mat-icon-button>
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                  
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+</div>

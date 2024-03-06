@@ -1,0 +1,68 @@
+<div class="tour">
+  <!-- <button class="overall-stats-button" [routerLink]="['overall-tour-statistics']" mat-raised-button>Overall Tour Statistics</button> -->
+  <div class="card-container" style="overflow-y: scroll;height: 100vh;scroll-behavior: smooth;">
+    <mat-card *ngFor="let t of tours" class="tour-card">
+      <div (click)="openTourView(t.id!)" class="card-image" matTooltip="Edit Tour" matTooltipPosition="right" style="background-image: url({{t.image}});">
+        <mat-card-title class="card-title">
+          <p>{{t.name}}</p>
+
+          <div class="price-wrapper">
+            <p [ngClass]="{'discounted-price': showDiscount && selectedTour === t}">{{t.price}}AC</p>    
+            <p class="new-price" *ngIf="dialogOpen && showDiscount && selectedTour === t" style="color: red;"> -{{ discountPercentage }}% </p>
+            <!--<button class="discount-btn" (click)="openDiscountSaleForm($event, t)">Discount</button>-->
+          </div>
+
+        </mat-card-title>
+        <p>{{tourStatus[t.status]}}</p>
+        <p class="card-description">{{t.description}}</p>
+      </div>
+      <br>
+      <mat-card-content class="card-content">
+        <div class="circles-container">
+          <p>Difficulty</p>
+          <mat-icon [ngClass]="{'filled-circle': t.difficulty === 0, 'empty-circle': t.difficulty !== 0}">fiber_manual_record</mat-icon>
+          <mat-icon [ngClass]="{'filled-circle': t.difficulty === 1, 'empty-circle': t.difficulty !== 1}">fiber_manual_record</mat-icon>
+          <mat-icon [ngClass]="{'filled-circle': t.difficulty === 2, 'empty-circle': t.difficulty !== 2}">fiber_manual_record</mat-icon>
+          <mat-icon [ngClass]="{'filled-circle': t.difficulty === 3, 'empty-circle': t.difficulty !== tourDifficulty.Pro}">fiber_manual_record</mat-icon>
+        </div>
+        <div>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Equipment
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div>
+              <xp-equipment-selection [tour]="t"></xp-equipment-selection>
+            </div>
+          </mat-expansion-panel>
+        </div>
+        <br>
+        <div>
+          <p>{{t.tags}}</p>
+          <button type="submit" *ngIf="canBeArchived(t)" (click)="archiveTour(t)" mat-raised-button>Archive</button>
+          <button type="submit" *ngIf="canBePublished(t)" (click)="publishTour(t)" mat-raised-button>Publish</button>
+          <button disabled *ngIf="errorMessage" type="submit" mat-raised-button>Publish</button>
+          <button type="submit" mat-raised-button (click)="showStatistics(t.id!)">Show statistics</button>
+          <p *ngIf="errorMessage" class="error-message"> Can't publish with invalid data! </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="noTours" class="no-tours">
+    <img src="../../../assets/images/no-tours-lightmode.png" alt="no picture">
+    <h3 style="color: white;"> <b>Currently, there are no tours created by you. <br>If you want to have your own tours, you first need to create them by pressing the create button.</b></h3>
+</div>
+</div>
+<div class="bottom-right-button-container">
+
+<button class="bottom-right-button" mat-icon-button (click)="openAddTourForm()">
+  <mat-icon>add</mat-icon>
+</button>
+
+<div>
+  <button class="to-top" (click)="scrollToTop()" mat-icon-button [ngClass]="{ 'show-scrollTop': windowScrolled }">
+      <mat-icon>keyboard_arrow_up</mat-icon>
+  </button>
+</div>
+</div>

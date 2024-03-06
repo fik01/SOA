@@ -1,0 +1,249 @@
+.map-view-container {
+  height: 100vh;
+  margin: 0;
+  background-image: url("../../../../assets/images/resized/2K/explore.webp");
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 -16em 60em var(--third-color);
+  display: flex;
+  justify-content: center;
+}
+
+.sections {
+  padding-top: 80px;
+  padding-bottom: 10px;
+  height: 100%;
+  display: flex;
+  width: 98%;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+@media only screen and (max-width: 1100px) {
+  .sections {
+    flex-direction: column-reverse;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .menu-section {
+    width: 80%;
+    max-height: 500px;
+  }
+
+  .map-section {
+    width: 100%;
+    height: 950px;
+  }
+}
+
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 450px;
+  max-width: 450px;
+  height: 100%;
+}
+
+.map-section {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+}
+
+.button-section {
+  background-color: #fff;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.button-section .upper-row {
+  display: flex;
+  justify-content: space-between;
+}
+.button-section .upper-row .button {
+  margin-right: 20px;
+}
+
+.button-section .lower-row {
+  display: flex;
+  justify-content: space-between;
+}
+.button-section .lower-row .button {
+  margin-right: 20px;
+  margin-top: 5px;
+}
+
+.button-label {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 12px;
+  width: 100%;
+  word-wrap: break-word;
+}
+.button-color {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.tours-section {
+  background-color: var(--white);
+  border: 3px solid var(--white);
+  border-radius: 15px;
+  overflow: auto;
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+  position: relative;
+  flex: 1;
+}
+.tour-card {
+  padding: 24px;
+  width: 100%;
+  border: 3px solid var(--primary-color);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: 0.1s;
+}
+.tour-card button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.my-location-button {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 400;
+}
+
+.challenge-info-button {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  z-index: 400;
+}
+
+.tour-execution-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  translate: -50%;
+  max-width: 250px;
+  z-index: 400;
+  transition: 0.5s;
+}
+
+.misc-button {
+  position: absolute;
+  bottom: 20px;
+  max-width: 250px;
+  z-index: 400;
+  transition: 0.5s;
+}
+
+.misc-button.complete {
+  right: 50%;
+  translate: 101%;
+}
+
+.misc-button.abandon {
+  left: 50%;
+  translate: -101%;
+}
+
+.selected-tour {
+  transform: scale(1.05);
+  background-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+.tour-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.button-invisible {
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.button-visible {
+  opacity: 100%;
+  pointer-events: auto;
+}
+
+.abandon-button-color {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.transportation-radio-group {
+  display: flex;
+  /* gap: 30px; */
+  justify-content: space-between;
+}
+
+.tour-description {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical; 
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.tour-buttons {
+  padding-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.my-tours-title {
+  background-color: var(--white);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.disabled-tour {
+  position: relative;
+  pointer-events: none;
+  border-color: #777;
+}
+
+.disabled-tour::before {
+  border-radius: 10px;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(95, 92, 92, 0.5);
+  z-index: 1;
+}
+
+.disabled-tour mat-radio-button,
+.disabled-tour button {
+  color: #a19e9e;
+}
+
+.disabled-tour button {
+  background-color: #777;
+}
+
+.active-tour mat-radio-button {
+  pointer-events: none;
+}
+
+.tab {
+  padding-top: 15px;
+}

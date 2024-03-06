@@ -1,0 +1,69 @@
+<div id="tour-problems" class="p-5">
+    <div class="hidden ps-0 header-div container-fluid fs-1 text-light bold text-start">Tour problems</div>
+    <div class="hidden col-lg-12 p-3 pe-lg-0 table-wrapper d-flex justify-content-center align-items-start">
+        <table class="challenges-table text-start">
+            <thead>
+                <tr>
+                    <th>Tourst username</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Description</th>
+                    <th>Time</th>
+                    <th>Author username</th>
+                    <th>Solved</th>
+                    <th>Give deadline</th>
+                    <th></th>
+                    <th></th>
+                    <th>Deadline</th>
+                    <th>Penalty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tp of tourProblems"
+                    [ngClass]="{'red-background':hasFiveDaysPassed(tp.time, tp.isSolved, HasDeadlinePassed(tp.time,tp.isSolved)), 'white-background': !hasFiveDaysPassed(tp.time, tp.isSolved, HasDeadlinePassed(tp.time, tp.isSolved))}">
+                    <td>{{tp.touristUsername}}</td>
+                    <td>{{problemCategoryToString(tp.category)}}</td>
+                    <td>{{problemPriorityToString(tp.priority)}}</td>
+                    <td>{{tp.description}}</td>
+                    <td>{{tp.time | date: 'medium'}}</td>
+                    <td>{{tp.authorUsername}}</td>
+                    <td>{{tp.isSolved ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <button *ngIf="hasFiveDaysPassed(tp.time, tp.isSolved, !HasDeadline(tp.deadline))"
+                            (click)="DeadlineClicked(tp.id)" class="deadline-button">Give deadline</button>
+                        <button *ngIf="hasFiveDaysPassed(tp.time, tp.isSolved, HasDeadline(tp.deadline))"
+                            (click)="DeadlineClicked(tp.id)" class="deadline-button">Update deadline</button>
+                    </td>
+                    <td colspan="2">
+                        <div class="row"  *ngIf="isCalnedar && selectedRowId === tp.id">
+                            <div style="display: flex;">
+                                <form [formGroup]="deadlineForm" >
+                                    <mat-form-field>
+                                        <input matInput [matDatepicker]="picker" formControlName="deadline">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+
+                                <span class="row red-letters" *ngIf="!this.isValid">
+                                    <p>Date is not valid!</p>
+                                </span>
+                            </form>
+                            <button (click)="GiveDeadline()" class="deadline-button little-margin">Give deadline</button>
+                            </div>
+
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="hasFiveDaysPassed(tp.time, tp.isSolved, HasDeadline(tp.deadline))">{{tp.deadline |
+                            date: 'medium'}}</span>
+                    </td>
+                    <td>
+                        <button *ngIf="HasDeadlinePassed(tp.deadline!,tp.isSolved)" (click)="GivePenalty(tp)"
+                            class="deadline-button">Give penalty</button>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="search-container">
+    <form class="search-form" [formGroup]="searchForm">
+        <div class="row">
+            <mat-form-field class="form-field search-input">
+                <input matInput placeholder="Name" formControlName="name">
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <mat-form-field class="form-field search-input">
+                    <input matInput placeholder="Tag" formControlName="tag">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <button mat-flat-button class="add-button" (click)="addTag()">
+                    Add tag
+                </button>
+            </div>
+        </div>
+        <div class="row" *ngIf="tagsForSearch.length > 0">
+            <div>
+                <span>
+                    <mat-chip *ngFor="let tag of tagsForSearch; let i = index" (removed)="removeTag(tag)" class="chips-wrapper" color="accent">
+                        {{ tag }}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <mat-form-field class="form-field search-input">
+                <mat-select placeholder="Difficulty" (selectionChange)="onDifficultySelected($event)"
+                    formControlName="difficulty">
+                    <mat-option *ngFor="let option of difficultyOptions" [value]="option">{{ option
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="form-field search-input">
+                <input matInput placeholder="Start price" formControlName="startPrice" min="0" max="10000"
+                    type="number">
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="form-field search-input">
+                <input matInput placeholder="End price" formControlName="endPrice" min="0" max="10000" type="number">
+            </mat-form-field>
+        </div>
+        <div class="search-button-container">
+            <button mat-flat-button class="search-button" (click)="search($event)">
+                Search
+            </button>
+        </div>
+
+    </form>
+</div>

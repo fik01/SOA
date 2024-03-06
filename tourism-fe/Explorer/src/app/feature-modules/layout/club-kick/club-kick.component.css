@@ -1,0 +1,14 @@
+.list-container {
+  background: #edebdf;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  padding: 20px;
+  align-items: center;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.kick-button {
+  margin-left: 10px;
+}
