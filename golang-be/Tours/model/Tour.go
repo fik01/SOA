@@ -76,12 +76,12 @@ type Tour struct {
 	PublishedDate time.Time
 	Image         string
 	KeyPoints     []TourKeyPoint `gorm:"foreignKey:TourID"`
-	Durations     string
+	Durations     []TourDuration `gorm: "foreignKey:TourID"`
 }
 
-/*func NewTour(name string, description string, price float64, difficulty TourDifficulty,
-	tags []Tag, status TourStatus, authorId int, equipment []int, distanceInKm float64,
-	archiveDate, publishDate time.Time, image string, keyPoints []TourKeyPoint, durations string) *Tour {
+func NewTour(name string, description string, price float64, difficulty TourDifficulty,
+	tags ArrayString, status TourStatus, authorId int, equipment []int, distanceInKm float64,
+	archiveDate, publishDate time.Time, image string, keyPoints []TourKeyPoint, durations []TourDuration) *Tour {
 	tour := &Tour{
 		Name:          name,
 		Description:   description,
@@ -99,7 +99,7 @@ type Tour struct {
 	}
 
 	return tour
-}*/
+}
 
 func (tour *Tour) CreateID(scope *gorm.DB) error {
 	tour.ID = uuid.New()
@@ -116,9 +116,9 @@ func (tour *Tour) validate() error {
 	if tour.Price < 0 {
 		return errors.New("invalid Price")
 	}
-	/*if len(tour.Tags) == 0 {
+	if len(tour.Tags) == 0 {
 		return errors.New("not enough Tags")
-	}*/
+	}
 	if len(tour.KeyPoints) < 2 {
 		return errors.New("not enough Key Points")
 	}

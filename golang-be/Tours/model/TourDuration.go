@@ -1,11 +1,15 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type TransportationType int
 
 type TourDuration struct {
 	gorm.Model
+	TourID         uuid.UUID
 	TimeInSeconds  int
 	Transportation TransportationType
 }
