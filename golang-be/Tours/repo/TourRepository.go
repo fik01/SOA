@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"fmt"
 	"log"
 	"tours/model"
 
@@ -28,4 +29,15 @@ func (repo *TourRepository) UpdateTour(tour *model.Tour) error {
 
 	log.Println(dbResult.RowsAffected)
 	return nil
+}
+
+func (repo *TourRepository) GetAll() ([]model.Tour, error) {
+	var tours []model.Tour
+	dbResult := repo.DatabaseConnection.Preload("KeyPoints").Find(&tours)
+	fmt.Println(dbResult)
+	if dbResult.Error != nil {
+		return nil, dbResult.Error
+	}
+
+	return tours, nil
 }

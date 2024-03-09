@@ -24,3 +24,13 @@ func (service *TourService) Update(tour *model.Tour) error {
 	}
 	return nil
 }
+
+func (service *TourService) GetAll() ([]model.Tour, error) {
+	var tours []model.Tour
+	tours, err := service.TourRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return tours, nil
+}

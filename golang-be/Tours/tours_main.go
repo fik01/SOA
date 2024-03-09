@@ -29,10 +29,6 @@ func initDB() *gorm.DB {
 	if err != nil {
 		log.Fatalf("Error migrating schema: %v", err)
 	}
-	err = db.AutoMigrate(&model.Tag{})
-	if err != nil {
-		log.Fatalf("Error migrating schema: %v", err)
-	}
 	err = db.AutoMigrate(&model.Tour{})
 	if err != nil {
 		log.Fatalf("Error migrating schema: %v", err)
@@ -46,6 +42,7 @@ func startServer(handler *handler.TourHandler) {
 
 	router.HandleFunc("/newtour", handler.Create).Methods("POST")
 	router.HandleFunc("/updateTour", handler.Update).Methods("POST")
+	router.HandleFunc("/getTours", handler.GetAll).Methods("GET")
 
 	log.Println(http.ListenAndServe(":8080", router))
 }

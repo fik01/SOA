@@ -24,6 +24,11 @@ func (handler *TourHandler) Create(writer http.ResponseWriter, req *http.Request
 		return
 	}
 	tour.ID = uuid.New()
+
+	for i := range tour.KeyPoints {
+		tour.KeyPoints[i].ID = uuid.New()
+	}
+
 	fmt.Println(&tour)
 	err = handler.TourService.Create(&tour)
 	if err != nil {
@@ -53,4 +58,28 @@ func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request
 
 	// Respond with HTTP status 200 OK
 	writer.WriteHeader(http.StatusOK)
+}
+
+func (handler *TourHandler) GetAll(writer http.ResponseWriter, req *http.Request) {
+	// Fetch all tours from the repository
+	tours, err := handler.TourService.GetAll()
+	if err != nil {
+		// If there's an error, return a 500 Internal Server Error response
+		http.Error(writer, "Failed to fetch tours", http.StatusInternalServerError)
+		return
+	}
+
+	// Convert tours slice to JSON
+	jsonData, err := json.Marshal(tours)
+	if err != nil {
+		// If there's an error while marshaling JSON, return a 500 Internal Server Error response
+		http.Error(writer, "Failed to marshal JSON", http.StatusInternalServerError)
+		return
+	}
+
+	// Set content type to JSON
+	writer.Header().Set("Content-Type", "application/json")
+
+	// Write JSON response with fetched tours to the client
+	writer.Write(jsonData)
 }
