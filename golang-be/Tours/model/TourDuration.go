@@ -1,8 +1,11 @@
 package model
 
+import "gorm.io/gorm"
+
 type TransportationType int
 
 type TourDuration struct {
+	gorm.Model
 	TimeInSeconds  int
 	Transportation TransportationType
 }
