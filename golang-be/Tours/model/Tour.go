@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -62,7 +61,7 @@ func (a *ArrayString) Scan(value interface{}) error {
 
 type Tour struct {
 	gorm.Model
-	ID            uuid.UUID `gorm:"primaryKey"`
+	ID            int `gorm:"primaryKey"`
 	Name          string
 	Description   string
 	Price         float64
@@ -102,7 +101,7 @@ func NewTour(name string, description string, price float64, difficulty TourDiff
 }
 
 func (tour *Tour) CreateID(scope *gorm.DB) error {
-	tour.ID = uuid.New()
+	tour.ID = 0
 	return nil
 }
 

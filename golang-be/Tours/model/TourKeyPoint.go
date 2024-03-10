@@ -3,19 +3,18 @@ package model
 import (
 	"errors"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type TourKeyPoint struct {
 	gorm.Model
-	ID             uuid.UUID `gorm:"primaryKey"`
+	ID             int `gorm:"primaryKey"`
 	Name           string
 	Description    string
 	Longitude      float64
 	Latitude       float64
 	Image          string
-	TourID         uuid.UUID
+	TourID         int
 	Secret         string
 	PositionInTour int
 	PublicPointId  int

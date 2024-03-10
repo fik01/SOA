@@ -3,25 +3,40 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Authoring;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    [Authorize(Policy = "authorPolicy")]
+    //[Authorize(Policy = "authorPolicy")]
     [Route("api/tourManagement/tour")]
     public class TourController : BaseApiController
     {
         private readonly ITourService _tourService;
 
+        private static HttpClient _httpClient;
+
         public TourController(ITourService tourService)
         {
             _tourService = tourService;
+            _httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:8080"),
+            };
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<List<TourDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            var jsonResponse = await GetToursAsync(_httpClient);
+            var tourDtos = JsonConvert.DeserializeObject<List<TourDto>>(jsonResponse);
+            return tourDtos;
+        }
+
+        static async Task<string> GetToursAsync(HttpClient httpClient)
+        {
+            using HttpResponseMessage response = await httpClient.GetAsync("getTours");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
 

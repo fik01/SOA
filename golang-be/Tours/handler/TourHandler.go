@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"tours/model"
 	"tours/service"
-
-	"github.com/google/uuid"
 )
 
 type TourHandler struct {
@@ -23,11 +21,11 @@ func (handler *TourHandler) Create(writer http.ResponseWriter, req *http.Request
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	tour.ID = uuid.New()
+	//tour.ID = uuid.New()
 
-	for i := range tour.KeyPoints {
+	/*for i := range tour.KeyPoints {
 		tour.KeyPoints[i].ID = uuid.New()
-	}
+	}*/
 
 	fmt.Println(&tour)
 	err = handler.TourService.Create(&tour)
