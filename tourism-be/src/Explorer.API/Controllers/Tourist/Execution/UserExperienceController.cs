@@ -14,11 +14,13 @@ namespace Explorer.API.Controllers.Tourist.Execution
     {
         private readonly IUserExperienceService _userExperienceService;
         private readonly IChallengeExecutionService _challengeExecutionService;
+        private IHttpClientFactory _httpClientFactory;
 
-        public UserExperienceController(IUserExperienceService userExperienceService, IChallengeExecutionService challengeExecutionService)
+        public UserExperienceController(IUserExperienceService userExperienceService, IChallengeExecutionService challengeExecutionService, IHttpClientFactory httpClientFactory)
         {
             _userExperienceService = userExperienceService;
             _challengeExecutionService = challengeExecutionService;
+            _httpClientFactory = httpClientFactory;
         }
         [HttpGet]
         public ActionResult<PagedResult<UserExperienceDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
@@ -56,7 +58,9 @@ namespace Explorer.API.Controllers.Tourist.Execution
         [HttpPut("addxp/{id:long}/{xp:int}")]
         public ActionResult<UserExperienceDto> AddXP(long id,int xp)
         {
-            var result = _userExperienceService.AddXP(id,xp);
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:8080/");
+            var result = _userExperienceService.AddXP(id, xp);
             return CreateResponse(result);
         }
         [HttpPut("addxpsocial/{challengeId:long}/{xp:int}")]
