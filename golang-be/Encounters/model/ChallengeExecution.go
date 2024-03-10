@@ -1,13 +1,13 @@
 package model
 
 import (
-    "time"
-    "math"
+	"math"
+	"time"
 )
 
 type ChallengeExecution struct {
     TouristId      int64
-    Challenge      Challenge
+    // Challenge      Challenge
     ChallengeId    int64
     Latitude       float64
     Longitude      float64
@@ -35,15 +35,15 @@ func (ce *ChallengeExecution) Complete() {
     ce.IsCompleted = true
 }
 
-func (ce *ChallengeExecution) CheckSocialCompletionConditions(numberOfTourists int) error {
-    if ce.Challenge.RequiredAttendance > numberOfTourists {
-        return errors.New("Not enough tourists to complete the challenge")
-    }
-    if ce.Challenge.Range > ce.calculateDistance(ce.Challenge.Latitude, ce.Challenge.Longitude, ce.Latitude, ce.Longitude) {
-        return errors.New("Not close enough to complete the challenge")
-    }
-    return nil
-}
+// func (ce *ChallengeExecution) CheckSocialCompletionConditions(numberOfTourists int) error {
+//     if ce.Challenge.RequiredAttendance > numberOfTourists {
+//         return errors.New("Not enough tourists to complete the challenge")
+//     }
+//     if ce.Challenge.Range > ce.calculateDistance(ce.Challenge.Latitude, ce.Challenge.Longitude, ce.Latitude, ce.Longitude) {
+//         return errors.New("Not close enough to complete the challenge")
+//     }
+//     return nil
+// }
 
 func (ce *ChallengeExecution) calculateDistance(challengeLatitude, challengeLongitude, touristLatitude, touristLongitude float64) float64 {
     earthRadius := 6371000.0
