@@ -1,10 +1,9 @@
 package repo
 
 import (
-	"log"
+	"fmt"
 
 	"encounters.xws.com/model"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -18,17 +17,26 @@ func NewUserExperienceRepository(db *gorm.DB) *UserExperienceRepository {
 		}
 }
 
-func (repo *UserExperienceRepository) Get(id uuid.UUID) (model.UserExperience, error) {
-	var userExperience model.UserExperience
-	dbResult := repo.DatabaseConnection.Get(id)
+func (repo *UserExperienceRepository) Create(userExperience *model.UserExperience) error {
+	dbResult := repo.DatabaseConnection.Create(userExperience)
 	if dbResult.Error != nil {
-		return nil, dbResult.Error
+		return dbResult.Error
+	}
+	fmt.Println("Rows affected: ",dbResult.RowsAffected)
+	return nil
+}
+
+func (repo *UserExperienceRepository) Get(id string) (model.UserExperience, error) {
+	userExperience := model.UserExperience{}
+	dbResult := repo.DatabaseConnection.First(&userExperience, "id = ?", id)
+	if dbResult.Error != nil {
+		return userExperience, dbResult.Error
 	}
 	return userExperience, nil
 }
 
 
-func (repo *UserExperienceRepository) GetByUserId(id uuid.UUID) (model.UserExperience, error) {
+func (repo *UserExperienceRepository) GetByUserId(id int) (model.UserExperience, error) {
 	var userExperience model.UserExperience
 	dbResult := repo.DatabaseConnection.Where("UserId = ?", id).First(&userExperience)
 	if dbResult.Error != nil {
@@ -44,6 +52,6 @@ func (repo *UserExperienceRepository) Update(userExperience *model.UserExperienc
 		return dbResult.Error
 	}
 
-	log.Println(dbResult.RowsAffected)
-	return  nil
+	fmt.Println("ROWS AFFECTED: ", dbResult.RowsAffected)
+	return nil
 }

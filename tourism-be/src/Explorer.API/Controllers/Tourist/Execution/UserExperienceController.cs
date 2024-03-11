@@ -1,10 +1,13 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
+using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.UseCases;
+using Explorer.Stakeholders.API.Internal;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace Explorer.API.Controllers.Tourist.Execution
 {
@@ -29,10 +32,19 @@ namespace Explorer.API.Controllers.Tourist.Execution
             return CreateResponse(result);
         }
         [HttpPost]
-        public ActionResult<UserExperienceDto> Create([FromBody] UserExperienceDto userExperience)
+        public async Task<ActionResult> Create([FromBody] UserExperienceDto userExperience)
         {
-            var result = _userExperienceService.Create(userExperience);
-            return CreateResponse(result);
+            var client = _httpClientFactory.CreateClient("encounters");
+            using HttpResponseMessage response = await client.PostAsJsonAsync("newUserExperience", userExperience);
+
+            //var result = _userExperienceService.Create(userExperience);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return Ok(jsonResponse);
         }
 
         [HttpPut("{id:int}")]
@@ -49,19 +61,28 @@ namespace Explorer.API.Controllers.Tourist.Execution
             return CreateResponse(result);
         }
         [HttpGet("userxp/{userId:long}")]
-        public ActionResult<PagedResult<UserExperienceDto>> GetByUserId(long userId)
+        public ActionResult<PagedResult<UserExperienceDto>> GetByUserId(int userId)
         {
             var result = _userExperienceService.GetByUserId(userId);
             return CreateResponse(result);
         }
 
-        [HttpPut("addxp/{id:long}/{xp:int}")]
-        public ActionResult<UserExperienceDto> AddXP(long id,int xp)
+        [HttpPut("addxp/{id:int}/{xp:int}")]
+        public async Task<ActionResult> AddXP(int id,int xp)
         {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:8080/");
-            var result = _userExperienceService.AddXP(id, xp);
-            return CreateResponse(result);
+            UserExperienceDto userExperienceDto = new UserExperienceDto();
+            var client = _httpClientFactory.CreateClient("encounters");
+            using HttpResponseMessage response = await client.PutAsJsonAsync($"addXP/" + id.ToString() + "/" + xp.ToString(), userExperienceDto);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return Ok(jsonResponse);
+
+            //var result = _userExperienceService.AddXP(id, xp);
+            //return CreateResponse(result);
         }
         [HttpPut("addxpsocial/{challengeId:long}/{xp:int}")]
         public ActionResult<UserExperienceDto> AddXPSocial(long challengeId, int xp)

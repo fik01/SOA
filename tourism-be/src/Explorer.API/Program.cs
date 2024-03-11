@@ -23,6 +23,7 @@ builder.Services.AddSignalR(o =>
 });
 
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("encounters", (client) => client.BaseAddress = new Uri("http://localhost:8081/"));
 
 var app = builder.Build();
 

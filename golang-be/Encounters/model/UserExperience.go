@@ -1,18 +1,22 @@
 package model
 
-import "github.com/google/uuid"
-
 type UserExperience struct {
-	UserId uuid.UUID
-	XP int
-	Level int
+	Id     int `json:"Id"`
+	UserId int `json:"UserId"`
+	XP     int `json:"XP"`
+	Level  int `json:"Level"`
 }
 
-func NewUserExperience(userId uuid.UUID, xp int, level int) *UserExperience{
+// func (userExperience *UserExperience) BeforeCreate(scope *gorm.DB) error {
+// 	userExperience.Id = uuid.New()
+// 	return nil
+// }
+
+func NewUserExperience(userId int, xp int, level int) *UserExperience {
 	userExperience := &UserExperience{
 		UserId: userId,
-		XP: xp,
-		Level: 0,
+		XP:     xp,
+		Level:  0,
 	}
 
 	userExperience.Level = CalculateLevel(userExperience)
@@ -20,8 +24,7 @@ func NewUserExperience(userId uuid.UUID, xp int, level int) *UserExperience{
 	return userExperience
 }
 
-func CalculateLevel(userExperience *UserExperience) int{
-	level := userExperience.XP / 20 + 1
+func CalculateLevel(userExperience *UserExperience) int {
+	level := userExperience.XP/20 + 1
 	return level
 }
-

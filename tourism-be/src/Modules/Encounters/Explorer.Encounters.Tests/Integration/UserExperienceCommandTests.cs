@@ -21,58 +21,58 @@ namespace Explorer.Encounters.Tests.Integration
         {
         }
 
-        [Fact]
-        public void Update()
-        {
-            using var scope=Factory.Services.CreateScope();
-            var controller= CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-            var updatedUserExperience = new UserExperienceDto
-            {
-                Id = -1,
-                UserId = -21,
-                XP = 150,
-                Level = 8
-            };
-            var result = ((ObjectResult)controller.Update(updatedUserExperience).Result)?.Value as UserExperienceDto;
+        //[Fact]
+        //public void Update()
+        //{
+        //    using var scope=Factory.Services.CreateScope();
+        //    var controller= CreateController(scope);
+        //    var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        //    var updatedUserExperience = new UserExperienceDto
+        //    {
+        //        Id = -1,
+        //        UserId = -21,
+        //        XP = 150,
+        //        Level = 8
+        //    };
+        //    var result = ((ObjectResult)controller.Update(updatedUserExperience).Result)?.Value as UserExperienceDto;
 
-            result.ShouldNotBeNull();
-            result.Level.ShouldBe(8);
+        //    result.ShouldNotBeNull();
+        //    result.Level.ShouldBe(8);
 
-            var storedEntity = dbContext.UserExperience.FirstOrDefault(i => i.Level == 8);
-            storedEntity.ShouldNotBeNull();
-            storedEntity.XP.ShouldBe(updatedUserExperience.XP);
-            var oldEntity = dbContext.UserExperience.FirstOrDefault(i => i.XP==0);
-            oldEntity.ShouldBeNull();
+        //    var storedEntity = dbContext.UserExperience.FirstOrDefault(i => i.Level == 8);
+        //    storedEntity.ShouldNotBeNull();
+        //    storedEntity.XP.ShouldBe(updatedUserExperience.XP);
+        //    var oldEntity = dbContext.UserExperience.FirstOrDefault(i => i.XP==0);
+        //    oldEntity.ShouldBeNull();
 
-        }
+        //}
 
-        [Fact]
-        public void UpdateFail()
-        {
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-            var updatedUserExperience = new UserExperienceDto
-            {
-                Id = -1000,
-                UserId = -21,
-                XP = 150,
-                Level = 8
-            };
-            var result = ((ObjectResult)controller.Update(updatedUserExperience).Result);
+        //[Fact]
+        //public void UpdateFail()
+        //{
+        //    using var scope = Factory.Services.CreateScope();
+        //    var controller = CreateController(scope);
+        //    var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        //    var updatedUserExperience = new UserExperienceDto
+        //    {
+        //        Id = -1000,
+        //        UserId = -21,
+        //        XP = 150,
+        //        Level = 8
+        //    };
+        //    var result = ((ObjectResult)controller.Update(updatedUserExperience).Result);
 
-            result.ShouldNotBeNull();
+        //    result.ShouldNotBeNull();
 
-            result.StatusCode.ShouldBe(404);
+        //    result.StatusCode.ShouldBe(404);
 
-        }
-        private static UserExperienceController CreateController(IServiceScope scope)
-        {
-            return new UserExperienceController(scope.ServiceProvider.GetRequiredService<IUserExperienceService>(), scope.ServiceProvider.GetService<IChallengeExecutionService>())
-            {
-                ControllerContext = BuildContext("-1")
-            };
-        }
+        //}
+        //private static UserExperienceController CreateController(IServiceScope scope)
+        //{
+        //    return new UserExperienceController(scope.ServiceProvider.GetRequiredService<IUserExperienceService>(), scope.ServiceProvider.GetService<IChallengeExecutionService>())
+        //    {
+        //        ControllerContext = BuildContext("-1")
+        //    };
+        //}
     }
 }

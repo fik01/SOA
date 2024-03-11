@@ -3,7 +3,6 @@ package service
 import (
 	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
-	"github.com/google/uuid"
 )
 
 type UserExperienceService struct {
@@ -16,7 +15,15 @@ func NewUserExperienceService(repo *repo.UserExperienceRepository) *UserExperien
     }
 }
 
-func (service *UserExperienceService) AddXP(id uuid.UUID, xp int) (model.UserExperience, error) {
+func (service *UserExperienceService) Create(userExperience *model.UserExperience) error {
+	err := service.UserExperienceRepo.Create(userExperience)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (service *UserExperienceService) AddXP(id string, xp int) (model.UserExperience, error) {
 	userExperience, err := service.UserExperienceRepo.Get(id)
 	if err != nil{
 		return userExperience, err
@@ -30,7 +37,7 @@ func (service *UserExperienceService) AddXP(id uuid.UUID, xp int) (model.UserExp
 	return userExperience, nil
 }
 
-func (service *UserExperienceService) GetByUserId(id uuid.UUID) (model.UserExperience, error) {
+func (service *UserExperienceService) GetByUserId(id int) (model.UserExperience, error) {
 	userExperience, err := service.UserExperienceRepo.GetByUserId(id)
 	if err != nil {
 		return userExperience, err
