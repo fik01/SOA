@@ -43,6 +43,8 @@ func startServer(handler *handler.TourHandler) {
 	router.HandleFunc("/newtour", handler.Create).Methods("POST")
 	router.HandleFunc("/updateTour", handler.Update).Methods("POST")
 	router.HandleFunc("/getTours", handler.GetAll).Methods("GET")
+	router.HandleFunc("/getAllByAuthorId", handler.GetAllByAuthorId).Methods("GET")
+	router.HandleFunc("/get", handler.Get).Methods("GET")
 
 	log.Println(http.ListenAndServe(":8080", router))
 }

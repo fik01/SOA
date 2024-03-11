@@ -9,6 +9,7 @@ using Explorer.Tours.Core.UseCases;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Xml.Linq;
 
 namespace Explorer.API.Controllers.Tourist
@@ -19,19 +20,41 @@ namespace Explorer.API.Controllers.Tourist
     {
         private readonly ITourService _tourService;
         private readonly IRecommenderService _recommenderService;
+        private static HttpClient _httpClient;
 
         public TourController(ITourService tourService, IRecommenderService recommenderService)
         {
             _tourService = tourService;
             _recommenderService = recommenderService;
+            _httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:8080"),
+            };
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<TourDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            var jsonResponse = await GetAllToursAsync(_httpClient);
+            var tourDtos = JsonConvert.DeserializeObject<List<TourDto>>(jsonResponse);
+
+            int total = 0;
+            foreach (var ex in tourDtos)
+            {
+                total++;
+            }
+
+            var pagedResult = new PagedResult<TourDto>(tourDtos, total);
+
+            return pagedResult;
+        }
+
+        static async Task<string> GetAllToursAsync(HttpClient httpClient)
+        {
+            using HttpResponseMessage response = await httpClient.GetAsync("getTours");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [AllowAnonymous]

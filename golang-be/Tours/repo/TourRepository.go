@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"fmt"
 	"log"
 	"tours/model"
 
@@ -30,14 +29,30 @@ func (repo *TourRepository) UpdateTour(tour *model.Tour) error {
 	log.Println(dbResult.RowsAffected)
 	return nil
 }
+func (repo *TourRepository) Get(id int) (model.Tour, error) {
+	var tours model.Tour
+	dbResult := repo.DatabaseConnection.Where("id = ?", id).Preload("KeyPoints").Preload("Durations").Find(&tours)
+	if dbResult.Error != nil {
+		return tours, dbResult.Error
+	}
+	return tours, nil
+}
 
 func (repo *TourRepository) GetAll() ([]model.Tour, error) {
 	var tours []model.Tour
 	dbResult := repo.DatabaseConnection.Preload("KeyPoints").Preload("Durations").Find(&tours)
-	fmt.Println(dbResult)
 	if dbResult.Error != nil {
 		return nil, dbResult.Error
 	}
 
+	return tours, nil
+}
+
+func (repo *TourRepository) GetAllByAuthorId(authorId int) ([]model.Tour, error) {
+	var tours []model.Tour
+	dbResult := repo.DatabaseConnection.Where("author_id = ?", authorId).Preload("KeyPoints").Preload("Durations").Find(&tours)
+	if dbResult.Error != nil {
+		return nil, dbResult.Error
+	}
 	return tours, nil
 }
