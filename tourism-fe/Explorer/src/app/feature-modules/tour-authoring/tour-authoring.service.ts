@@ -20,15 +20,9 @@ import { Campaign } from './model/campaign.model';
 export class TourAuthoringService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  /*createTour(tour: Tour): Observable<Tour> {
-    return this.http.post<Tour>(
-      environment.apiHost + 'tourManagement/tour',
-      tour
-    );
-  }*/
   createTour(tour: Tour): Observable<Tour> {
     return this.http.post<Tour>(
-      'https://localhost:8080/newtour',
+      environment.apiHost + 'tourManagement/tour',
       tour
     );
   }

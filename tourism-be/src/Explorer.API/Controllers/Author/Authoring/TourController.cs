@@ -4,6 +4,7 @@ using Explorer.Tours.API.Public.Authoring;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
@@ -41,10 +42,30 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 
         [HttpPost]
-        public ActionResult<TourDto> Create([FromBody] TourDto tour)
+        public async Task<ActionResult<TourDto>> Create([FromBody] TourDto tour)
         {
-            var result = _tourService.Create(tour);
-            return CreateResponse(result);
+            var result = await PostAsync(_httpClient, tour);
+            return Ok(result);
+        }
+
+        static async Task<TourDto> CreateTourAsync(HttpClient httpClient, TourDto tourDto)
+        {
+            using StringContent jsonContent = new(
+                System.Text.Json.JsonSerializer.Serialize(tourDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("newtour", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            // Deserialize the JSON response into TourDto
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpPut("{id:int}")]

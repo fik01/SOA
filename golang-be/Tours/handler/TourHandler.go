@@ -21,20 +21,23 @@ func (handler *TourHandler) Create(writer http.ResponseWriter, req *http.Request
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	//tour.ID = uuid.New()
-
-	/*for i := range tour.KeyPoints {
-		tour.KeyPoints[i].ID = uuid.New()
-	}*/
 
 	fmt.Println(&tour)
+
 	err = handler.TourService.Create(&tour)
 	if err != nil {
 		log.Println("Error while creating tour")
 		writer.WriteHeader(http.StatusExpectationFailed)
 		return
 	}
+	createdTour, err := json.Marshal(&tour)
+	if err != nil {
+		log.Println("Error while encoding tour to JSON")
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	writer.WriteHeader(http.StatusCreated)
+	writer.Write(createdTour)
 }
 
 func (handler *TourHandler) Update(writer http.ResponseWriter, req *http.Request) {
