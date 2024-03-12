@@ -61,7 +61,7 @@ func (a *ArrayString) Scan(value interface{}) error {
 
 type Tour struct {
 	gorm.Model
-	ID            int `gorm:"primaryKey"`
+	Id            int `gorm:"primaryKey"`
 	Name          string
 	Description   string
 	Price         float64

@@ -25,13 +25,13 @@ func (handler *TourHandler) Create(writer http.ResponseWriter, req *http.Request
 
 	fmt.Println(&tour)
 
-	err = handler.TourService.Create(&tour)
+	newTour, err := handler.TourService.Create(&tour)
 	if err != nil {
 		log.Println("Error while creating tour")
 		writer.WriteHeader(http.StatusExpectationFailed)
 		return
 	}
-	createdTour, err := json.Marshal(&tour)
+	createdTour, err := json.Marshal(&newTour)
 	if err != nil {
 		log.Println("Error while encoding tour to JSON")
 		writer.WriteHeader(http.StatusInternalServerError)

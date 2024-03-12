@@ -9,12 +9,12 @@ type TourService struct {
 	TourRepo *repo.TourRepository
 }
 
-func (service *TourService) Create(tour *model.Tour) error {
-	err := service.TourRepo.CreateNewTour(tour)
+func (service *TourService) Create(tour *model.Tour) (*model.Tour, error) {
+	newTour, err := service.TourRepo.CreateNewTour(tour)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return newTour, nil
 }
 
 func (service *TourService) Update(tour *model.Tour) error {
