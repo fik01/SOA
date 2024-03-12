@@ -21,6 +21,10 @@ builder.Services.AddSignalR(o =>
 {
     o.EnableDetailedErrors = true;
 });
+
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("encounters", (client) => client.BaseAddress = new Uri("http://localhost:8081/"));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
