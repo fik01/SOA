@@ -4,10 +4,11 @@ using Explorer.Tours.API.Public.Authoring;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Explorer.API.Controllers.Author.Authoring
 {
-    //[Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "authorPolicy")]
     [Route("api/tourManagement/tour")]
     public class TourController : BaseApiController
     {
@@ -25,14 +26,23 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TourDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<TourDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var jsonResponse = await GetToursAsync(_httpClient);
+            var jsonResponse = await GetAllToursAsync(_httpClient);
             var tourDtos = JsonConvert.DeserializeObject<List<TourDto>>(jsonResponse);
-            return tourDtos;
+
+            int total = 0;
+            foreach (var ex in tourDtos)
+            {
+                total++;
+            }
+
+            var pagedResult = new PagedResult<TourDto>(tourDtos, total);
+
+            return pagedResult;
         }
 
-        static async Task<string> GetToursAsync(HttpClient httpClient)
+        static async Task<string> GetAllToursAsync(HttpClient httpClient)
         {
             using HttpResponseMessage response = await httpClient.GetAsync("getTours");
             response.EnsureSuccessStatusCode();
@@ -41,17 +51,57 @@ namespace Explorer.API.Controllers.Author.Authoring
 
 
         [HttpPost]
-        public ActionResult<TourDto> Create([FromBody] TourDto tour)
+        public async Task<ActionResult<TourDto>> Create([FromBody] TourDto tour)
         {
-            var result = _tourService.Create(tour);
-            return CreateResponse(result);
+            var result = await CreateTourAsync(_httpClient, tour);
+            return Ok(result);
+        }
+
+        static async Task<TourDto> CreateTourAsync(HttpClient httpClient, TourDto tourDto)
+        {
+            using StringContent jsonContent = new(
+                System.Text.Json.JsonSerializer.Serialize(tourDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("newtour", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            // Deserialize the JSON response into TourDto
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<TourDto> Update([FromBody] TourDto tour)
+        public async Task<ActionResult<TourDto>> Update([FromBody] TourDto tour)
         {
-            var result = _tourService.Update(tour);
-            return CreateResponse(result);
+            var result = await UpdateTourAsync(_httpClient, tour);
+            return Ok(result);
+        }
+
+        static async Task<TourDto> UpdateTourAsync(HttpClient httpClient, TourDto tourDto)
+        {
+            using StringContent jsonContent = new(
+                System.Text.Json.JsonSerializer.Serialize(tourDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("updateTour", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            // Deserialize the JSON response into TourDto
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpDelete("{id:int}")]
@@ -63,10 +113,19 @@ namespace Explorer.API.Controllers.Author.Authoring
 
         [AllowAnonymous]
         [HttpGet("{id:int}")]
-        public ActionResult<TourDto> Get(int id)
+        public async Task<ActionResult<TourDto>> Get(int id)
         {
-            var result = _tourService.Get(id);
-            return CreateResponse(result);
+            var jsonResponse = await GetAsync(_httpClient, id);
+            var tourDto = JsonConvert.DeserializeObject<TourDto>(jsonResponse);
+            return tourDto;
+        }
+
+        static async Task<string> GetAsync(HttpClient httpClient, int id)
+        {
+            string url = $"get?id={id}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [HttpPut("publish/{id:int}")]
@@ -84,10 +143,28 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
         [HttpGet("author")]
-        public ActionResult<PagedResult<TourDto>> GetAllByAuthorId([FromQuery] int authorId, [FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<TourDto>>> GetAllByAuthorId([FromQuery] int authorId, [FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourService.GetPagedByAuthorId(authorId, page, pageSize);
-            return CreateResponse(result);
+            var jsonResponse = await GetAllToursByAuthorIdAsync(_httpClient, authorId);
+            var tourDtos = JsonConvert.DeserializeObject<List<TourDto>>(jsonResponse);
+
+            int total = 0;
+            foreach(var ex in tourDtos)
+            {
+                total++;
+            }
+
+            var pagedResult = new PagedResult<TourDto>(tourDtos, total);
+
+            return pagedResult;
+        }
+
+        static async Task<string> GetAllToursByAuthorIdAsync(HttpClient httpClient, int authorId)
+        {
+            string url = $"getAllByAuthorId?author_id={authorId}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

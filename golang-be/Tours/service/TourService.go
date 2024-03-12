@@ -34,3 +34,21 @@ func (service *TourService) GetAll() ([]model.Tour, error) {
 
 	return tours, nil
 }
+
+func (service *TourService) GetAllByAuthorId(authorId int) ([]model.Tour, error) {
+	var tours []model.Tour
+	tours, err := service.TourRepo.GetAllByAuthorId(authorId)
+	if err != nil {
+		return nil, err
+	}
+	return tours, nil
+}
+
+func (service *TourService) Get(id int) (model.Tour, error) {
+	var tour model.Tour
+	tour, err := service.TourRepo.Get(id)
+	if err != nil {
+		return tour, err
+	}
+	return tour, nil
+}
