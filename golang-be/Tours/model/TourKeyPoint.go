@@ -8,7 +8,7 @@ import (
 
 type TourKeyPoint struct {
 	gorm.Model
-	ID             int `gorm:"primaryKey"`
+	Id             int `gorm:"primaryKey"`
 	Name           string
 	Description    string
 	Longitude      float64

@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/gorilla/mux"
 	"tours/handler"
+
+	"github.com/gorilla/mux"
 )
 
 func Route(router *mux.Router, handler *handler.Handler) {
@@ -21,4 +22,10 @@ func Route(router *mux.Router, handler *handler.Handler) {
 	router.HandleFunc("/rating/getByPersonAndTourId", handler.RatingHandler.GetByPersonIdAndTourId).Methods("GET")
 	router.HandleFunc("/rating/update", handler.RatingHandler.Update).Methods("POST")
 
+	//Tour key point
+	router.HandleFunc("/tourKeyPoint/create", handler.TourKeyPointHandler.Create).Methods("POST")
+	router.HandleFunc("/tourKeyPoint/update", handler.TourKeyPointHandler.Update).Methods("POST")
+	router.HandleFunc("/tourKeyPoint/getById", handler.TourKeyPointHandler.GetById).Methods("GET")
+	router.HandleFunc("/tourKeyPoint/getByTourId", handler.TourKeyPointHandler.GetByTourId).Methods("GET")
+	router.HandleFunc("/tourKeyPoint/delete", handler.TourKeyPointHandler.Delete).Methods("DELETE")
 }

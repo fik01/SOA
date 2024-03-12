@@ -1,15 +1,17 @@
 package handler
 
 import (
-	"gorm.io/gorm"
 	"tours/model"
 	"tours/repo"
 	"tours/service"
+
+	"gorm.io/gorm"
 )
 
 type Handler struct {
-	RatingHandler *RatingHandler
-	TourHandler   *TourHandler
+	RatingHandler       *RatingHandler
+	TourHandler         *TourHandler
+	TourKeyPointHandler *TourKeyPointHandler
 }
 
 func NewHandler(db *gorm.DB) *Handler {
@@ -22,6 +24,10 @@ func NewHandler(db *gorm.DB) *Handler {
 	tourRepo := &repo.TourRepository{DatabaseConnection: db}
 	tourService := &service.TourService{TourRepo: tourRepo}
 	handler.TourHandler = &TourHandler{TourService: tourService}
+
+	tourKeyPointRepo := &repo.CRUDRepository[model.TourKeyPoint]{DatabaseConnection: db}
+	tourKeyPointService := &service.TourKeyPointService{TourKeyPointRepo: tourKeyPointRepo}
+	handler.TourKeyPointHandler = &TourKeyPointHandler{TourKeyPointService: tourKeyPointService}
 
 	return handler
 
