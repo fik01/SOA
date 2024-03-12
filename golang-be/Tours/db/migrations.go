@@ -23,4 +23,8 @@ func AutoMigrate(db *gorm.DB) {
 	if err != nil {
 		log.Fatalf("Error migrating schema: %v", err)
 	}
+	err = db.AutoMigrate(&model.Equipment{})
+	if err != nil {
+		log.Fatalf("Error migrating schema: %v", err)
+	}
 }

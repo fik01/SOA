@@ -43,7 +43,7 @@ namespace Explorer.API.Controllers.Tourist
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var responseObject = JsonSerializer.Deserialize<TourDurationDto>(responseBody);
+                var responseObject = JsonSerializer.Deserialize<TourRatingDto>(responseBody);
 
                 return Ok(responseObject);
             }

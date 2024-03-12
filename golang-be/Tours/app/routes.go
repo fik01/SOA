@@ -21,4 +21,11 @@ func Route(router *mux.Router, handler *handler.Handler) {
 	router.HandleFunc("/rating/getByPersonAndTourId", handler.RatingHandler.GetByPersonIdAndTourId).Methods("GET")
 	router.HandleFunc("/rating/update", handler.RatingHandler.Update).Methods("POST")
 
+	//Equipment
+	router.HandleFunc("/equipment/create", handler.EquipmentHandler.Create).Methods("POST")
+	router.HandleFunc("/equipment/update", handler.EquipmentHandler.Update).Methods("POST")
+	router.HandleFunc("/equipment/deleteById", handler.EquipmentHandler.Delete).Methods("GET")
+	router.HandleFunc("/equipment/get", handler.EquipmentHandler.Get).Methods("GET")
+	router.HandleFunc("/equipment/getById", handler.EquipmentHandler.GetById).Methods("GET")
+
 }

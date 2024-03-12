@@ -18,7 +18,6 @@ func (service *RatingService) Create(rating *model.Rating) error {
 }
 
 func (service *RatingService) GetById(id int) (*model.Rating, error) {
-	var rating *model.Rating
 	rating, err := service.RatingRepo.GetById(id)
 	if err != nil {
 		return nil, err
@@ -27,7 +26,6 @@ func (service *RatingService) GetById(id int) (*model.Rating, error) {
 }
 
 func (service *RatingService) GetByTourId(id int) (*[]model.Rating, error) {
-	var rating *[]model.Rating
 	rating, err := service.RatingRepo.Where("tour_id = ?", id)
 	if err != nil {
 		return nil, err
@@ -44,7 +42,6 @@ func (service *RatingService) Update(rating *model.Rating) error {
 }
 
 func (service *RatingService) GetByPersonIdAndTourId(tourId int, personId int) (*[]model.Rating, error) {
-	var rating *[]model.Rating
 	rating, err := service.RatingRepo.Where("tour_id = ? AND person_id = ?", tourId, personId)
 	if err != nil {
 		return nil, err
