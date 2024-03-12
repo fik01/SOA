@@ -11,6 +11,8 @@ func Route(router *mux.Router, handler *handler.Handler) {
 	router.HandleFunc("/newtour", handler.TourHandler.Create).Methods("POST")
 	router.HandleFunc("/updateTour", handler.TourHandler.Update).Methods("POST")
 	router.HandleFunc("/getTours", handler.TourHandler.GetAll).Methods("GET")
+	router.HandleFunc("/getAllByAuthorId", handler.TourHandler.GetAllByAuthorId).Methods("GET")
+	router.HandleFunc("/get", handler.TourHandler.Get).Methods("GET")
 
 	//Tour Rating
 	router.HandleFunc("/rating/create", handler.RatingHandler.Create).Methods("POST")
