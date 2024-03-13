@@ -12,6 +12,7 @@ type Handler struct {
 	RatingHandler       *RatingHandler
 	TourHandler         *TourHandler
 	TourKeyPointHandler *TourKeyPointHandler
+	TourProblemHandler  *TourProblemHandler
 }
 
 func NewHandler(db *gorm.DB) *Handler {
@@ -28,6 +29,10 @@ func NewHandler(db *gorm.DB) *Handler {
 	tourKeyPointRepo := &repo.CRUDRepository[model.TourKeyPoint]{DatabaseConnection: db}
 	tourKeyPointService := &service.TourKeyPointService{TourKeyPointRepo: tourKeyPointRepo}
 	handler.TourKeyPointHandler = &TourKeyPointHandler{TourKeyPointService: tourKeyPointService}
+
+	tourProblemRepo := &repo.CRUDRepository[model.TourProblem]{DatabaseConnection: db}
+	tourProblemService := &service.TourProblemService{TourProblemRepo: tourProblemRepo}
+	handler.TourProblemHandler = &TourProblemHandler{TourProblemService: tourProblemService}
 
 	return handler
 

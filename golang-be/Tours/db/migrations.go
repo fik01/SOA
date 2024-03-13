@@ -1,9 +1,10 @@
 package db
 
 import (
-	"gorm.io/gorm"
 	"log"
 	"tours/model"
+
+	"gorm.io/gorm"
 )
 
 func AutoMigrate(db *gorm.DB) {
@@ -20,6 +21,14 @@ func AutoMigrate(db *gorm.DB) {
 		log.Fatalf("Error migrating schema: %v", err)
 	}
 	err = db.AutoMigrate(&model.Rating{})
+	if err != nil {
+		log.Fatalf("Error migrating schema: %v", err)
+	}
+	err = db.AutoMigrate(&model.TourProblemMessage{})
+	if err != nil {
+		log.Fatalf("Error migrating schema: %v", err)
+	}
+	err = db.AutoMigrate(&model.TourProblem{})
 	if err != nil {
 		log.Fatalf("Error migrating schema: %v", err)
 	}
