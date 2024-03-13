@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
 )
@@ -23,11 +25,12 @@ func (service *UserExperienceService) Create(userExperience *model.UserExperienc
 	return nil
 }
 
-func (service *UserExperienceService) AddXP(id string, xp int) (model.UserExperience, error) {
+func (service *UserExperienceService) AddXP(id int, xp int) (model.UserExperience, error) {
 	userExperience, err := service.UserExperienceRepo.Get(id)
 	if err != nil{
 		return userExperience, err
 	}
+	fmt.Println("\nUSERXP:", userExperience.Id)
 	userExperience.XP += xp
 	userExperience.Level = model.CalculateLevel(&userExperience)
 	dbResult := service.UserExperienceRepo.Update(&userExperience)

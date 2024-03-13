@@ -37,16 +37,27 @@ func (handler *UserExperienceHandler) Create(writer http.ResponseWriter, req *ht
 }
 
 func (handler *UserExperienceHandler) AddXP(writer http.ResponseWriter, req *http.Request) {
-	id := mux.Vars(req)["id"]
-	xp, _ := strconv.Atoi(mux.Vars(req)["xp"])
-	userExperience, err := handler.UserExperienceService.AddXP(id, xp)
-	writer.Header().Set("Content-Type", "application/json")
-	if err != nil {
-		log.Println("Error while adding xp")
-		writer.WriteHeader(http.StatusExpectationFailed)
-		return
-	}
-	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(userExperience)
+	id, err := strconv.Atoi(mux.Vars(req)["id"])
+    if err != nil {
+        http.Error(writer, "Invalid ID format", http.StatusBadRequest)
+        return
+    }
+
+    xp, err := strconv.Atoi(mux.Vars(req)["xp"])
+    if err != nil {
+        http.Error(writer, "Invalid XP format", http.StatusBadRequest)
+        return
+    }
+
+    userExperience, err := handler.UserExperienceService.AddXP(id, xp)
+    writer.Header().Set("Content-Type", "application/json")
+
+    if err != nil {
+        log.Println("Error while adding XP:", err)
+        return
+    }
+
+    writer.WriteHeader(http.StatusOK)
+    json.NewEncoder(writer).Encode(userExperience)
 }
 

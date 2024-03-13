@@ -15,11 +15,17 @@ import (
 
 func initDB() *gorm.DB {
 	// Set up database connection
-	dsn := "host=localhost user=postgres password=super dbname=test_encounter port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=super dbname=explorer-v1 port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
+
+	err = db.Exec("SET search_path TO encounters").Error
+	if err != nil {
+		log.Fatal("Error setting search path:",err)
+	}
+
 	// Migrate the schema
 	err = db.AutoMigrate(&model.UserExperience{})
 	if err != nil {
