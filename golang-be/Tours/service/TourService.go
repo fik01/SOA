@@ -52,3 +52,31 @@ func (service *TourService) Get(id int) (model.Tour, error) {
 	}
 	return tour, nil
 }
+
+func (service *TourService) Publish(authorId, tourId int) (*model.Tour, error) {
+	var tour model.Tour
+	tour, err := service.Get(tourId)
+	if err != nil {
+		return nil, err
+	}
+	tour.Publish(authorId)
+	err = service.TourRepo.UpdateTour(&tour)
+	if err != nil {
+		return nil, err
+	}
+	return &tour, nil
+}
+
+func (service *TourService) Archive(authorId, tourId int) (*model.Tour, error) {
+	var tour model.Tour
+	tour, err := service.Get(tourId)
+	if err != nil {
+		return nil, err
+	}
+	tour.Archive(authorId)
+	err = service.TourRepo.UpdateTour(&tour)
+	if err != nil {
+		return nil, err
+	}
+	return &tour, nil
+}

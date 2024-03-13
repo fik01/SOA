@@ -129,6 +129,22 @@ func (tour *Tour) validate() error {
 	return nil
 }
 
+func (tour *Tour) Publish(authorId int) error {
+	if tour.AuthorID != authorId {
+		return errors.New("author id doesn't match tour")
+	}
+	tour.Status = Published
+	return nil
+}
+
+func (tour *Tour) Archive(authorId int) error {
+	if tour.AuthorID != authorId {
+		return errors.New("author id doesn't match tour")
+	}
+	tour.Status = Archived
+	return nil
+}
+
 type TourStatus int
 
 const (

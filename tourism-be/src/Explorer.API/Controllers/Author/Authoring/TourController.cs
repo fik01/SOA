@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Authoring;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -129,17 +130,39 @@ namespace Explorer.API.Controllers.Author.Authoring
         }
 
         [HttpPut("publish/{id:int}")]
-        public ActionResult<TourDto> Publish(int id, [FromBody] int authorId)
+        public async Task<ActionResult<TourDto>> Publish(int id, [FromBody] int authorId)
         {
-            var result = _tourService.Publish(id, authorId);
-            return CreateResponse(result);
+            var result = await PublishTourAsync(_httpClient, id, authorId);
+            return Ok(result);
+        }
+
+        static async Task<TourDto> PublishTourAsync(HttpClient httpClient, int tourId, int authorId)
+        {
+            string url = $"publish?tourId={tourId}&authorId={authorId}";
+            using HttpResponseMessage response = await httpClient.PutAsync(url, null);
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpPut("archive/{id:int}")]
-        public ActionResult<TourDto> Archive(int id, [FromBody] int authorId)
+        public async Task<ActionResult<TourDto>> Archive(int id, [FromBody] int authorId)
         {
-            var result = _tourService.Archive(id, authorId);
-            return CreateResponse(result);
+            var result = await ArchiveTourAsync(_httpClient, id, authorId);
+            return Ok(result);
+        }
+
+        static async Task<TourDto> ArchiveTourAsync(HttpClient httpClient, int tourId, int authorId)
+        {
+            string url = $"archive?tourId={tourId}&authorId={authorId}";
+            using HttpResponseMessage response = await httpClient.PutAsync(url, null);
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpGet("author")]

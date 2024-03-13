@@ -132,3 +132,65 @@ func (handler *TourHandler) Get(writer http.ResponseWriter, req *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Write(jsonData)
 }
+
+func (handler *TourHandler) Publish(writer http.ResponseWriter, req *http.Request) {
+	idStr := req.URL.Query().Get("tourId")
+	tourId, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(writer, "Invalid tour ID", http.StatusBadRequest)
+		return
+	}
+	idStr = req.URL.Query().Get("authorId")
+	authorId, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(writer, "Invalid author ID", http.StatusBadRequest)
+		return
+	}
+
+	tour, err := handler.TourService.Publish(authorId, tourId)
+	if err != nil {
+		http.Error(writer, "Failed to publish tour", http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(&tour)
+	if err != nil {
+		http.Error(writer, "Failed to marshal JSON", http.StatusInternalServerError)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(jsonData)
+
+}
+
+func (handler *TourHandler) Archive(writer http.ResponseWriter, req *http.Request) {
+	idStr := req.URL.Query().Get("tourId")
+	tourId, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(writer, "Invalid tour ID", http.StatusBadRequest)
+		return
+	}
+	idStr = req.URL.Query().Get("authorId")
+	authorId, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(writer, "Invalid author ID", http.StatusBadRequest)
+		return
+	}
+
+	tour, err := handler.TourService.Archive(authorId, tourId)
+	if err != nil {
+		http.Error(writer, "Failed to archive tour", http.StatusInternalServerError)
+		return
+	}
+
+	jsonData, err := json.Marshal(&tour)
+	if err != nil {
+		http.Error(writer, "Failed to marshal JSON", http.StatusInternalServerError)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(jsonData)
+
+}
