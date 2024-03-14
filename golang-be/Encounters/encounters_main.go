@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"encounters.xws.com/handler"
-	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
 	"encounters.xws.com/service"
 	"github.com/gorilla/mux"
@@ -27,10 +26,10 @@ func initDB() *gorm.DB {
 	}
 
 	// Migrate the schema
-	err = db.AutoMigrate(&model.UserExperience{})
-	if err != nil {
-		log.Fatalf("Error migrating schema: %v", err)
-	}
+	// err = db.AutoMigrate(&model.UserExperience{})
+	// if err != nil {
+	// 	log.Fatalf("Error migrating schema: %v", err)
+	// }
 
 	return db
 }
@@ -38,6 +37,8 @@ func initDB() *gorm.DB {
 func startServer(handler *handler.UserExperienceHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
+	router.HandleFunc("/deleteUserExperience/{id}", handler.Delete).Methods("DELETE")
+	router.HandleFunc("/getUserExperience/{id}", handler.GetXPByUserId).Methods("GET")
 	router.HandleFunc("/newUserExperience", handler.Create).Methods("POST")
 	router.HandleFunc("/addXP/{id}/{xp}", handler.AddXP).Methods("PUT")
 	log.Println(http.ListenAndServe(":8081", router))

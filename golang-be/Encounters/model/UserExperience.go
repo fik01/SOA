@@ -1,16 +1,11 @@
 package model
 
 type UserExperience struct {
-	Id     int `json:"Id" gorm:"column:Id"`
+	Id     int `json:"Id" gorm:"column:Id;primaryKey;autoIncrement"`
 	UserId int `json:"UserId" gorm:"column:UserId"`
 	XP     int `json:"XP" gorm:"column:XP"`
 	Level  int `json:"Level" gorm:"column:Level"`
 }
-
-// func (userExperience *UserExperience) BeforeCreate(scope *gorm.DB) error {
-// 	userExperience.Id = uuid.New()
-// 	return nil
-// }
 
 func (UserExperience) TableName() string {
 	return "UserExperience"

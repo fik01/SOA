@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
 )
@@ -25,12 +23,23 @@ func (service *UserExperienceService) Create(userExperience *model.UserExperienc
 	return nil
 }
 
+func (service *UserExperienceService) Delete(id int) error {
+	userExperience, err := service.UserExperienceRepo.Get(id)
+	if err != nil{
+		return err
+	}
+	err1 := service.UserExperienceRepo.Delete(&userExperience)
+	if err1 != nil {
+		return err1
+	}
+	return nil
+}
+
 func (service *UserExperienceService) AddXP(id int, xp int) (model.UserExperience, error) {
 	userExperience, err := service.UserExperienceRepo.Get(id)
 	if err != nil{
 		return userExperience, err
 	}
-	fmt.Println("\nUSERXP:", userExperience.Id)
 	userExperience.XP += xp
 	userExperience.Level = model.CalculateLevel(&userExperience)
 	dbResult := service.UserExperienceRepo.Update(&userExperience)
@@ -43,7 +52,8 @@ func (service *UserExperienceService) AddXP(id int, xp int) (model.UserExperienc
 func (service *UserExperienceService) GetByUserId(id int) (model.UserExperience, error) {
 	userExperience, err := service.UserExperienceRepo.GetByUserId(id)
 	if err != nil {
-		return userExperience, err
+		return userExperience, 
+		err
 	}
 	return userExperience, nil
 }

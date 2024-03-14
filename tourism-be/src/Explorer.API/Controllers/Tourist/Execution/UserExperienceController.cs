@@ -4,10 +4,12 @@ using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.UseCases;
 using Explorer.Stakeholders.API.Internal;
+using Explorer.Stakeholders.Core.Domain;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace Explorer.API.Controllers.Tourist.Execution
 {
@@ -55,16 +57,36 @@ namespace Explorer.API.Controllers.Tourist.Execution
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var result = _userExperienceService.Delete(id);
-            return CreateResponse(result);
+            var client = _httpClientFactory.CreateClient("encounters");
+            using HttpResponseMessage response = await client.DeleteAsync($"deleteUserExperience/" + id.ToString());
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+            //var userExperienceDto = await response.Content.ReadFromJsonAsync<UserExperienceDto>();
+            return Ok("Deleted succesfully!");
+
+            //var result = _userExperienceService.Delete(id);
+            //return CreateResponse(result);
         }
         [HttpGet("userxp/{userId:long}")]
-        public ActionResult<PagedResult<UserExperienceDto>> GetByUserId(int userId)
+        public async Task<ActionResult> GetByUserId(int userId)
         {
-            var result = _userExperienceService.GetByUserId(userId);
-            return CreateResponse(result);
+            var client = _httpClientFactory.CreateClient("encounters");
+            using HttpResponseMessage response = await client.GetAsync($"getUserExperience/" + userId.ToString());
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+            var userExperienceDto = await response.Content.ReadFromJsonAsync<UserExperienceDto>();
+            return Ok(userExperienceDto);
+
+            //var result = _userExperienceService.GetByUserId(userId);
+            //return CreateResponse(result);
         }
 
         [HttpPut("addxp/{id:int}/{xp:int}")]
