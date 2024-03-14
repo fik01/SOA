@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -25,7 +24,6 @@ func (handler *UserExperienceHandler) Create(writer http.ResponseWriter, req *ht
 		return
 	}
 
-	fmt.Println(&userExperience)
 	err = handler.UserExperienceService.Create(&userExperience)
 	if err != nil {
 		log.Println("Error while creating userExperience")

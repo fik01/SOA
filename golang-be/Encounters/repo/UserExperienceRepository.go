@@ -22,7 +22,7 @@ func (repo *UserExperienceRepository) Create(userExperience *model.UserExperienc
 	if dbResult.Error != nil {
 		return dbResult.Error
 	}
-	fmt.Println("Rows affected: ",dbResult.RowsAffected)
+	fmt.Println("Succesfully created: ")
 	return nil
 }
 
