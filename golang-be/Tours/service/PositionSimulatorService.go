@@ -22,6 +22,9 @@ func (service *PositionSimulatorService) GetByTouristId(id int) (*model.Position
 	if err != nil {
 		return nil, err
 	}
+	if len(*position) == 0 {
+		return nil, nil
+	}
 	return &(*position)[0], nil // wtf
 }
 

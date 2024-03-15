@@ -57,10 +57,7 @@ public class ToursContext : DbContext
             .WithMany()
             .HasForeignKey(s => s.TourId);
 
-        modelBuilder.Entity<Session>()
-            .HasOne<PositionSimulator>()
-            .WithMany()
-            .HasForeignKey(s => s.LocationId);
+        
 
         modelBuilder.Entity<DomainEvent>()
                 .HasDiscriminator<string>("EventType")

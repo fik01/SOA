@@ -119,7 +119,7 @@ namespace Explorer.API.Controllers.Execution
         }
 
         [HttpGet("touristId/{touristId:long}")]
-        public async Task<ActionResult<PositionSimulator>> GetByTouristId(long touristId)
+        public async Task<ActionResult<PositionSimulatorDto>> GetByTouristId(long touristId)
         {
             HttpResponseMessage response = await _httpClient.GetAsync("/positionSimulator/getByTouristId?touristId=" + touristId);
 
@@ -128,7 +128,7 @@ namespace Explorer.API.Controllers.Execution
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var responseObject = JsonSerializer.Deserialize<PositionSimulator>(responseBody);
+                var responseObject = JsonSerializer.Deserialize<PositionSimulatorDto>(responseBody);
 
                 return Ok(responseObject);
             }

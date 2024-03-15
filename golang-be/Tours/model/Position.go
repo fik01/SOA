@@ -7,10 +7,10 @@ import (
 
 type Position struct {
 	gorm.Model
-	ID        int `gorm:"primaryKey"`
-	Latitude  float64
-	Longitude float64
-	TouristID int
+	ID        int     `gorm:"primaryKey" json:"Id"`
+	Latitude  float64 `gorm:"type:double precision"`
+	Longitude float64 `gorm:"type:double precision"`
+	TouristId int
 }
 
 func (position *Position) validate() error {
