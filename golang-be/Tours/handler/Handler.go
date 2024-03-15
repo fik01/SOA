@@ -8,9 +8,10 @@ import (
 )
 
 type Handler struct {
-	RatingHandler    *RatingHandler
-	TourHandler      *TourHandler
-	EquipmentHandler *EquipmentHandler
+	RatingHandler            *RatingHandler
+	TourHandler              *TourHandler
+	EquipmentHandler         *EquipmentHandler
+	PositionSimulatorHandler *PositionSimulatorHandler
 }
 
 func NewHandler(db *gorm.DB) *Handler {
@@ -27,6 +28,10 @@ func NewHandler(db *gorm.DB) *Handler {
 	equipmentRepo := &repo.CRUDRepository[model.Equipment]{DatabaseConnection: db}
 	equipmentService := &service.EquipmentService{EquipmentRepo: equipmentRepo}
 	handler.EquipmentHandler = &EquipmentHandler{EquipmentService: equipmentService}
+
+	positionRepo := &repo.CRUDRepository[model.Position]{DatabaseConnection: db}
+	positionSimulatorService := &service.PositionSimulatorService{PositionRepo: positionRepo}
+	handler.PositionSimulatorHandler = &PositionSimulatorHandler{PositionSimulatorService: positionSimulatorService}
 
 	return handler
 
