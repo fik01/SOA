@@ -11,13 +11,16 @@ type TourRepository struct {
 	DatabaseConnection *gorm.DB
 }
 
-func (repo *TourRepository) CreateNewTour(tour *model.Tour) error {
+func (repo *TourRepository) CreateNewTour(tour *model.Tour) (*model.Tour, error) {
 	dbResult := repo.DatabaseConnection.Create(tour)
 	if dbResult.Error != nil {
-		return dbResult.Error
+		return nil, dbResult.Error
 	}
-	log.Println(dbResult.RowsAffected)
-	return nil
+
+	if err := repo.DatabaseConnection.First(tour, tour.Id).Error; err != nil {
+		return nil, err
+	}
+	return tour, nil
 }
 
 func (repo *TourRepository) UpdateTour(tour *model.Tour) error {

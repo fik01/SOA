@@ -61,7 +61,7 @@ func (a *ArrayString) Scan(value interface{}) error {
 
 type Tour struct {
 	gorm.Model
-	ID            int `gorm:"primaryKey"`
+	Id            int `gorm:"primaryKey"`
 	Name          string
 	Description   string
 	Price         float64
@@ -126,6 +126,22 @@ func (tour *Tour) validate() error {
 		return errors.New("tour is already published")
 	}
 
+	return nil
+}
+
+func (tour *Tour) Publish(authorId int) error {
+	if tour.AuthorID != authorId {
+		return errors.New("author id doesn't match tour")
+	}
+	tour.Status = Published
+	return nil
+}
+
+func (tour *Tour) Archive(authorId int) error {
+	if tour.AuthorID != authorId {
+		return errors.New("author id doesn't match tour")
+	}
+	tour.Status = Archived
 	return nil
 }
 

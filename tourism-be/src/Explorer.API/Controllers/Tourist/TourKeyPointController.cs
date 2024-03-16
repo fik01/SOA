@@ -7,6 +7,8 @@ using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System.Net.Http;
 using static Explorer.Tours.Core.Domain.PublicTourKeyPoints;
 
 namespace Explorer.API.Controllers.Tourist
@@ -17,11 +19,16 @@ namespace Explorer.API.Controllers.Tourist
     {
         private readonly ITourKeyPointService _tourKeyPointService;
         private readonly IPublicTourKeyPointService _publicTourKeyPointService;
+        private static HttpClient _httpClient;
 
         public TourKeyPointController(ITourKeyPointService tourKeyPointService, IPublicTourKeyPointService publicTourKeyPointService)
         {
             _tourKeyPointService = tourKeyPointService;
             _publicTourKeyPointService = publicTourKeyPointService;
+            _httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:8080"),
+            };
         }
 
         [HttpGet]
@@ -32,17 +39,44 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("tour/{tourId:int}")]
-        public ActionResult<PagedResult<TourKeyPointDto>> GetByTourId(int tourId)
+        public async Task<ActionResult<PagedResult<TourKeyPointDto>>> GetByTourId(int tourId)
         {
-            var result = _tourKeyPointService.GetByTourId(tourId);
-            return CreateResponse(result);
+            var jsonResponse = await GetByTourIdAsync(_httpClient, tourId);
+            var tourKeyPointDtos = JsonConvert.DeserializeObject<List<TourKeyPointDto>>(jsonResponse);
+
+            int total = 0;
+            foreach (var ex in tourKeyPointDtos)
+            {
+                total++;
+            }
+
+            var pagedResult = new PagedResult<TourKeyPointDto>(tourKeyPointDtos, total);
+
+            return pagedResult;
+        }
+
+        static async Task<string> GetByTourIdAsync(HttpClient httpClient, int id)
+        {
+            string url = $"tourKeyPoint/getByTourId?tourId={id}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<TourKeyPointDto> Get(int id)
+        public async Task<ActionResult<TourKeyPointDto>> Get(int id)
         {
-            var result = _tourKeyPointService.Get(id);
-            return CreateResponse(result);
+            var jsonResponse = await GetAsync(_httpClient, id);
+            var tourKeyPointDto = JsonConvert.DeserializeObject<TourKeyPointDto>(jsonResponse);
+            return tourKeyPointDto;
+        }
+
+        static async Task<string> GetAsync(HttpClient httpClient, int id)
+        {
+            string url = $"tourKeyPoint/getById?id={id}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [HttpGet("public")]

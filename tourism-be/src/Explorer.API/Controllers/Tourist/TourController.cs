@@ -59,10 +59,19 @@ namespace Explorer.API.Controllers.Tourist
 
         [AllowAnonymous]
         [HttpGet("{id:int}")]
-        public ActionResult<TourDto> Get(int id)
+        public async Task<ActionResult<TourDto>> Get(int id)
         {
-            var result = _tourService.Get(id);
-            return CreateResponse(result);
+            var jsonResponse = await GetAsync(_httpClient, id);
+            var tourDto = JsonConvert.DeserializeObject<TourDto>(jsonResponse);
+            return tourDto;
+        }
+
+        static async Task<string> GetAsync(HttpClient httpClient, int id)
+        {
+            string url = $"get?id={id}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [HttpPost]

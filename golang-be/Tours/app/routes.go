@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/gorilla/mux"
 	"tours/handler"
+
+	"github.com/gorilla/mux"
 )
 
 func Route(router *mux.Router, handler *handler.Handler) {
@@ -13,6 +14,8 @@ func Route(router *mux.Router, handler *handler.Handler) {
 	router.HandleFunc("/getTours", handler.TourHandler.GetAll).Methods("GET")
 	router.HandleFunc("/getAllByAuthorId", handler.TourHandler.GetAllByAuthorId).Methods("GET")
 	router.HandleFunc("/get", handler.TourHandler.Get).Methods("GET")
+	router.HandleFunc("/publish", handler.TourHandler.Publish).Methods("PUT")
+	router.HandleFunc("/archive", handler.TourHandler.Archive).Methods("PUT")
 
 	//Tour Rating
 	router.HandleFunc("/rating/create", handler.RatingHandler.Create).Methods("POST")
@@ -34,4 +37,10 @@ func Route(router *mux.Router, handler *handler.Handler) {
 	router.HandleFunc("/positionSimulator/getByTouristId", handler.PositionSimulatorHandler.GetByTouristId).Methods("GET")
 	router.HandleFunc("/positionSimulator/getById", handler.PositionSimulatorHandler.GetById).Methods("GET")
 
+	//Tour key point
+	router.HandleFunc("/tourKeyPoint/create", handler.TourKeyPointHandler.Create).Methods("POST")
+	router.HandleFunc("/tourKeyPoint/update", handler.TourKeyPointHandler.Update).Methods("POST")
+	router.HandleFunc("/tourKeyPoint/getById", handler.TourKeyPointHandler.GetById).Methods("GET")
+	router.HandleFunc("/tourKeyPoint/getByTourId", handler.TourKeyPointHandler.GetByTourId).Methods("GET")
+	router.HandleFunc("/tourKeyPoint/delete", handler.TourKeyPointHandler.Delete).Methods("DELETE")
 }
