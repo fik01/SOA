@@ -7,17 +7,18 @@ import (
 )
 
 type ChallengeExecution struct {
-	TouristId      int64
-	Challenge      Challenge
-	ChallengeId    int64
-	Latitude       float64
-	Longitude      float64
-	ActivationTime time.Time
-	CompletionTime *time.Time
-	IsCompleted    bool
+	Id             int        `gorm:"primaryKey;autoIncrement"`
+	TouristId      int64      `json:"tourist_id"`
+	Challenge      *Challenge `gorm:"foreignKey:IdChallenge"`
+	ChallengeId    int64      `json:"challenge_id"`
+	Latitude       float64    `json:"latitude"`
+	Longitude      float64    `json:"longitude"`
+	ActivationTime time.Time  `json:"activation_time"`
+	CompletionTime *time.Time `json:"completion_time,omitempty"`
+	IsCompleted    bool       `json:"is_completed"`
 }
 
-func NewChallengeExecution(touristId int64, latitude, longitude float64,
+func NewChallengeExecution(touristId int64, latitude float64, longitude float64,
 	activationTime time.Time, completionTime *time.Time, challengeId int64, isCompleted bool) *ChallengeExecution {
 	return &ChallengeExecution{
 		TouristId:      touristId,
@@ -37,7 +38,7 @@ func (ce *ChallengeExecution) Complete() {
 }
 
 func (ce *ChallengeExecution) CheckSocialCompletionConditions(numberOfTourists int) error {
-	if ce.Challenge.RequiredAttendance > numberOfTourists {
+	if ce.Challenge.RequiredAttendance != nil && *ce.Challenge.RequiredAttendance > numberOfTourists {
 		return errors.New("Not enough tourists to complete the challenge")
 	}
 	if ce.Challenge.Range > ce.CalculateDistance(ce.Challenge.Latitude, ce.Challenge.Longitude, ce.Latitude, ce.Longitude) {

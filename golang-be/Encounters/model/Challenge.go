@@ -6,24 +6,25 @@ import (
 )
 
 type Challenge struct {
-	CreatorID          int64
-	Description        string
-	Name               string
-	Status             ChallengeStatus
-	Type               ChallengeType
-	Latitude           float64
-	Longitude          float64
-	ExperiencePoints   int
-	KeyPointID         *int64
-	Image              *url.URL
-	LatitudeImage      *float64
-	LongitudeImage     *float64
-	Range              float64
-	RequiredAttendance *int
+	IdChallenge        int64           `gorm:"primaryKey" json:"IdChallenge"`
+	CreatorID          int64           `json:"creator_id"`
+	Description        string          `json:"description"`
+	Name               string          `json:"name"`
+	Status             ChallengeStatus `json:"status"`
+	Type               ChallengeType   `json:"type"`
+	Latitude           float64         `json:"latitude"`
+	Longitude          float64         `json:"longitude"`
+	ExperiencePoints   int             `json:"experience_points"`
+	KeyPointID         *int64          `json:"key_point_id,omitempty"`
+	Image              *url.URL        `gorm:"-" json:"image,omitempty"`
+	LatitudeImage      *float64        `json:"latitude_image,omitempty"`
+	LongitudeImage     *float64        `json:"longitude_image,omitempty"`
+	Range              float64         `json:"range"`
+	RequiredAttendance *int            `json:"required_attendance,omitempty"`
 }
 
-func NewChallenge(creatorID int64, description, name string, status ChallengeStatus, challengeType ChallengeType, latitude, longitude float64,
-	imageURL *url.URL, latitudeImage, longitudeImage *float64, rangeVal float64, experiencePoints int, keyPointID, requiredAttendance *int) (*Challenge, error) {
+func NewChallenge(creatorID int64, description string, name string, status ChallengeStatus, challengeType ChallengeType, latitude float64, longitude float64,
+	imageURL *url.URL, latitudeImage *float64, longitudeImage *float64, rangeVal float64, experiencePoints int, keyPointID *int64, requiredAttendance *int) (*Challenge, error) {
 	challenge := &Challenge{
 		CreatorID:          creatorID,
 		Description:        description,

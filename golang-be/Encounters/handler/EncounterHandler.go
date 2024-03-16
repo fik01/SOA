@@ -54,6 +54,7 @@ func (handler *UserExperienceHandler) AddXP(writer http.ResponseWriter, req *htt
 	json.NewEncoder(writer).Encode(userExperience)
 }
 
+/*
 func (handler *ChallengeExecutionHandler) GetAll(writer http.ResponseWriter, req *http.Request) {
 	page, _ := strconv.Atoi(req.URL.Query().Get("page"))
 	pageSize, _ := strconv.Atoi(req.URL.Query().Get("pageSize"))
@@ -67,6 +68,7 @@ func (handler *ChallengeExecutionHandler) GetAll(writer http.ResponseWriter, req
 	}
 	json.NewEncoder(writer).Encode(result)
 }
+*/
 
 func (handler *ChallengeExecutionHandler) Create(writer http.ResponseWriter, req *http.Request) {
 	var challengeExecution model.ChallengeExecution
@@ -84,11 +86,13 @@ func (handler *ChallengeExecutionHandler) Create(writer http.ResponseWriter, req
 		return
 	}
 
+	log.Println("Challenge execution created successfully:", challengeExecution)
 	writer.WriteHeader(http.StatusCreated)
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(challengeExecution)
 }
 
+/*
 func (handler *ChallengeExecutionHandler) Update(writer http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id, _ := strconv.Atoi(vars["id"])
@@ -112,7 +116,9 @@ func (handler *ChallengeExecutionHandler) Update(writer http.ResponseWriter, req
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(challengeExecution)
 }
+*/
 
+/*
 func (handler *ChallengeExecutionHandler) Delete(writer http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id, _ := strconv.Atoi(vars["id"])
@@ -126,7 +132,9 @@ func (handler *ChallengeExecutionHandler) Delete(writer http.ResponseWriter, req
 
 	writer.WriteHeader(http.StatusOK)
 }
+*/
 
+/*
 func (handler *ChallengeExecutionHandler) GetPagedByTour(writer http.ResponseWriter, req *http.Request) {
 	var tour model.Tour
 	err := json.NewDecoder(req.Body).Decode(&tour)
@@ -148,7 +156,9 @@ func (handler *ChallengeExecutionHandler) GetPagedByTour(writer http.ResponseWri
 	}
 	json.NewEncoder(writer).Encode(result)
 }
+*/
 
+/*
 func (handler *ChallengeExecutionHandler) GetPagedByTouristId(writer http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	touristID, _ := strconv.Atoi(vars["touristId"])
@@ -165,3 +175,4 @@ func (handler *ChallengeExecutionHandler) GetPagedByTouristId(writer http.Respon
 	}
 	json.NewEncoder(writer).Encode(result)
 }
+*/

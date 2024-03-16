@@ -1,11 +1,11 @@
-package repository
+package repo
 
 import (
-	"encounters/model"
 	"errors"
 	"fmt"
 	"log"
 
+	"encounters.xws.com/model"
 	"gorm.io/gorm"
 )
 
@@ -77,8 +77,7 @@ func (repo *ChallengeExecutionRepository) GetByChallengeIdAndTouristId(challenge
 func (repo *ChallengeExecutionRepository) GetNumberOfTouristsByChallengeId(challengeId int64) int {
 	var count int64
 	repo.DatabaseConnection.Model(&model.ChallengeExecution{}).
-		Joins("JOIN challenges ON challenge_executions.challenge_id = challenges.id").
-		Where("challenges.id = ? AND NOT challenge_executions.is_completed", challengeId).
+		Where("challenge_id = ? AND NOT is_completed", challengeId).
 		Count(&count)
 	return int(count)
 }
@@ -91,7 +90,7 @@ func (repo *ChallengeExecutionRepository) SaveChanges() error {
 	return nil
 }
 
-func (repo *ChallengeExecutionRepository) GetPagedByKeyPointIds(tourKeyPointIds []int, page, pageSize int) (*model.PagedResult, error) {
+func (repo *ChallengeExecutionRepository) GetPagedByKeyPointIds(tourKeyPointIds []int, page, pageSize int) ([]model.ChallengeExecution, error) {
 	var challengeExecutions []model.ChallengeExecution
 	err := repo.DatabaseConnection.
 		Preload("Challenge").
@@ -103,10 +102,10 @@ func (repo *ChallengeExecutionRepository) GetPagedByKeyPointIds(tourKeyPointIds 
 	if err != nil {
 		return nil, fmt.Errorf("failed to get paged challenge executions by key point IDs: %w", err)
 	}
-	return &model.PagedResult{Results: challengeExecutions}, nil
+	return challengeExecutions, nil
 }
 
-func (repo *ChallengeExecutionRepository) GetPagedByTouristId(touristId int64, page, pageSize int) (*model.PagedResult, error) {
+func (repo *ChallengeExecutionRepository) GetPagedByTouristId(touristId int64, page, pageSize int) ([]model.ChallengeExecution, error) {
 	var challengeExecutions []model.ChallengeExecution
 	err := repo.DatabaseConnection.
 		Preload("Challenge").
@@ -117,10 +116,10 @@ func (repo *ChallengeExecutionRepository) GetPagedByTouristId(touristId int64, p
 	if err != nil {
 		return nil, fmt.Errorf("failed to get paged challenge executions by tourist ID: %w", err)
 	}
-	return &model.PagedResult{Results: challengeExecutions}, nil
+	return challengeExecutions, nil
 }
 
-func (repo *ChallengeExecutionRepository) GetIncompletePagedByChallengeId(challengeId int64, page, pageSize int) (*model.PagedResult, error) {
+func (repo *ChallengeExecutionRepository) GetIncompletePagedByChallengeId(challengeId int64, page, pageSize int) ([]model.ChallengeExecution, error) {
 	var challengeExecutions []model.ChallengeExecution
 	err := repo.DatabaseConnection.
 		Preload("Challenge").
@@ -131,7 +130,7 @@ func (repo *ChallengeExecutionRepository) GetIncompletePagedByChallengeId(challe
 	if err != nil {
 		return nil, fmt.Errorf("failed to get paged incomplete challenge executions by challenge ID: %w", err)
 	}
-	return &model.PagedResult{Results: challengeExecutions}, nil
+	return challengeExecutions, nil
 }
 
 func (repo *ChallengeExecutionRepository) GetUserIds(challengeId int64) ([]int64, error) {
