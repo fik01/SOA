@@ -6,12 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="f6fe1ac9-e6f0-412a-a5e7-fbdf2a85c335" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Position.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/Position.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/CRUDRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/CRUDRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/PositionSimulatorService.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/PositionSimulatorService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../tourism-fe/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../tourism-fe/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../tourism-fe/Explorer/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../tourism-fe/Explorer/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/Equipment.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/Equipment.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/Rating.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/Rating.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/RatingService.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/RatingService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../tourism-be/src/Explorer.API/Controllers/Tourist/TourRatingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../tourism-be/src/Explorer.API/Controllers/Tourist/TourRatingController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../tourism-fe/Explorer/src/app/feature-modules/tour-execution/tour-all-details/tour-all-details.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../tourism-fe/Explorer/src/app/feature-modules/tour-execution/tour-all-details/tour-all-details.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,10 +109,5 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="GoApplicationRunConfiguration">
-        <watch expression="" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

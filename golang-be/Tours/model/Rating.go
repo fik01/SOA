@@ -8,14 +8,14 @@ import (
 
 type Rating struct {
 	gorm.Model
-	ID               int `gorm:"primaryKey"`
+	ID               int `gorm:"primaryKey" json:"Id"`
 	TourID           int `gorm:"foreignKey:TourId"`
 	PersonID         int
 	Mark             int
 	Comment          string
 	DateOfVisit      time.Time
 	DateOfCommenting time.Time
-	Images           []string `gorm:"type:text[]"`
+	Images           ArrayString `gorm:"type:text[]"`
 }
 
 func (rating *Rating) validate() error {

@@ -41,10 +41,10 @@ func (service *RatingService) Update(rating *model.Rating) error {
 	return nil
 }
 
-func (service *RatingService) GetByPersonIdAndTourId(tourId int, personId int) (*[]model.Rating, error) {
+func (service *RatingService) GetByPersonIdAndTourId(tourId int, personId int) (*model.Rating, error) {
 	rating, err := service.RatingRepo.Where("tour_id = ? AND person_id = ?", tourId, personId)
 	if err != nil {
 		return nil, err
 	}
-	return rating, nil
+	return &(*rating)[0], nil
 }

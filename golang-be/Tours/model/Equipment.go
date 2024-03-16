@@ -7,7 +7,7 @@ import (
 
 type Equipment struct {
 	gorm.Model
-	ID          int `gorm:"primaryKey"`
+	ID          int `gorm:"primaryKey" json:"Id"`
 	Name        string
 	Description string
 }

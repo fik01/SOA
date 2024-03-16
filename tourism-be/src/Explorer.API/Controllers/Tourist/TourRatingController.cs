@@ -90,7 +90,7 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("tour/{tourId:int}")]
-        public async Task<ActionResult<PagedResult<TourRatingDto>>> GetByTourId(int tourId)
+        public async Task<ActionResult<List<TourRatingDto>>> GetByTourId(int tourId)
         {
             HttpResponseMessage response = await _httpClient.GetAsync("/rating/getByTourId?tourId=" + tourId);
             
@@ -101,9 +101,8 @@ namespace Explorer.API.Controllers.Tourist
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 var responseObject = JsonSerializer.Deserialize<List<TourRatingDto>>(responseBody);
-                var tours = new PagedResult<TourRatingDto>(responseObject,1);
 
-                return Ok(tours);
+                return Ok(responseObject);
             }
             else
             {
@@ -150,7 +149,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet("getByPersonIdAndTourId/{personId:long}/{tourId:long}")]
         public async Task<ActionResult<TourRatingDto>> GetByPersonIdAndTourId(long personId, long tourId)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("/getByPersonAndTourId?tourId=" + tourId + "&personId=" + personId);
+            HttpResponseMessage response = await _httpClient.GetAsync("/rating/getByPersonAndTourId?tourId=" + tourId + "&personId=" + personId);
 
 
             if (response.IsSuccessStatusCode)
@@ -158,10 +157,10 @@ namespace Explorer.API.Controllers.Tourist
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var responseObject = JsonSerializer.Deserialize<List<TourRatingDto>>(responseBody);
-                var tours = new PagedResult<TourRatingDto>(responseObject, 1);
+                var responseObject = JsonSerializer.Deserialize<TourRatingDto>(responseBody);
 
-                return Ok(tours);
+
+                return Ok(responseObject);
             }
             else
             {
