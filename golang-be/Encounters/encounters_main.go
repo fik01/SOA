@@ -15,7 +15,7 @@ import (
 
 func initDB() *gorm.DB {
 	// Set up database connection
-	dsn := "host=localhost user=postgres password=super dbname=v1 port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=super dbname=explorer-v1 port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
@@ -39,21 +39,20 @@ func initDB() *gorm.DB {
 	return db
 }
 
-func startServer(handler *handler.UserExperienceHandler) {
+func startServerUserExperience(userExperienceHandler *handler.UserExperienceHandler) {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/newUserExperience", handler.Create).Methods("POST")
-	router.HandleFunc("/addXP/{id}/{xp}", handler.AddXP).Methods("PUT")
+	router.HandleFunc("/newUserExperience", userExperienceHandler.Create).Methods("POST")
+	router.HandleFunc("/addXP/{id}/{xp}", userExperienceHandler.AddXP).Methods("PUT")
 
-	//router.HandleFunc("/challengeExecution", handler.Create).Methods("POST")
 	log.Println(http.ListenAndServe(":8081", router))
 }
 
-func startServer1(challengeExecutionHandler *handler.ChallengeExecutionHandler) {
-	router1 := mux.NewRouter().StrictSlash(true)
+func startServerChallengeExecution(challengeExecutionHandler *handler.ChallengeExecutionHandler) {
+	router := mux.NewRouter().StrictSlash(true)
 
-	router1.HandleFunc("/tourist/challengeExecution", challengeExecutionHandler.Create).Methods("POST")
-	log.Println(http.ListenAndServe(":8081", router1))
+	router.HandleFunc("/tourist/challengeExecution", challengeExecutionHandler.Create).Methods("POST")
+	log.Println(http.ListenAndServe(":8081", router))
 }
 
 func main() {
@@ -65,16 +64,17 @@ func main() {
 		print("CONNECTED")
 	}
 
-	//repoa := &repo.UserExperienceRepository{DatabaseConnection: database}
-	//servicea := &service.UserExperienceService{UserExperienceRepo: repoa}
-	//handlera := &handler.UserExperienceHandler{UserExperienceService: servicea}
+	userExperiencerepo := &repo.UserExperienceRepository{DatabaseConnection: database}
+	userExperienceservice := &service.UserExperienceService{UserExperienceRepo: userExperiencerepo}
+	userExperiencehandler := &handler.UserExperienceHandler{UserExperienceService: userExperienceservice}
 
-	challengeExecutionRepo := &repo.ChallengeExecutionRepository{DatabaseConnection: database}
-	challengeExecutionService := &service.ChallengeExecutionService{ChallengeExecutionRepository: challengeExecutionRepo}
-	challengeExecutionHandler := &handler.ChallengeExecutionHandler{ChallengeExecutionService: challengeExecutionService}
+	startServerUserExperience(userExperiencehandler)
 
-	//challengeExecutionHandler := &challengeExecutionHandler.ChallengeExecutionHandler{ChallengeExecutionService: challengeExecutionService}
+	go func() {
+		challengeExecutionRepo := &repo.ChallengeExecutionRepository{DatabaseConnection: database}
+		challengeExecutionService := &service.ChallengeExecutionService{ChallengeExecutionRepository: challengeExecutionRepo}
+		challengeExecutionHandler := &handler.ChallengeExecutionHandler{ChallengeExecutionService: challengeExecutionService}
 
-	//startServer(handlera)
-	startServer1(challengeExecutionHandler)
+		startServerChallengeExecution(challengeExecutionHandler)
+	}()
 }
