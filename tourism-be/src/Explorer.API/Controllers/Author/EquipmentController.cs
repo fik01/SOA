@@ -24,6 +24,7 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<PagedResult<EquipmentDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             HttpResponseMessage response = await _httpClient.GetAsync("/equipment/get");
@@ -34,7 +35,7 @@ namespace Explorer.API.Controllers.Author
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 var responseObject = JsonSerializer.Deserialize<List<EquipmentDto>>(responseBody);
-                var equipment = new PagedResult<EquipmentDto>(responseObject, 1);
+                var equipment = new PagedResult<EquipmentDto>(responseObject, 0);
 
                 return Ok(equipment);
             }
