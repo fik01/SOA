@@ -2,8 +2,11 @@
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.UseCases;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -13,6 +16,11 @@ namespace Explorer.API.Controllers.Author
     {
         private readonly IBlogService _blogService;
         //private readonly ICommentService _commentService;
+
+        private static HttpClient _blogClient = new()
+        {
+            BaseAddress = new Uri("https://localhost:8080/blog/"),
+        };
 
         public BlogController(IBlogService blogService)
         {
@@ -95,10 +103,24 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpGet("blogComments/{blogId:int}")]
-        public ActionResult<List<CommentDto>> GetCommentsByBlogId(int blogId)
+        public async Task<ActionResult<List<CommentDto>>> GetCommentsByBlogId(int blogId)
         {
-            var result = _blogService.GetCommentsByBlogId(blogId);
-            return CreateResponse(result);
+            HttpResponseMessage response = await _blogClient.GetAsync("blogComments");
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<List<CommentDto>>(responseBody);
+                var comments = new PagedResult<CommentDto>(responseObject, 0);
+
+                return Ok(comments);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
 
         [HttpDelete("rating/{userId:int}/{blogId:int}")]
