@@ -4,6 +4,7 @@ using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 
@@ -26,11 +27,29 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpGet("{authorId:long}")]
-        public ActionResult<PagedResult<TourProblemDto>> GetByAuthorId(long authorId)
+        public async Task<ActionResult<PagedResult<TourProblemDto>>> GetByAuthorId(long authorId)
         {
-            var result = _problemService.GetByAuthorId(authorId);
-            _problemService.FindNames(result.Value);
-            return CreateResponse(result);
+            var jsonResponse = await GetByAuthorIdAsync(_httpClient, authorId);
+            var tourProblemsDtos = JsonConvert.DeserializeObject<List<TourProblemDto>>(jsonResponse);
+
+            int total = 0;
+            foreach (var ex in tourProblemsDtos)
+            {
+                total++;
+            }
+
+            var pagedResult = new PagedResult<TourProblemDto>(tourProblemsDtos, total);
+
+            return pagedResult;
+        }
+
+
+        static async Task<string> GetByAuthorIdAsync(HttpClient httpClient, long authorId)
+        {
+            string url = $"tourProblem/getByAuthorId?authorId={authorId}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [HttpPut("{id:int}")]

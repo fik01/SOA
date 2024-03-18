@@ -108,3 +108,37 @@ func (handler *TourProblemHandler) GetByTouristId(writer http.ResponseWriter, re
 	}
 
 }
+
+func (handler *TourProblemHandler) GetByAuthorId(writer http.ResponseWriter, req *http.Request) {
+	var tourProblems *[]model.TourProblem
+
+	authorId, err := strconv.Atoi(req.URL.Query().Get("authorId"))
+
+	if err != nil {
+		log.Println("Error while parsing query params")
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	tourProblems, err = handler.TourProblemService.GetByAuthorId(authorId)
+
+	if err != nil {
+		log.Println("Error while getting tour key points")
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	jsonData, err := json.Marshal(tourProblems)
+
+	if err != nil {
+		http.Error(writer, "Failed to marshal JSON", http.StatusInternalServerError)
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	_, err = writer.Write(jsonData)
+
+	if err != nil {
+		http.Error(writer, "Failed to write JSON data!", http.StatusInternalServerError)
+	}
+
+}
