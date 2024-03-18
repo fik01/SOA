@@ -20,7 +20,7 @@ namespace Explorer.API.Controllers.Author
 
         private static HttpClient _blogClient = new()
         {
-            BaseAddress = new Uri("https://localhost:8080/blog/"),
+            BaseAddress = new Uri("http://localhost:8090"),
         };
 
         public BlogController(IBlogService blogService)
@@ -71,7 +71,7 @@ namespace Explorer.API.Controllers.Author
         [HttpPost("createComment")]
         public async Task<ActionResult<CommentDto>> Create([FromBody] CommentDto commentDto)
         {
-            var result = CreateCommentAsync(_blogClient, commentDto);
+            var result = await CreateCommentAsync(_blogClient, commentDto);
             return Ok(result);
         }
 
@@ -82,7 +82,7 @@ namespace Explorer.API.Controllers.Author
                 Encoding.UTF8,
                 "application/json");
 
-            using HttpResponseMessage response = await httpClient.PostAsync("createComment", jsonContent);
+            using HttpResponseMessage response = await httpClient.PostAsync("blog/createComment", jsonContent);
 
             response.EnsureSuccessStatusCode();
 
@@ -125,7 +125,7 @@ namespace Explorer.API.Controllers.Author
         [HttpGet("blogComments/{blogId:int}")]
         public async Task<ActionResult<List<CommentDto>>> GetCommentsByBlogId(int blogId)
         {
-            HttpResponseMessage response = await _blogClient.GetAsync("blogComments");
+            HttpResponseMessage response = await _blogClient.GetAsync("blog/blogComments/"+blogId);
 
             if (response.IsSuccessStatusCode)
             {
