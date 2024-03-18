@@ -6,6 +6,8 @@ using Explorer.Tours.Core.UseCases;
 using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Text.Json;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -14,52 +16,156 @@ namespace Explorer.API.Controllers.Tourist
     public class TourRatingController : BaseApiController
     {
         private readonly ITourRatingService _ratingService;
+        private readonly HttpClient _httpClient;
 
-        public TourRatingController(ITourRatingService ratingService)
+        public TourRatingController(ITourRatingService ratingService, IHttpClientFactory httpClientFactory)
         {
             _ratingService = ratingService;
+
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri("http://localhost:8080");
         }
 
         [HttpGet]
         public ActionResult<PagedResult<TourRatingDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _ratingService.GetPaged(page, pageSize);
+            var result = _ratingService.GetPaged(page, pageSize);          
             return CreateResponse(result);
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<TourRatingDto> Get(int id)
+        public async Task<ActionResult<TourRatingDto>> Get(int id)
         {
-            var result = _ratingService.Get(id);
-            return CreateResponse(result);
+            HttpResponseMessage response = await _httpClient.GetAsync("/rating/getById?id=" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<TourRatingDto>(responseBody);
+
+                return Ok(responseObject);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
 
         [HttpPost]
-        public ActionResult<TourRatingDto> Create([FromBody] TourRatingDto rating)
+        public async Task<ActionResult<TourRatingDto>> Create([FromBody] TourRatingDto rating)
         {
-            var result = _ratingService.Create(rating);
-            return CreateResponse(result);
+            try
+            {
+            
+                string jsonPayload = JsonSerializer.Serialize(rating);
+
+                
+                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                
+                HttpResponseMessage response = await _httpClient.PostAsync("/rating/create", content);
+
+                
+                if (response.IsSuccessStatusCode)
+                {
+                   
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    
+                    return Ok(responseBody);
+                }
+                else
+                {
+                    
+                    return StatusCode((int)response.StatusCode, "Failed to create resource on the GoLang API");
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("tour/{tourId:int}")]
-        public ActionResult<PagedResult<TourRatingDto>> GetByTourId(int tourId)
+        public async Task<ActionResult<List<TourRatingDto>>> GetByTourId(int tourId)
         {
-            var result = _ratingService.GetByTourId(tourId);
-            return CreateResponse(result);
+            HttpResponseMessage response = await _httpClient.GetAsync("/rating/getByTourId?tourId=" + tourId);
+            
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<List<TourRatingDto>>(responseBody);
+
+                return Ok(responseObject);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
 
         [HttpPut]
-        public ActionResult<TourRatingDto> Update([FromBody] TourRatingDto rating)
+        public async Task<ActionResult<TourRatingDto>> Update([FromBody] TourRatingDto rating)
         {
-            var result = _ratingService.Update(rating);
-            return CreateResponse(result);
+            try
+            {
+
+                string jsonPayload = JsonSerializer.Serialize(rating);
+
+
+                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+
+                HttpResponseMessage response = await _httpClient.PostAsync("/rating/update", content);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+
+                    return Ok(responseBody);
+                }
+                else
+                {
+
+                    return StatusCode((int)response.StatusCode, "Failed to update resource on the GoLang API");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("getByPersonIdAndTourId/{personId:long}/{tourId:long}")]
-        public ActionResult<TourRatingDto> GetByPersonIdAndTourId(long personId, long tourId)
+        public async Task<ActionResult<TourRatingDto>> GetByPersonIdAndTourId(long personId, long tourId)
         {
-            var result = _ratingService.GetByPersonIdAndTourId(personId, tourId);
-            return CreateResponse(result);
+            HttpResponseMessage response = await _httpClient.GetAsync("/rating/getByPersonAndTourId?tourId=" + tourId + "&personId=" + personId);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<TourRatingDto>(responseBody);
+
+
+                return Ok(responseObject);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
     }
 }

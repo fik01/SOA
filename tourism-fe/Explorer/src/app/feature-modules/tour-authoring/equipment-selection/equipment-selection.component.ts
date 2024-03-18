@@ -26,7 +26,7 @@ export class EquipmentSelectionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
+
   }
 
   getEquipment(): void {
@@ -44,6 +44,7 @@ export class EquipmentSelectionComponent implements OnInit, OnChanges {
   }
 
   getTourEquipment(): void {
+    if (this.tour.equipment != null) {
     this.allEquipment.forEach(element => {
       this.tour.equipment.forEach(id => {
         if(element.id == id && !this.usedEquipment.includes(element)){
@@ -54,7 +55,9 @@ export class EquipmentSelectionComponent implements OnInit, OnChanges {
         }
       })
     })
+    }
   }
+
 
   onAddClicked(): void {
     this.shouldRenderUnusedEquipment = !this.shouldRenderUnusedEquipment
