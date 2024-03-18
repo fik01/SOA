@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"encounters.xws.com/handler"
+	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
 	"encounters.xws.com/service"
 	"github.com/gorilla/mux"
@@ -30,20 +31,48 @@ func initDB() *gorm.DB {
 	// if err != nil {
 	// 	log.Fatalf("Error migrating schema: %v", err)
 	// }
+	err = db.AutoMigrate(&model.Challenge{})
+	if err != nil {
+		log.Fatalf("Error migrating schema: %v", err)
+	}
+
+	err = db.AutoMigrate(&model.ChallengeExecution{})
+	if err != nil {
+		log.Fatalf("Error migrating schema: %v", err)
+	}
 
 	return db
 }
 
-func startServer(handler *handler.UserExperienceHandler) {
+func startServer(database *gorm.DB){
 	router := mux.NewRouter().StrictSlash(true)
+
+	initUserExperience(router, database)
+	initChallengeExecution(router, database)
+
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
+	println("Server starting")
+	log.Fatal(http.ListenAndServe(":8081", router))
+}
+
+func initChallengeExecution(router *mux.Router, database *gorm.DB){
+	repo := &repo.ChallengeExecutionRepository{DatabaseConnection: database}
+	service := &service.ChallengeExecutionService{ChallengeExecutionRepository: repo}
+	handler := &handler.ChallengeExecutionHandler{ChallengeExecutionService: service}
+
+	router.HandleFunc("/tourist/challengeExecution", handler.Create).Methods("POST")
+}
+
+func initUserExperience(router *mux.Router, database *gorm.DB){
+	repo := &repo.UserExperienceRepository{DatabaseConnection: database}
+	service := &service.UserExperienceService{UserExperienceRepo: repo}
+	handler := &handler.UserExperienceHandler{UserExperienceService: service}
 
 	router.HandleFunc("/deleteUserExperience/{id}", handler.Delete).Methods("DELETE")
 	router.HandleFunc("/getUserExperience/{id}", handler.GetXPByUserId).Methods("GET")
 	router.HandleFunc("/newUserExperience", handler.Create).Methods("POST")
 	router.HandleFunc("/addXP/{id}/{xp}", handler.AddXP).Methods("PUT")
-	log.Println(http.ListenAndServe(":8081", router))
 }
-
 
 func main() {
 	database := initDB()
@@ -54,9 +83,5 @@ func main() {
 		print("CONNECTED")
 	}
 
-	repo := &repo.UserExperienceRepository{DatabaseConnection: database}
-	service := &service.UserExperienceService{UserExperienceRepo: repo}
-	handler := &handler.UserExperienceHandler{UserExperienceService: service}
-
-	startServer(handler)
+	startServer(database)
 }

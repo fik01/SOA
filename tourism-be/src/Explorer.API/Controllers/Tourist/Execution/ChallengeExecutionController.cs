@@ -4,6 +4,7 @@ using Explorer.Encounters.API.Public;
 using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace Explorer.API.Controllers.Tourist.Execution
 {
@@ -12,10 +13,12 @@ namespace Explorer.API.Controllers.Tourist.Execution
     public class ChallengeExecutionController : BaseApiController
     {
         private readonly IChallengeExecutionService _challengeExecutionService;
+        private IHttpClientFactory _httpClientFactory;
 
-        public ChallengeExecutionController(IChallengeExecutionService challengeExecutionService)
+        public ChallengeExecutionController(IChallengeExecutionService challengeExecutionService, IHttpClientFactory httpClientFactory)
         {
             _challengeExecutionService = challengeExecutionService;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet]
@@ -27,11 +30,29 @@ namespace Explorer.API.Controllers.Tourist.Execution
 
 
         [HttpPost]
+        public async Task<ActionResult> Create([FromBody] ChallengeExecutionDto challengeExecution)
+        {
+            var client = _httpClientFactory.CreateClient("encounters");
+            using HttpResponseMessage response = await client.PostAsJsonAsync("tourist/challengeExecution", challengeExecution);
+
+            //var result = _challengeExecutionService.Create(challengeExecution);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return Ok(jsonResponse);
+        }
+
+/*        
+        [HttpPost]
         public ActionResult<ChallengeExecutionDto> Create([FromBody] ChallengeExecutionDto challengeExecution)
         {
             var result = _challengeExecutionService.Create(challengeExecution);
             return CreateResponse(result);
         }
+*/        
 
         [HttpPut("{id:int}")]
         public ActionResult<ChallengeExecutionDto> Update([FromBody] ChallengeExecutionDto challengeExecution)

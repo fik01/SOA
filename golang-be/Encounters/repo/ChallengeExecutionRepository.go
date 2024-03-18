@@ -1,33 +1,148 @@
 package repo
 
-//"database-example/model"
-// "gorm.io/gorm"
+import (
+	"errors"
+	"fmt"
+	"log"
 
-// type ChallengeExecutionRepository struct {
-//     DatabaseConnection *gorm.DB
-// }
+	"encounters.xws.com/model"
+	"gorm.io/gorm"
+)
 
-// func NewChallengeExecutionRepository(db *gorm.DB) *ChallengeExecutionRepository {
-//     return &ChallengeExecutionRepository{
-//         DatabaseConnection: db,
-//     }
-// }
+type ChallengeExecutionRepository struct {
+	DatabaseConnection *gorm.DB
+}
 
-// func (repo *ChallengeExecutionRepository) GetByChallengeIdAndTouristId(challengeId, touristId int64) (model.ChallengeExecution, error) {
-//     var challengeExecution model.ChallengeExecution
-//     dbResult := repo.DatabaseConnection.Where("challenge_id = ? AND tourist_id = ?", challengeId, touristId).First(&challengeExecution)
-//     if dbResult.Error != nil {
-//         return challengeExecution, dbResult.Error
-//     }
-//     return challengeExecution, nil
-// }
+func NewChallengeExecutionRepository(db *gorm.DB) *ChallengeExecutionRepository {
+	return &ChallengeExecutionRepository{
+		DatabaseConnection: db,
+	}
+}
 
-// func (repo *ChallengeExecutionRepository) GetPagedByKeyPointIds(tourKeyPointIds []int, page, pageSize int) ([]model.ChallengeExecution, error) {
-//     var challengeExecutions []model.ChallengeExecution
-//     dbResult := repo.DatabaseConnection.Where("key_point_id IN ?", tourKeyPointIds).Offset((page - 1) * pageSize).Limit(pageSize).Find(&challengeExecutions)
-//     if dbResult.Error != nil {
-//         return nil, dbResult.Error
-//     }
-//     return challengeExecutions, nil
-// }
+func (repo *ChallengeExecutionRepository) Create(entity *model.ChallengeExecution) error {
+	result := repo.DatabaseConnection.Create(entity)
+	if result.Error != nil {
+		return result.Error
+	}
+	log.Println(result.RowsAffected)
+	return nil
+}
 
+func (repo *ChallengeExecutionRepository) Delete(id int64) error {
+	entity, err := repo.Get(id)
+	if err != nil {
+		return err
+	}
+	result := repo.DatabaseConnection.Delete(entity)
+	if result.Error != nil {
+		return result.Error
+	}
+	log.Println(result.RowsAffected)
+	return nil
+}
+
+func (repo *ChallengeExecutionRepository) Get(id int64) (*model.ChallengeExecution, error) {
+	var challengeExecution model.ChallengeExecution
+	result := repo.DatabaseConnection.Where("id = ?", id).Preload("Challenge").First(&challengeExecution)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.New("Not found: " + fmt.Sprint(id))
+	}
+	return &challengeExecution, nil
+}
+
+func (repo *ChallengeExecutionRepository) Update(entity *model.ChallengeExecution) error {
+	result := repo.DatabaseConnection.Save(entity)
+	if result.Error != nil {
+		return result.Error
+	}
+	log.Println(result.RowsAffected)
+	return nil
+}
+
+func (repo *ChallengeExecutionRepository) GetByChallengeIdAndTouristId(challengeId, touristId int64) (*model.ChallengeExecution, error) {
+	var challengeExecution model.ChallengeExecution
+	result := repo.DatabaseConnection.Where("challenge_id = ? AND tourist_id = ?", challengeId, touristId).Preload("Challenge").First(&challengeExecution)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.New(fmt.Sprintf("Not found: challengeId=%d, touristId=%d", challengeId, touristId))
+	}
+	return &challengeExecution, nil
+}
+
+func (repo *ChallengeExecutionRepository) GetNumberOfTouristsByChallengeId(challengeId int64) int {
+	var count int64
+	repo.DatabaseConnection.Model(&model.ChallengeExecution{}).
+		Where("challenge_id = ? AND NOT is_completed", challengeId).
+		Count(&count)
+	return int(count)
+}
+
+func (repo *ChallengeExecutionRepository) SaveChanges() error {
+	err := repo.DatabaseConnection.Save(&model.ChallengeExecution{}).Error
+	if err != nil {
+		return fmt.Errorf("failed to save changes: %w", err)
+	}
+	return nil
+}
+
+func (repo *ChallengeExecutionRepository) GetPagedByKeyPointIds(tourKeyPointIds []int, page, pageSize int) ([]model.ChallengeExecution, error) {
+	var challengeExecutions []model.ChallengeExecution
+	err := repo.DatabaseConnection.
+		Preload("Challenge").
+		Joins("JOIN challenges ON challenge_executions.challenge_id = challenges.id").
+		Where("challenges.key_point_id IN ?", tourKeyPointIds).
+		Offset((page - 1) * pageSize).
+		Limit(pageSize).
+		Find(&challengeExecutions).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get paged challenge executions by key point IDs: %w", err)
+	}
+	return challengeExecutions, nil
+}
+
+func (repo *ChallengeExecutionRepository) GetPagedByTouristId(touristId int64, page, pageSize int) ([]model.ChallengeExecution, error) {
+	var challengeExecutions []model.ChallengeExecution
+	err := repo.DatabaseConnection.
+		Preload("Challenge").
+		Where("tourist_id = ?", touristId).
+		Offset((page - 1) * pageSize).
+		Limit(pageSize).
+		Find(&challengeExecutions).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get paged challenge executions by tourist ID: %w", err)
+	}
+	return challengeExecutions, nil
+}
+
+func (repo *ChallengeExecutionRepository) GetIncompletePagedByChallengeId(challengeId int64, page, pageSize int) ([]model.ChallengeExecution, error) {
+	var challengeExecutions []model.ChallengeExecution
+	err := repo.DatabaseConnection.
+		Preload("Challenge").
+		Where("challenge_id = ? AND NOT is_completed", challengeId).
+		Offset((page - 1) * pageSize).
+		Limit(pageSize).
+		Find(&challengeExecutions).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get paged incomplete challenge executions by challenge ID: %w", err)
+	}
+	return challengeExecutions, nil
+}
+
+func (repo *ChallengeExecutionRepository) GetUserIds(challengeId int64) ([]int64, error) {
+	var challengeExecutions []model.ChallengeExecution
+	err := repo.DatabaseConnection.Where("challenge_id = ?", challengeId).Find(&challengeExecutions).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user IDs for challenge execution: %w", err)
+	}
+
+	var userIds []int64
+	for _, ce := range challengeExecutions {
+		userIds = append(userIds, ce.TouristId)
+	}
+	return userIds, nil
+}
