@@ -4,9 +4,12 @@ import (
 	"database-example/model"
 	"database-example/service"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type CommentHandler struct {
@@ -15,7 +18,11 @@ type CommentHandler struct {
 
 func (handler *CommentHandler) GetByBlogId(writer http.ResponseWriter, req *http.Request) {
 
-	id, err := strconv.Atoi(req.URL.Query().Get("id"))
+	vars := mux.Vars(req)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	fmt.Println(id)
+	
 	if err != nil {
 		log.Println("Error while parsing query params")
 		writer.WriteHeader(http.StatusBadRequest)
@@ -37,7 +44,6 @@ func (handler *CommentHandler) GetByBlogId(writer http.ResponseWriter, req *http
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
-
 	_, err = writer.Write(jsonData)
 	if err != nil {
 		log.Println("Error while writing JSON data:", err)
@@ -50,11 +56,12 @@ func (handler *CommentHandler) Create(writer http.ResponseWriter, req *http.Requ
 	var comment model.Comment
 
 	err := json.NewDecoder(req.Body).Decode(&comment)
+	fmt.Println(comment)
 	if err != nil {
 		log.Println("Error while parsing rating json")
 		log.Println(err)
 		writer.WriteHeader(http.StatusBadRequest)
-		return
+		return 
 	}
 
 	err = handler.CommentService.Create(&comment)
@@ -64,5 +71,12 @@ func (handler *CommentHandler) Create(writer http.ResponseWriter, req *http.Requ
 		return
 	}
 
+	createdComment, err := json.Marshal(&comment)
+	if err != nil {
+		log.Println("Error while encoding tour to JSON")
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	writer.WriteHeader(http.StatusCreated)
+	writer.Write(createdComment)
 }

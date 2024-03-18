@@ -30,13 +30,8 @@ export class BlogService {
       return this.http.get<PagedResults<Comment>>(environment.apiHost + role + '/blog/allComments');
   }
 
-  getCommentsByBlogId(blogId: number, role: string): Observable<Comment[]> {
-    // return this.getAllComments(role).pipe(
-    //   map((pagedResults: PagedResults<Comment>) => {
-    //     return pagedResults.results.filter(comment => comment.blogId === blogId);
-    //   })
-    // )
-    return this.http.get<Comment[]>(environment.apiHost + role + '/blog/blogComments/' + blogId);
+  getCommentsByBlogId(blogId: number, role: string): Observable<PagedResults<Comment>> {
+    return this.http.get<PagedResults<Comment>>(environment.apiHost + role + '/blog/blogComments/' + blogId);
   }
 
   getCommentById(commentId: number, role: string): Observable<Comment> {
@@ -104,7 +99,7 @@ export class BlogService {
   }
 
   getNumberOfComments(blogId: number, role: string): Observable<number> {
-    return this.getCommentsByBlogId(blogId, role).pipe(map(comments => comments.length));
+    return this.getCommentsByBlogId(blogId, role).pipe(map(comments => comments.totalCount));
   }
 
   updateBlog(blog: BlogPage, role: string): Observable<BlogPage[]> {

@@ -86,15 +86,15 @@ export class BlogPageOverviewComponent {
         if (this.blog.id != null)
         {
           this.service.getCommentsByBlogId(this.blog.id, this.user.role).subscribe({
-            next: (result: Comment[]) => {
-              this.comments = result; 
+            next: (result: PagedResults<Comment>) => {
+              this.comments = result.results; 
               console.log(this.comments);
-              this.commentLength = result.length;
+              this.commentLength = result.totalCount;
             },
             error: (error: any) => {
               console.error('An error occurred:', error);
             }
-          });
+          });          
         }
       }
     })
@@ -118,8 +118,8 @@ export class BlogPageOverviewComponent {
             if (this.blog.id != null)
             {
               this.service.getCommentsByBlogId(this.blog.id, this.user.role).subscribe({
-                next: (result: Comment[]) => {
-                  this.comments = result;
+                next: (result: PagedResults<Comment>) => {
+                  this.comments = result.results;
                   this.commentLength = this.comments.length;
                   
                   if (this.blog.id != null) {
@@ -202,8 +202,8 @@ export class BlogPageOverviewComponent {
             if (this.blog.id)
             {
               this.service.getCommentsByBlogId(this.blog.id, this.user.role).subscribe({
-                next:(result: Comment[])=>{
-                  this.comments = result;
+                next:(result: PagedResults<Comment>)=>{
+                  this.comments = result.results;
                 }
               })
             }

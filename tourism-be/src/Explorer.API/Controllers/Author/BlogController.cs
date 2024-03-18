@@ -133,7 +133,7 @@ namespace Explorer.API.Controllers.Author
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 var responseObject = JsonSerializer.Deserialize<List<CommentDto>>(responseBody);
-                var comments = new PagedResult<CommentDto>(responseObject, 0);
+                var comments = new PagedResult<CommentDto>(responseObject, responseObject.Count);
 
                 return Ok(comments);
             }

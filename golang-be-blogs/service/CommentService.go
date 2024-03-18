@@ -22,7 +22,7 @@ func (service *CommentService) GetByBlogId(Id int) (*[]model.Comment, error) {
 }
 
 func (service *CommentService) Create(comment *model.Comment) error {
-	
+
 	comment.CreationDate = time.Now()
 	comment.LastEditDate = time.Now()
 
