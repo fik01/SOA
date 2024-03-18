@@ -91,7 +91,7 @@ func (handler *RatingHandler) Update(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 
-	writer.WriteHeader(http.StatusCreated)
+	writer.WriteHeader(http.StatusOK)
 }
 
 func (handler *RatingHandler) GetByTourId(writer http.ResponseWriter, req *http.Request) {
@@ -129,7 +129,6 @@ func (handler *RatingHandler) GetByTourId(writer http.ResponseWriter, req *http.
 }
 
 func (handler *RatingHandler) GetByPersonIdAndTourId(writer http.ResponseWriter, req *http.Request) {
-	var rating *[]model.Rating
 
 	tourId, tErr := strconv.Atoi(req.URL.Query().Get("tourId"))
 	personId, pErr := strconv.Atoi(req.URL.Query().Get("personId"))

@@ -55,6 +55,7 @@ export class UnusedEquipmentComponent implements OnInit, OnChanges{
     this.service.getEquipment().subscribe({
       next: (result: PagedResults<Equipment>) => {
         this.allEquipment = result.results
+        console.log(this.tour)
         this.getTourEquipment()
       },
       error: () => {
@@ -63,14 +64,16 @@ export class UnusedEquipmentComponent implements OnInit, OnChanges{
   }
 
   getTourEquipment(): void {
-    this.allEquipment.forEach(element => {
-      let id = element.id!
-      if(this.tour.equipment.includes(id))
-        this.usedEquipment.push(element)
-      else
-        this.unusedEquipment.push(element)
-    })
+    if (this.tour.equipment != null) {
 
+      this.allEquipment.forEach(element => {
+        let id = element.id!
+        if (this.tour.equipment.includes(id))
+          this.usedEquipment.push(element)
+        else
+          this.unusedEquipment.push(element)
+      })
+    }
     // this.allEquipment.forEach(element => {
     //   this.tour.equipment.forEach(id => {
     //     if(element.id == id && !this.usedEquipment.includes(element)){

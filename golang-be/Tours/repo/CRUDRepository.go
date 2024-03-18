@@ -35,7 +35,7 @@ func (repo *CRUDRepository[T]) GetAll() (*[]T, error) {
 }
 
 func (repo *CRUDRepository[T]) Update(entity *T) error {
-	return repo.DatabaseConnection.Save(&entity).Error
+	return repo.DatabaseConnection.Updates(&entity).Error
 }
 
 func (repo *CRUDRepository[T]) Delete(entity *T) error {
