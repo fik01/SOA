@@ -9,4 +9,6 @@ type Comment struct {
 	BlogId       int    `json:"BlogId"`
 	CreationDate time.Time `json:"CreationDate"`
 	LastEditDate time.Time `json:"LastEditDate"`
+	ProfilePic string `json:"ProfilePic"`
+	Username string `json:"Username"`
 }
