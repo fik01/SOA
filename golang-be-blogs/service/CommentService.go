@@ -4,6 +4,7 @@ import (
 	"database-example/model"
 	"database-example/repo"
 	"strconv"
+	"time"
 )
 
 type CommentService struct {
@@ -12,7 +13,7 @@ type CommentService struct {
 
 func (service *CommentService) GetByBlogId(Id int) (*[]model.Comment, error) {
 	query := "blog_id = " + strconv.Itoa(Id)
-	
+
 	comments, err := service.CommentRepo.Where(query)
 	if err != nil {
 		return nil, err
@@ -21,6 +22,10 @@ func (service *CommentService) GetByBlogId(Id int) (*[]model.Comment, error) {
 }
 
 func (service *CommentService) Create(comment *model.Comment) error {
+	
+	comment.CreationDate = time.Now()
+	comment.LastEditDate = time.Now()
+
 	err := service.CommentRepo.Create(comment)
 	if err != nil {
 		return err

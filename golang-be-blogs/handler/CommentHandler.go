@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database-example/model"
 	"database-example/service"
 	"encoding/json"
 	"log"
@@ -43,4 +44,25 @@ func (handler *CommentHandler) GetByBlogId(writer http.ResponseWriter, req *http
 		http.Error(writer, "Failed to write JSON data", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (handler *CommentHandler) Create(writer http.ResponseWriter, req *http.Request) {
+	var comment model.Comment
+
+	err := json.NewDecoder(req.Body).Decode(&comment)
+	if err != nil {
+		log.Println("Error while parsing rating json")
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = handler.CommentService.Create(&comment)
+	if err != nil {
+		log.Println("Error while creating comment")
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
 }

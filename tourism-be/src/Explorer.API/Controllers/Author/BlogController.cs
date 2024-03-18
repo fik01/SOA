@@ -6,6 +6,7 @@ using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 
 namespace Explorer.API.Controllers.Author
@@ -68,10 +69,29 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpPost("createComment")]
-        public ActionResult<CommentDto> Create([FromBody] CommentDto commentDto)
+        public async Task<ActionResult<CommentDto>> Create([FromBody] CommentDto commentDto)
         {
-            var result = _blogService.CreateComment(commentDto);
-            return CreateResponse(result);
+            var result = CreateCommentAsync(_blogClient, commentDto);
+            return Ok(result);
+        }
+
+        static async Task<CommentDto> CreateCommentAsync(HttpClient httpClient, CommentDto commentDto)
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(commentDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("createComment", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpGet("comment/{id:int}")]
