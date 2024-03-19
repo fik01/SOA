@@ -61,6 +61,9 @@ func initChallengeExecution(router *mux.Router, database *gorm.DB){
 	handler := &handler.ChallengeExecutionHandler{ChallengeExecutionService: service}
 
 	router.HandleFunc("/tourist/challengeExecution", handler.Create).Methods("POST")
+	router.HandleFunc("/tourist/challengeExecution/{id}", handler.Delete).Methods("DELETE")
+	router.HandleFunc("/tourist/challengeExecution/{id}", handler.Update).Methods("PUT")
+	router.HandleFunc("/tourist/challengeExecution", handler.GetAll).Methods("GET")
 }
 
 func initUserExperience(router *mux.Router, database *gorm.DB){

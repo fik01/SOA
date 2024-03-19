@@ -67,23 +67,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Payments.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Payments.Tests", "Modules\Payments\Explorer.Payments.Tests\Explorer.Payments.Tests.csproj", "{AB2E95B6-9452-425A-B333-1518884567E5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EncountersGO", "EncountersGO", "{2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{17F6D753-0C0F-48FF-B643-2614B9966A17}"
-	ProjectSection(SolutionItems) = preProject
-		ChallengeExecution.go = ChallengeExecution.go
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{1B866B54-A32F-42BA-8440-7558A971B6C6}"
-	ProjectSection(SolutionItems) = preProject
-		ChallengeExecutionRepository.go = ChallengeExecutionRepository.go
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{22183A88-F105-47D0-8C60-0817F3933162}"
-	ProjectSection(SolutionItems) = preProject
-		ChallengeExecutionService.go = ChallengeExecutionService.go
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,10 +206,6 @@ Global
 		{B8DB0F19-A890-45D8-B1D7-3F54E3D84DB8} = {57D98C40-22FF-41D8-80F6-A3E4A149B4E5}
 		{ED720B34-9823-481F-B85A-43DA721CD4E8} = {57D98C40-22FF-41D8-80F6-A3E4A149B4E5}
 		{AB2E95B6-9452-425A-B333-1518884567E5} = {57D98C40-22FF-41D8-80F6-A3E4A149B4E5}
-		{2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C} = {B8BD4B35-C40B-4BC6-9A8D-7FBE215FD1CE}
-		{17F6D753-0C0F-48FF-B643-2614B9966A17} = {2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}
-		{1B866B54-A32F-42BA-8440-7558A971B6C6} = {2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}
-		{22183A88-F105-47D0-8C60-0817F3933162} = {2AF2B5B1-9FBF-4EA8-8F73-BEA1F465763C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C378FE87-3A2E-4BB0-8E39-FB8767789244}

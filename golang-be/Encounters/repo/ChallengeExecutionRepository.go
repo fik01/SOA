@@ -29,15 +29,14 @@ func (repo *ChallengeExecutionRepository) Create(entity *model.ChallengeExecutio
 }
 
 func (repo *ChallengeExecutionRepository) Delete(id int64) error {
-	entity, err := repo.Get(id)
-	if err != nil {
-		return err
-	}
-	result := repo.DatabaseConnection.Delete(entity)
+	result := repo.DatabaseConnection.Delete(&model.ChallengeExecution{}, id)
 	if result.Error != nil {
 		return result.Error
 	}
-	log.Println(result.RowsAffected)
+	if result.RowsAffected == 0 {
+		return errors.New("no rows affected, entity not found")
+	}
+
 	return nil
 }
 
@@ -64,12 +63,12 @@ func (repo *ChallengeExecutionRepository) Update(entity *model.ChallengeExecutio
 
 func (repo *ChallengeExecutionRepository) GetByChallengeIdAndTouristId(challengeId, touristId int64) (*model.ChallengeExecution, error) {
 	var challengeExecution model.ChallengeExecution
-	result := repo.DatabaseConnection.Where("challenge_id = ? AND tourist_id = ?", challengeId, touristId).Preload("Challenge").First(&challengeExecution)
+	result := repo.DatabaseConnection.Where("ChallengeId = ? AND TouristId = ?", challengeId, touristId).Preload("Challenge").First(&challengeExecution)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	if result.RowsAffected == 0 {
-		return nil, errors.New(fmt.Sprintf("Not found: challengeId=%d, touristId=%d", challengeId, touristId))
+		return nil, errors.New(fmt.Sprintf("Not found: ChallengeId=%d, TouristId=%d", challengeId, touristId))
 	}
 	return &challengeExecution, nil
 }
@@ -77,7 +76,7 @@ func (repo *ChallengeExecutionRepository) GetByChallengeIdAndTouristId(challenge
 func (repo *ChallengeExecutionRepository) GetNumberOfTouristsByChallengeId(challengeId int64) int {
 	var count int64
 	repo.DatabaseConnection.Model(&model.ChallengeExecution{}).
-		Where("challenge_id = ? AND NOT is_completed", challengeId).
+		Where("ChallengeId = ? AND NOT IsCompleted", challengeId).
 		Count(&count)
 	return int(count)
 }
@@ -90,40 +89,11 @@ func (repo *ChallengeExecutionRepository) SaveChanges() error {
 	return nil
 }
 
-func (repo *ChallengeExecutionRepository) GetPagedByKeyPointIds(tourKeyPointIds []int, page, pageSize int) ([]model.ChallengeExecution, error) {
-	var challengeExecutions []model.ChallengeExecution
-	err := repo.DatabaseConnection.
-		Preload("Challenge").
-		Joins("JOIN challenges ON challenge_executions.challenge_id = challenges.id").
-		Where("challenges.key_point_id IN ?", tourKeyPointIds).
-		Offset((page - 1) * pageSize).
-		Limit(pageSize).
-		Find(&challengeExecutions).Error
-	if err != nil {
-		return nil, fmt.Errorf("failed to get paged challenge executions by key point IDs: %w", err)
-	}
-	return challengeExecutions, nil
-}
-
-func (repo *ChallengeExecutionRepository) GetPagedByTouristId(touristId int64, page, pageSize int) ([]model.ChallengeExecution, error) {
-	var challengeExecutions []model.ChallengeExecution
-	err := repo.DatabaseConnection.
-		Preload("Challenge").
-		Where("tourist_id = ?", touristId).
-		Offset((page - 1) * pageSize).
-		Limit(pageSize).
-		Find(&challengeExecutions).Error
-	if err != nil {
-		return nil, fmt.Errorf("failed to get paged challenge executions by tourist ID: %w", err)
-	}
-	return challengeExecutions, nil
-}
-
 func (repo *ChallengeExecutionRepository) GetIncompletePagedByChallengeId(challengeId int64, page, pageSize int) ([]model.ChallengeExecution, error) {
 	var challengeExecutions []model.ChallengeExecution
 	err := repo.DatabaseConnection.
 		Preload("Challenge").
-		Where("challenge_id = ? AND NOT is_completed", challengeId).
+		Where("ChallengeId = ? AND NOT IsCompleted", challengeId).
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).
 		Find(&challengeExecutions).Error
@@ -133,16 +103,10 @@ func (repo *ChallengeExecutionRepository) GetIncompletePagedByChallengeId(challe
 	return challengeExecutions, nil
 }
 
-func (repo *ChallengeExecutionRepository) GetUserIds(challengeId int64) ([]int64, error) {
-	var challengeExecutions []model.ChallengeExecution
-	err := repo.DatabaseConnection.Where("challenge_id = ?", challengeId).Find(&challengeExecutions).Error
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user IDs for challenge execution: %w", err)
+func (repo *ChallengeExecutionRepository) GetAll() ([]model.ChallengeExecution, error) {
+	var entities []model.ChallengeExecution
+	if err := repo.DatabaseConnection.Find(&entities).Error; err != nil {
+		return nil, err
 	}
-
-	var userIds []int64
-	for _, ce := range challengeExecutions {
-		userIds = append(userIds, ce.TouristId)
-	}
-	return userIds, nil
+	return entities, nil
 }

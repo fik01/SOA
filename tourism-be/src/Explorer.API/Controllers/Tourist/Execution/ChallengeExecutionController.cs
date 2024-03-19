@@ -21,13 +21,29 @@ namespace Explorer.API.Controllers.Tourist.Execution
             _httpClientFactory = httpClientFactory;
         }
 
+        /*
         [HttpGet]
         public ActionResult<PagedResult<ChallengeExecutionDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _challengeExecutionService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
+        */
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ChallengeExecutionDto>>> GetAll()
+        {
+            var client = _httpClientFactory.CreateClient("encounters");
+            var response = await client.GetAsync("tourist/challengeExecution");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var challengeExecutions = await response.Content.ReadFromJsonAsync<IEnumerable<ChallengeExecutionDto>>();
+                return Ok(challengeExecutions);
+            }
+
+            return StatusCode((int)response.StatusCode);
+        }
 
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] ChallengeExecutionDto challengeExecution)
@@ -45,28 +61,62 @@ namespace Explorer.API.Controllers.Tourist.Execution
             return Ok(jsonResponse);
         }
 
-/*        
+        /*        
         [HttpPost]
         public ActionResult<ChallengeExecutionDto> Create([FromBody] ChallengeExecutionDto challengeExecution)
         {
             var result = _challengeExecutionService.Create(challengeExecution);
             return CreateResponse(result);
         }
-*/        
+        */
 
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ChallengeExecutionDto>> Update([FromBody] ChallengeExecutionDto challengeExecution)
+        {
+            var client = _httpClientFactory.CreateClient("encounters");
+            var response = await client.PutAsJsonAsync($"tourist/challengeExecution/{challengeExecution.Id}", challengeExecution);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return Ok(jsonResponse);
+        }
+
+        /*
         [HttpPut("{id:int}")]
         public ActionResult<ChallengeExecutionDto> Update([FromBody] ChallengeExecutionDto challengeExecution)
         {
             var result = _challengeExecutionService.Update(challengeExecution);
             return CreateResponse(result);
         }
+        */
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient("encounters");
+            using HttpResponseMessage response = await client.DeleteAsync($"tourist/challengeExecution/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+
+
+            return Ok();
+        }
+
+        /*
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
             var result = _challengeExecutionService.Delete(id);
             return CreateResponse(result);
         }
+        */
 
         [HttpPost("tour")]
         public ActionResult GetPagedByTour([FromQuery] int page, [FromQuery] int pageSize, [FromBody] TourDto tour)
