@@ -108,3 +108,24 @@ func (handler *CommentHandler) Update(writer http.ResponseWriter, req *http.Requ
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Write(jsonData)
 }
+
+func (handler *CommentHandler) Delete(writer http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		log.Println("Error while parsing query params")
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = handler.CommentService.DeleteById(id)
+	if err != nil {
+		log.Println("Error while updating comment:", err)
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
+}

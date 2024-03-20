@@ -5,6 +5,7 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -127,10 +128,28 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpDelete("deleteComment/{id:int}")]
-        public ActionResult DeleteComment(int id)
+        public async Task<ActionResult> DeleteComment(int id)
         {
-            var result = _blogService.DeleteComment(id);
-            return CreateResponse(result);
+            var result = DeleteCommentAsync(_blogClient, id);
+            return result.Result ? Ok() : NotFound();
+        }
+
+        static async Task<bool> DeleteCommentAsync(HttpClient httpClient, int id)
+        {
+            using HttpResponseMessage response = await httpClient.DeleteAsync("blog/deleteComment/"+id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+
+            response.EnsureSuccessStatusCode();
+            return false;
         }
 
         [HttpGet("allComments")]
