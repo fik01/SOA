@@ -66,3 +66,12 @@ func (repo *CRUDRepository[T]) Where(query interface{}, args ...interface{}) (*[
 	}
 	return &entities, nil
 }
+
+func (repo *CRUDRepository[T]) WhereWithPreload(query interface{}, preload string, args ...interface{}) (*[]T, error) {
+	var entities []T
+	err := repo.DatabaseConnection.Model(&entities).Where(query, args...).Preload(preload).Find(&entities).Error
+	if err != nil {
+		return nil, err
+	}
+	return &entities, nil
+}

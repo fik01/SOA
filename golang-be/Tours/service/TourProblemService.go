@@ -29,7 +29,7 @@ func (service *TourProblemService) Update(problem *model.TourProblem) error {
 
 func (service *TourProblemService) GetByTouristId(touristId int) (*[]model.TourProblem, error) {
 	var tourProblems *[]model.TourProblem
-	tourProblems, err := service.TourProblemRepo.Where("tourist_id = ?", touristId)
+	tourProblems, err := service.TourProblemRepo.WhereWithPreload("tourist_id = ?", "Messages", touristId)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (service *TourProblemService) GetByAuthorId(authorId int) (*[]model.TourPro
 
 	var tourProblems []model.TourProblem
 	for _, tour := range tours {
-		authorTour, err := service.TourProblemRepo.Where("tour_id = ?", tour.Id)
+		authorTour, err := service.TourProblemRepo.WhereWithPreload("tour_id = ?", "Messages", tour.Id)
 		if err != nil {
 			return nil, err
 		}

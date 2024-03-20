@@ -67,7 +67,7 @@ namespace Explorer.API.Controllers.Author
                 Encoding.UTF8,
                 "application/json");
 
-            using HttpResponseMessage response = await httpClient.PostAsync("tourProblem/update", jsonContent);
+            using HttpResponseMessage response = await httpClient.PutAsync("tourProblem/update", jsonContent);
 
             response.EnsureSuccessStatusCode();
 
