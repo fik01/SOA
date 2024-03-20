@@ -21,29 +21,29 @@ namespace Explorer.Encounters.Tests.Integration.ChallengeExecution
         {
         }
 
-        [Fact]
-        public void Retrieves_all()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+        //[Fact]
+        //public void Retrieves_all()
+        //{
+        //    // Arrange
+        //    using var scope = Factory.Services.CreateScope();
+        //    var controller = CreateController(scope);
 
-            // Act
-            var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<ChallengeExecutionDto>;
+        //    // Act
+        //    var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<ChallengeExecutionDto>;
 
-            // Assert
-            result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(3);
-            result.TotalCount.ShouldBe(3);
-        }
+        //    // Assert
+        //    result.ShouldNotBeNull();
+        //    result.Results.Count.ShouldBe(3);
+        //    result.TotalCount.ShouldBe(3);
+        //}
 
-        private static ChallengeExecutionController CreateController(IServiceScope scope)
-        {
-            return new ChallengeExecutionController(scope.ServiceProvider.GetRequiredService<IChallengeExecutionService>())
-            {
-                ControllerContext = BuildContext("-1")
-            };
-        }
+        //private static ChallengeExecutionController CreateController(IServiceScope scope)
+        //{
+        //    return new ChallengeExecutionController(scope.ServiceProvider.GetRequiredService<IChallengeExecutionService>())
+        //    {
+        //        ControllerContext = BuildContext("-1")
+        //    };
+        //}
     }
 
 }

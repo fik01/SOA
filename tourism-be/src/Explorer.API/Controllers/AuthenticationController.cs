@@ -6,6 +6,7 @@ using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace Explorer.API.Controllers;
 
@@ -15,22 +16,26 @@ public class AuthenticationController : BaseApiController
     private readonly IAuthenticationService _authenticationService;
     private readonly IWalletService _walletService;
     private readonly IUserExperienceService _userExperienceService;
+    private IHttpClientFactory _httpClientFactory;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IWalletService walletService, IUserExperienceService userExperienceService)
+    public AuthenticationController(IAuthenticationService authenticationService, IWalletService walletService, IUserExperienceService userExperienceService, IHttpClientFactory httpClientFactory)
     {
         _authenticationService = authenticationService;
         _walletService = walletService;
         _userExperienceService = userExperienceService;
+        _httpClientFactory = httpClientFactory;
     }
 
     [HttpPost]
-    public ActionResult<AuthenticationTokensDto> RegisterTourist([FromBody] AccountRegistrationDto account)
+    public async Task<ActionResult> RegisterTourist([FromBody] AccountRegistrationDto account)
     {
         var result = _authenticationService.RegisterTourist(account);
 
         WalletDto wallet = new WalletDto(result.Value.Id, 0);
         _walletService.Create(wallet);
         UserExperienceDto userExperience = new UserExperienceDto(result.Value.Id, 0, 1);
+        var client = _httpClientFactory.CreateClient("encounters");
+        using HttpResponseMessage response = await client.PostAsJsonAsync("newUserExperience", userExperience);
         _userExperienceService.Create(userExperience);
         return CreateResponse(result);
     }

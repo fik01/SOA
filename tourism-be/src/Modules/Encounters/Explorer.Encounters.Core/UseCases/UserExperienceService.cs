@@ -30,7 +30,7 @@ namespace Explorer.Encounters.Core.UseCases
             UserExperienceDto dto = new UserExperienceDto();
             dto.UserId = userExperience.UserId;
             dto.XP = userExperience.XP;
-            dto.Id = userExperience.Id;
+            dto.Id = (int)userExperience.Id;
             dto.Level = userExperience.Level;
             return dto;
 
@@ -42,7 +42,7 @@ namespace Explorer.Encounters.Core.UseCases
             UserExperienceDto dto = new UserExperienceDto();
             dto.UserId = userExperience.UserId;
             dto.XP = userExperience.XP;
-            dto.Id = userExperience.Id;
+            dto.Id = (int)userExperience.Id;
             dto.Level = userExperience.Level;
             return dto;
         }
