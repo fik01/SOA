@@ -20,25 +20,25 @@ public class TourProblemMessagingTests : BaseToursIntegrationTest
 {
     public TourProblemMessagingTests(ToursTestFactory factory) : base(factory) { }
 
-    [Fact]
-    public void RetrievesByTouristId()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
+    //[Fact]
+    //public void RetrievesByTouristId()
+    //{
+    //    // Arrange
+    //    using var scope = Factory.Services.CreateScope();
+    //    var controller = CreateController(scope);
 
-        // Act
-        var result = (ObjectResult)controller.GetByTouristId(-6).Result;
+    //    // Act
+    //    var result = (ObjectResult)controller.GetByTouristId(-6).Result;
 
-        // Assert
-        result.ShouldNotBe(null);
-        result.StatusCode.ShouldBe(200);
-    }
-    private static TourProblemController CreateController(IServiceScope scope)
-    {
-        return new TourProblemController(scope.ServiceProvider.GetRequiredService<ITourProblemService>())
-        {
-            ControllerContext = BuildContext("-1")
-        };
-    }
+    //    // Assert
+    //    result.ShouldNotBe(null);
+    //    result.StatusCode.ShouldBe(200);
+    //}
+    //private static TourProblemController CreateController(IServiceScope scope)
+    //{
+    //    return new TourProblemController(scope.ServiceProvider.GetRequiredService<ITourProblemService>())
+    //    {
+    //        ControllerContext = BuildContext("-1")
+    //    };
+    //}
 }

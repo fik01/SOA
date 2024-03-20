@@ -3,10 +3,14 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
+using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -15,32 +19,95 @@ namespace Explorer.API.Controllers.Tourist
     public class TourProblemController : BaseApiController
     {
         private readonly ITourProblemService _problemService;
+        private static HttpClient _httpClient;
 
         public TourProblemController(ITourProblemService problemService)
         {
             _problemService = problemService;
+            _httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:8080"),
+            };
         }
 
         [HttpPost]
-        public ActionResult<TourProblemDto> Create([FromBody] TourProblemDto tourProblem)
+        public async Task<ActionResult<TourProblemDto>> Create([FromBody] TourProblemDto tourProblem)
         {
-            var result = _problemService.Create(tourProblem);
-            return CreateResponse(result);
+            var result = await CreateTourProblemAsync(_httpClient, tourProblem);
+            return Ok(result);
+        }
+
+
+        static async Task<TourProblemDto> CreateTourProblemAsync(HttpClient httpClient, TourProblemDto tourProblemDto)
+        {
+            using StringContent jsonContent = new(
+                System.Text.Json.JsonSerializer.Serialize(tourProblemDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("tourProblem/create", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            // Deserialize the JSON response into TourDto
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourProblemDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<TourProblemDto> Update([FromBody] TourProblemDto tourProblem)
+        public async Task<ActionResult<TourProblemDto>> Update([FromBody] TourProblemDto tourProblem)
         {
-            var result = _problemService.Update(tourProblem);
-            return CreateResponse(result);
+            var result = await UpdateTourProblemAsync(_httpClient, tourProblem);
+            return Ok(result);
+        }
+
+        static async Task<TourProblemDto> UpdateTourProblemAsync(HttpClient httpClient, TourProblemDto tourProblemDto)
+        {
+            using StringContent jsonContent = new(
+                System.Text.Json.JsonSerializer.Serialize(tourProblemDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("tourProblem/update", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            // Deserialize the JSON response into TourDto
+            var result = System.Text.Json.JsonSerializer.Deserialize<TourProblemDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpGet("{touristId:long}")]
-        public ActionResult<PagedResult<TourProblemDto>> GetByTouristId(long touristId)
+        public async Task<ActionResult<PagedResult<TourProblemDto>>> GetByTouristId(long touristId)
         {
-            var result = _problemService.GetByTouristId(touristId);
-            _problemService.FindNames(result.Value);
-            return CreateResponse(result);
+            var jsonResponse = await GetAllToursByAuthorIdAsync(_httpClient, touristId);
+            var tourProblemsDtos = JsonConvert.DeserializeObject<List<TourProblemDto>>(jsonResponse);
+
+            int total = 0;
+            foreach (var ex in tourProblemsDtos)
+            {
+                total++;
+            }
+
+            var pagedResult = new PagedResult<TourProblemDto>(tourProblemsDtos, total);
+
+            return pagedResult;
+        }
+
+        static async Task<string> GetAllToursByAuthorIdAsync(HttpClient httpClient, long touristId)
+        {
+            string url = $"tourProblem/getByTouristId?touristId={touristId}";
+            using HttpResponseMessage response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         [HttpGet("messages/{userId:long}")]

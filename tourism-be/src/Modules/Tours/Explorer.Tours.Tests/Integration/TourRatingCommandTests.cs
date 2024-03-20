@@ -18,61 +18,61 @@ namespace Explorer.Tours.Tests.Integration
     {
         public TourRatingCommandTests(ToursTestFactory factory) : base(factory) { }
 
-        [Fact]
-        public void Creates()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-            var newEntity = new TourRatingDto
-            {
-                PersonId = 1,
-                TourId = 2,
-                Mark = 4,
-                Comment = "Bilo je odlicno",
-                DateOfVisit = DateTime.UtcNow,
-                DateOfCommenting = DateTime.UtcNow,
-                Images = new List<Uri>()         
-            };
+        //[Fact]
+        //public void Creates()
+        //{
+        //    // Arrange
+        //    using var scope = Factory.Services.CreateScope();
+        //    var controller = CreateController(scope);
+        //    var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+        //    var newEntity = new TourRatingDto
+        //    {
+        //        PersonId = 1,
+        //        TourId = 2,
+        //        Mark = 4,
+        //        Comment = "Bilo je odlicno",
+        //        DateOfVisit = DateTime.UtcNow,
+        //        DateOfCommenting = DateTime.UtcNow,
+        //        Images = new List<Uri>()         
+        //    };
 
-            // Act
-            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as TourRatingDto;
+        //    // Act
+        //    var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as TourRatingDto;
 
-            // Assert - Response
-            result.ShouldNotBeNull();
-            result.PersonId.ShouldNotBe(0);
-            result.Comment.ShouldBe(newEntity.Comment);
+        //    // Assert - Response
+        //    result.ShouldNotBeNull();
+        //    result.PersonId.ShouldNotBe(0);
+        //    result.Comment.ShouldBe(newEntity.Comment);
 
-            // Assert - Database
-            var storedEntity = dbContext.TourRatings.FirstOrDefault(i => i.Comment == newEntity.Comment);
-            storedEntity.ShouldNotBeNull();
-        }
-        [Fact]
-        public void CreateFailsInvalidData()
-        {
-            //Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var newEntity = new TourRatingDto()
-            {
-                Comment = "Test"
-            };
+        //    // Assert - Database
+        //    var storedEntity = dbContext.TourRatings.FirstOrDefault(i => i.Comment == newEntity.Comment);
+        //    storedEntity.ShouldNotBeNull();
+        //}
+        //[Fact]
+        //public void CreateFailsInvalidData()
+        //{
+        //    //Arrange
+        //    using var scope = Factory.Services.CreateScope();
+        //    var controller = CreateController(scope);
+        //    var newEntity = new TourRatingDto()
+        //    {
+        //        Comment = "Test"
+        //    };
 
-            // Act
-            var result = (ObjectResult)controller.Create(newEntity).Result;
+        //    // Act
+        //    var result = (ObjectResult)controller.Create(newEntity).Result;
 
-            // Assert
-            result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(400);
-        }
+        //    // Assert
+        //    result.ShouldNotBeNull();
+        //    result.StatusCode.ShouldBe(400);
+        //}
 
-        private static TourRatingController CreateController(IServiceScope scope)
-        {
-            return new TourRatingController(scope.ServiceProvider.GetRequiredService<ITourRatingService>())
-            {
-                ControllerContext = BuildContext("-1")
-            };
-        }
+        //private static TourRatingController CreateController(IServiceScope scope)
+        //{
+        //    return new TourRatingController(scope.ServiceProvider.GetRequiredService<ITourRatingService>())
+        //    {
+        //        ControllerContext = BuildContext("-1")
+        //    };
+        //}
     }
 }

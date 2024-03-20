@@ -97,8 +97,8 @@ export class MapViewComponent implements OnInit {
 
   constructor(
     private service: MapViewService,
-    private dialog: MatDialog, 
-    private tourAuthoringService: TourAuthoringService, 
+    private dialog: MatDialog,
+    private tourAuthoringService: TourAuthoringService,
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
@@ -131,10 +131,10 @@ export class MapViewComponent implements OnInit {
         this.challenges = result.results.filter(c => c.keyPointId == null && c.status == ChallengeStatus.Active);
         this.service.getChallengeExecutionForTourist(this.user.id).subscribe({
           next:(result: PagedResults<ChallengeExecution>) =>{
-    
+
             this.continueActiveChallenge(result.results);
             this.activeChallenge = result.results.find(challengeExecution => challengeExecution.isCompleted === false);
-            
+
             // remove completed challenges
             this.challenges = this.challenges.filter(challenge => !result.results.some(challengeExecution => challengeExecution.challengeId === challenge.id && challengeExecution.isCompleted == true));
 
@@ -210,7 +210,7 @@ export class MapViewComponent implements OnInit {
       tour.canBeRated = this.sessions.some(session => session.tourId == tour.id && session.distanceCrossedPercent! > 30);
     })
   }
-  
+
   private loadSessions() {
     this.service.getSessionsByTouristId(this.user.id).subscribe({
       next: (result: PagedResults<Session>) => {
@@ -233,7 +233,7 @@ export class MapViewComponent implements OnInit {
   }
   openAddPublicFacilitiy(): void {
     const dialogRef = this.dialog.open(PublicFacilitiesComponent, {
-      width: '50%', 
+      width: '50%',
       height: '90%'
     });
   }
@@ -261,7 +261,7 @@ export class MapViewComponent implements OnInit {
 
   loadTours(): void {
     switch (this.user.role) {
-      case 'author': 
+      case 'author':
         this.tourAuthoringService.getToursByAuthorId(this.user?.id!).subscribe({
           next: (response: PagedResults<Tour>) => {
             this.tours = response.results;
@@ -296,7 +296,7 @@ export class MapViewComponent implements OnInit {
     let vehicleType = this.setTransportation(tour);
     this.mapComponent.clearMarkers();
     switch (this.user.role) {
-      case 'author': 
+      case 'author':
         tour.keyPoints.forEach(keypoint => {
           this.mapComponent.addTouristKeyPointMarker(keypoint, false, false);
           this.mapComponent.setRoute(vehicleType);
@@ -353,7 +353,7 @@ export class MapViewComponent implements OnInit {
   onEditClick(tourId: number | undefined){
     this.router.navigate([`tour-creation-form/${tourId}/1`]);
   }
-  
+
   showAllPublic(): void{
     this.mapComponent.clearMarkers();
     this.tourAuthoringService.getPublicTourKeyPoints().subscribe(
@@ -433,9 +433,8 @@ export class MapViewComponent implements OnInit {
     this.positionSimulator.longitude = this.mapComponent.getTouristMarker().getLatLng().lng;
     this.service.updatePositionSimulator(this.positionSimulator).subscribe({
       next: (result: PositionSimulator) => {
-        this.positionSimulator = result;
-        this.person.latitude = result.latitude;
-        this.person.longitude = result.longitude;
+        this.person.latitude = this.positionSimulator.latitude;
+        this.person.longitude = this.positionSimulator.longitude;
         if (this.selectedTab === 0) {
           this.canStartTour(this.positionSimulator);
           this.completeKeyPoint(this.positionSimulator);
@@ -445,7 +444,7 @@ export class MapViewComponent implements OnInit {
           this.canChallengeStart();
           this.updateActiveChallenge();
         }
-        
+
       },
       complete: () => {
         this.setTourDistanceCrossed();
@@ -505,7 +504,7 @@ export class MapViewComponent implements OnInit {
                 this.showLocationChallengeCompleted = false;
                 this.activeChallenge!.completionTime = new Date();
                 this.activeChallenge!.isCompleted = true;
-              
+
                 this.service.updateChallengeExecution(this.activeChallenge!, this.activeChallenge!.id!).subscribe({
                   next: (result: ChallengeExecution) => {
                     this.nearbyChallenge = undefined;
@@ -617,7 +616,7 @@ export class MapViewComponent implements OnInit {
   private completeKeyPoint(ps: PositionSimulator) {
     if (this.activeSession != null){
       this.selectedTour.keyPoints.forEach(kp => {
-        if (this.mapComponent.getDistance(kp.latitude, kp.longitude, ps.latitude, ps.longitude) <= 100 
+        if (this.mapComponent.getDistance(kp.latitude, kp.longitude, ps.latitude, ps.longitude) <= 100
           && this.activeSession.completedKeyPoints.find(ckp => ckp.keyPointId == kp.id) == undefined
           && kp.positionInTour === this.activeSession.completedKeyPoints.length) {
           this.service.completeKeyPoint(this.activeSession.id!, kp.id!).subscribe({
@@ -666,13 +665,13 @@ export class MapViewComponent implements OnInit {
       //this.routeMap.addMarker(this.selectedTour.keyPoints[0].latitude, this.selectedTour.keyPoints[0].longitude);
       for (let keyPoint of this.selectedTour.keyPoints) {
         const isCompleted = this.activeSession.completedKeyPoints.some(completedPoint => completedPoint.keyPointId === keyPoint.id);
-    
+
         if (isCompleted) {
           this.routeMap.addMarker(keyPoint.latitude,keyPoint.longitude);
         }
       }
       this.routeMap.addMarker(this.positionSimulator.latitude, this.positionSimulator.longitude);
-  
+
       let vehicleType = '';
       switch (this.selectedTour.selectedTransport) {
         case 0:
@@ -687,7 +686,7 @@ export class MapViewComponent implements OnInit {
         default:
           vehicleType = 'walking';
       }
-  
+
       this.routeMap.setRoute(vehicleType);
       setTimeout(() => {
         this.activeSession.distanceCrossedPercent = Math.round(this.routeMap.getRouteDistanceInMeters() / (this.selectedTour.distanceInKm * 1000) * 100);
@@ -706,21 +705,21 @@ export class MapViewComponent implements OnInit {
       }, 1000)
     }
   }
-  
+
   showNotificationForBlog() {
     const dialogRef = this.snackBar.open('Would you like to write a blog about this tour?', 'Yes', {
-      duration: 15000, 
-      horizontalPosition: 'end', 
+      duration: 15000,
+      horizontalPosition: 'end',
       verticalPosition: 'top',
       panelClass: "blog-snack"
-      
+
     });
     dialogRef.onAction().subscribe(() => {
       this.router.navigate(['/blog/create/' + this.completedTourId]);
     });
-  
+
   }
-  
+
   openTourDetails(tour: Tour) {
     this.router.navigate([`tour-all-details/${tour.id}`]);
   }

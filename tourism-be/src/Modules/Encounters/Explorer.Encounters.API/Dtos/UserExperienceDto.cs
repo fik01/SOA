@@ -8,7 +8,7 @@ namespace Explorer.Encounters.API.Dtos
 {
     public class UserExperienceDto
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public long UserId { get; set; }
         public int XP { get; set; }
         public int Level { get; set; }

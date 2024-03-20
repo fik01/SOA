@@ -12,6 +12,7 @@ builder.Services.ConfigureCors(corsPolicy);
 builder.Services.ConfigureAuth();
 
 builder.Services.RegisterModules();
+builder.Services.AddHttpClient();
 builder.Services.AddSingleton<PeriodicHostedService>();
 builder.Services.AddHostedService(
     provider => provider.GetRequiredService<PeriodicHostedService>());
@@ -21,6 +22,10 @@ builder.Services.AddSignalR(o =>
 {
     o.EnableDetailedErrors = true;
 });
+
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("encounters", (client) => client.BaseAddress = new Uri("http://localhost:8081/"));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
