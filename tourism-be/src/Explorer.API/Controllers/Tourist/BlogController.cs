@@ -59,10 +59,24 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet]
-        public ActionResult<List<BlogDto>> GetAll()
+        public async Task<ActionResult<List<BlogDto>>> GetAll()
         {
-            var result = _blogService.GetAll();
-            return CreateResponse(result);
+            HttpResponseMessage response = await _blogClient.GetAsync("blog");
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<List<BlogDto>>(responseBody);
+                var blogs = new PagedResult<BlogDto>(responseObject, responseObject.Count);
+
+                return Ok(blogs);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
 
         [HttpGet("{id:int}")]

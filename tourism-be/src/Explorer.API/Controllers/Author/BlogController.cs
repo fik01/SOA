@@ -31,18 +31,50 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpPost]
-        public ActionResult<BlogDto> Create([FromBody] BlogDto blog)
+        public async Task<ActionResult<BlogDto>> Create([FromBody] BlogDto blog)
         {
-            var result = _blogService.Create(blog);
-            return CreateResponse(result);
+            var result = await CreateBlogAsync(_blogClient, blog);
+            return Ok(result);
+        }
+
+        static async Task<CommentDto> CreateBlogAsync(HttpClient httpClient, BlogDto blogDto)
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(blogDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("blog", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpGet]
-        public ActionResult<List<BlogDto>> GetAll()
+        public async Task<ActionResult<List<BlogDto>>> GetAll()
         {
-            var result = _blogService.GetAll();
+            HttpResponseMessage response = await _blogClient.GetAsync("blog");
 
-            return CreateResponse(result);
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<List<BlogDto>>(responseBody);
+                var blogs = new PagedResult<BlogDto>(responseObject, responseObject.Count);
+
+                return Ok(blogs);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
 
         [HttpPut]
