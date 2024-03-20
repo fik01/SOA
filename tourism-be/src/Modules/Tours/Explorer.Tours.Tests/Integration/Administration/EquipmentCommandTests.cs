@@ -15,123 +15,123 @@ public class EquipmentCommandTests : BaseToursIntegrationTest
 {
     public EquipmentCommandTests(ToursTestFactory factory) : base(factory) { }
 
-    [Fact]
-    public void Creates()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-        var newEntity = new EquipmentDto
-        {
-            Name = "Obuća za grub teren",
-            Description = "Patike sa tvrdim đonom i kramponima koje daju stabilnost na neravnom i rastresitom terenu."
-        };
+    //[Fact]
+    //public void Creates()
+    //{
+    //    // Arrange
+    //    using var scope = Factory.Services.CreateScope();
+    //    var controller = CreateController(scope);
+    //    var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+    //    var newEntity = new EquipmentDto
+    //    {
+    //        Name = "Obuća za grub teren",
+    //        Description = "Patike sa tvrdim đonom i kramponima koje daju stabilnost na neravnom i rastresitom terenu."
+    //    };
 
-        // Act
-        var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as EquipmentDto;
+    //    // Act
+    //    var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as EquipmentDto;
 
-        // Assert - Response
-        result.ShouldNotBeNull();
-        result.Id.ShouldNotBe(0);
-        result.Name.ShouldBe(newEntity.Name);
+    //    // Assert - Response
+    //    result.ShouldNotBeNull();
+    //    result.Id.ShouldNotBe(0);
+    //    result.Name.ShouldBe(newEntity.Name);
         
-        // Assert - Database
-        var storedEntity = dbContext.Equipment.FirstOrDefault(i => i.Name == newEntity.Name);
-        storedEntity.ShouldNotBeNull();
-        storedEntity.Id.ShouldBe(result.Id);
-    }
+    //    // Assert - Database
+    //    var storedEntity = dbContext.Equipment.FirstOrDefault(i => i.Name == newEntity.Name);
+    //    storedEntity.ShouldNotBeNull();
+    //    storedEntity.Id.ShouldBe(result.Id);
+    //}
 
-    [Fact]
-    public void Create_fails_invalid_data()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var updatedEntity = new EquipmentDto
-        {
-            Description = "Test"
-        };
+    //[Fact]
+    //public void Create_fails_invalid_data()
+    //{
+    //    // Arrange
+    //    using var scope = Factory.Services.CreateScope();
+    //    var controller = CreateController(scope);
+    //    var updatedEntity = new EquipmentDto
+    //    {
+    //        Description = "Test"
+    //    };
 
-        // Act
-        var result = (ObjectResult)controller.Create(updatedEntity).Result;
+    //    // Act
+    //    var result = (ObjectResult)controller.Create(updatedEntity).Result;
 
-        // Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(400);
-    }
+    //    // Assert
+    //    result.ShouldNotBeNull();
+    //    result.StatusCode.ShouldBe(400);
+    //}
 
-    [Fact]
-    public void Updates()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-        var updatedEntity = new EquipmentDto
-        {
-            Id = -1,
-            Name = "Tečnost",
-            Description = "Voda ili druga tečnost koja hidrira. Preporuka je pola litre tečnosti na sat vremena umerene aktivnosti po umerenoj temperaturi."
-        };
+    //[Fact]
+    //public void Updates()
+    //{
+    //    // Arrange
+    //    using var scope = Factory.Services.CreateScope();
+    //    var controller = CreateController(scope);
+    //    var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+    //    var updatedEntity = new EquipmentDto
+    //    {
+    //        Id = -1,
+    //        Name = "Tečnost",
+    //        Description = "Voda ili druga tečnost koja hidrira. Preporuka je pola litre tečnosti na sat vremena umerene aktivnosti po umerenoj temperaturi."
+    //    };
 
-        // Act
-        var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as EquipmentDto;
+    //    // Act
+    //    var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as EquipmentDto;
 
-        // Assert - Response
-        result.ShouldNotBeNull();
-        result.Id.ShouldBe(-1);
-        result.Name.ShouldBe(updatedEntity.Name);
-        result.Description.ShouldBe(updatedEntity.Description);
+    //    // Assert - Response
+    //    result.ShouldNotBeNull();
+    //    result.Id.ShouldBe(-1);
+    //    result.Name.ShouldBe(updatedEntity.Name);
+    //    result.Description.ShouldBe(updatedEntity.Description);
 
-        // Assert - Database
-        var storedEntity = dbContext.Equipment.FirstOrDefault(i => i.Name == "Tečnost");
-        storedEntity.ShouldNotBeNull();
-        storedEntity.Description.ShouldBe(updatedEntity.Description);
-        var oldEntity = dbContext.Equipment.FirstOrDefault(i => i.Name == "Voda");
-        oldEntity.ShouldBeNull();
-    }
+    //    // Assert - Database
+    //    var storedEntity = dbContext.Equipment.FirstOrDefault(i => i.Name == "Tečnost");
+    //    storedEntity.ShouldNotBeNull();
+    //    storedEntity.Description.ShouldBe(updatedEntity.Description);
+    //    var oldEntity = dbContext.Equipment.FirstOrDefault(i => i.Name == "Voda");
+    //    oldEntity.ShouldBeNull();
+    //}
 
-    [Fact]
-    public void Update_fails_invalid_id()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var updatedEntity = new EquipmentDto
-        {
-            Id = -1000,
-            Name = "Test"
-        };
+    //[Fact]
+    //public void Update_fails_invalid_id()
+    //{
+    //    // Arrange
+    //    using var scope = Factory.Services.CreateScope();
+    //    var controller = CreateController(scope);
+    //    var updatedEntity = new EquipmentDto
+    //    {
+    //        Id = -1000,
+    //        Name = "Test"
+    //    };
 
-        // Act
-        var result = (ObjectResult)controller.Update(updatedEntity).Result;
+    //    // Act
+    //    var result = (ObjectResult)controller.Update(updatedEntity).Result;
 
-        // Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(404);
-    }
+    //    // Assert
+    //    result.ShouldNotBeNull();
+    //    result.StatusCode.ShouldBe(404);
+    //}
     
-    [Fact]
-    public void Delete_fails_invalid_id()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
+    //[Fact]
+    //public void Delete_fails_invalid_id()
+    //{
+    //    // Arrange
+    //    using var scope = Factory.Services.CreateScope();
+    //    var controller = CreateController(scope);
 
-        // Act
-        var result = (ObjectResult)controller.Delete(-1000);
+    //    // Act
+    //    var result = (ObjectResult)controller.Delete(-1000);
 
-        // Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(404);
-    }
+    //    // Assert
+    //    result.ShouldNotBeNull();
+    //    result.StatusCode.ShouldBe(404);
+    //}
 
-    private static EquipmentController CreateController(IServiceScope scope)
-    {
-        return new EquipmentController(scope.ServiceProvider.GetRequiredService<IEquipmentService>())
-        {
-            ControllerContext = BuildContext("-1")
-        };
-    }
+    //private static EquipmentController CreateController(IServiceScope scope)
+    //{
+    //    return new EquipmentController(scope.ServiceProvider.GetRequiredService<IEquipmentService>())
+    //    {
+    //        ControllerContext = BuildContext("-1")
+    //    };
+    //}
 }

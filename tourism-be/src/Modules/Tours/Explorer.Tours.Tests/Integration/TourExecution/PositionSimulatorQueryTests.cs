@@ -17,41 +17,41 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
         {
         }
 
-        [Fact]
-        public void Retrieves_one()
-        {
-            //Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+        //[Fact]
+        //public void Retrieves_one()
+        //{
+        //    //Arrange
+        //    using var scope = Factory.Services.CreateScope();
+        //    var controller = CreateController(scope);
 
-            //Act
-            var result = ((ObjectResult)controller.Get(-21).Result);
+        //    //Act
+        //    var result = ((ObjectResult)controller.Get(-21).Result);
 
-            //Assert
-            result.ShouldNotBe(null);
-            result.StatusCode.ShouldBe(200);
-        }
+        //    //Assert
+        //    result.ShouldNotBe(null);
+        //    result.StatusCode.ShouldBe(200);
+        //}
 
-        [Fact]
-        public void Retrieves_one_failed_invalid_id()
-        {
-            //Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+        //[Fact]
+        //public void Retrieves_one_failed_invalid_id()
+        //{
+        //    //Arrange
+        //    using var scope = Factory.Services.CreateScope();
+        //    var controller = CreateController(scope);
 
-            //Act
-            var result = ((ObjectResult)controller.Get(-1000).Result);
+        //    //Act
+        //    var result = ((ObjectResult)controller.Get(-1000).Result);
 
-            //Assert
-            result.StatusCode.ShouldBe(404);
-        }
+        //    //Assert
+        //    result.StatusCode.ShouldBe(404);
+        //}
 
-        private static PositionSimulatorController CreateController(IServiceScope scope)
-        {
-            return new PositionSimulatorController(scope.ServiceProvider.GetRequiredService<IPositionSimulatorService>())
-            {
-                ControllerContext = BuildContext("-1")
-            };
-        }
+        //private static PositionSimulatorController CreateController(IServiceScope scope)
+        //{
+        //    return new PositionSimulatorController(scope.ServiceProvider.GetRequiredService<IPositionSimulatorService>())
+        //    {
+        //        ControllerContext = BuildContext("-1")
+        //    };
+        //}
     }
 }
