@@ -33,10 +33,29 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpPost]
-        public ActionResult<BlogDto> Create([FromBody] BlogDto blog)
+        public async Task<ActionResult<BlogDto>> Create([FromBody] BlogDto blog)
         {
-            var result = _blogService.Create(blog);
-            return CreateResponse(result);
+            var result = await CreateBlogAsync(_blogClient, blog);
+            return Ok(result);
+        }
+
+        static async Task<CommentDto> CreateBlogAsync(HttpClient httpClient, BlogDto blogDto)
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(blogDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("blog", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpGet]
