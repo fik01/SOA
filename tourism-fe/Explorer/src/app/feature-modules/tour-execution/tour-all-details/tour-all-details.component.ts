@@ -113,10 +113,13 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
   getRatingsByTourId(tourid: number): void {
     this.service.getRatingsByTourId(Number(tourid)).subscribe({
       next: (result: TourRating[]) => {
-        this.tourRatings = result.sort((objA, objB) => {
-          const dateA = new Date(objA.dateOfCommenting);
-          const dateB = new Date(objB.dateOfCommenting);
-          return dateB.getTime() - dateA.getTime();});
+
+
+          this.tourRatings = result.sort((objA, objB) => {
+            const dateA = new Date(objA.dateOfCommenting);
+            const dateB = new Date(objB.dateOfCommenting);
+            return dateB.getTime() - dateA.getTime();
+          });
 
         for (const rating of this.tourRatings){
           if(rating.personId == this.authService.user$.getValue().id){
@@ -230,13 +233,13 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
   showNextKeyPoint() {
     if (this.keyPoints.length > 0) {
       this.mapComponent.clearMarkers();
-  
+
       if (this.selectedKeyPointIndex < this.keyPoints.length - 1) {
         this.selectedKeyPointIndex++;
       } else {
-        this.selectedKeyPointIndex = 0; 
+        this.selectedKeyPointIndex = 0;
       }
-  
+
       this.selectedKeyPoint = this.keyPoints[this.selectedKeyPointIndex];
 
       this.mapComponent.addMarker(
@@ -257,15 +260,15 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
 
   viewTourProggres(): void{
     this.router.navigate(['/map-view']);
-  } 
+  }
 
   getSession(): void {
     this.ExecutionService.getActiveSessionByTouristId(this.userId).subscribe({
       next: (result => this.session = result),
       error: (error: any) => console.log(error),
       complete: (): void => { }
-    }) 
-  }  
+    })
+  }
 
 
   getStarsArray(grade: number): number[] {
@@ -274,16 +277,16 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
 
   // showNotificationForComment() {
   //   const dialogRef = this.snackBar.open('Do you want to leave a review for the tour,you have fulfilled all the necessary requirements for it?', 'Yes', {
-  //     duration: 8000, 
-  //     horizontalPosition: 'end', 
-  //     verticalPosition: 'top', 
-      
+  //     duration: 8000,
+  //     horizontalPosition: 'end',
+  //     verticalPosition: 'top',
+
   //   });
   //   dialogRef.onAction().subscribe(() => {
   //     this.showFormForComment();
   //   });
   // }
-  
+
   showFormForComment() {
     this.validForForm = true;
     this.validForTouristComment = true;
@@ -305,14 +308,14 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
       tourId : this.tour!.id,
       mark: parseInt(this.tourratingForm.value.grade || ""),
       comment: this.tourratingForm.value.comment || "",
-      dateOfVisit : this.sessionForAlways.lastActivity, 
+      dateOfVisit : this.sessionForAlways.lastActivity,
       dateOfCommenting : new Date(),
       images : []
 
     };
 
     const imageUris = this.tourratingForm.value.image;
-    const images = imageUris?.split(','); 
+    const images = imageUris?.split(',');
     if (images) {
       images.forEach(imageUri => {
       tourrating.images.push(imageUri);
@@ -330,7 +333,7 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
           this.toastr.error('There was an error while trying to add a rating','Error');
         }
     });
-    }   
+    }
   }
 
   private validate(): boolean {
@@ -346,12 +349,12 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
       this.toastr.warning('Comment must not be empty','Warning');
       return false;
     }
-    return true;  
+    return true;
   }
 
   // showNotificationForUpdate() {
   //   const dialogRef = this.snackBar.open('Since you have already left a review for this tour, would you like to modify it', 'Yes', {
-  //     duration: 8000, 
+  //     duration: 8000,
   //     horizontalPosition: 'end',
   //     verticalPosition: 'top',
   //     panelClass: 'my-snackbar'
@@ -380,7 +383,7 @@ export class TourAllDetailsComponent implements OnInit, OnDestroy {
 
       this.tourRating.images.splice(0, this.tourRating.images.length);
       const imageUris = this.tourratingForm.value.image;
-      const images = imageUris?.split(','); 
+      const images = imageUris?.split(',');
       if (images) {
         images.forEach(imageUri => {
         this.tourRating.images.push(imageUri);

@@ -12,6 +12,7 @@ builder.Services.ConfigureCors(corsPolicy);
 builder.Services.ConfigureAuth();
 
 builder.Services.RegisterModules();
+builder.Services.AddHttpClient();
 builder.Services.AddSingleton<PeriodicHostedService>();
 builder.Services.AddHostedService(
     provider => provider.GetRequiredService<PeriodicHostedService>());
