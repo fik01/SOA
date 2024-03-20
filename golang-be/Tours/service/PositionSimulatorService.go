@@ -23,7 +23,17 @@ func (service *PositionSimulatorService) GetByTouristId(id int) (*model.Position
 		return nil, err
 	}
 	if len(*position) == 0 {
-		return nil, nil
+		newPos := model.Position{
+			Latitude:  45.267136,
+			Longitude: 19.833549,
+			TouristId: id,
+		}
+
+		err = service.Create(&newPos)
+		if err != nil {
+			return nil, err
+		}
+		return &newPos, nil
 	}
 	return &(*position)[0], nil // wtf
 }
