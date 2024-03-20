@@ -21,8 +21,7 @@ func (handler *CommentHandler) GetByBlogId(writer http.ResponseWriter, req *http
 	vars := mux.Vars(req)
 	idStr := vars["id"]
 	id, err := strconv.Atoi(idStr)
-	fmt.Println(id)
-	
+
 	if err != nil {
 		log.Println("Error while parsing query params")
 		writer.WriteHeader(http.StatusBadRequest)
@@ -79,4 +78,33 @@ func (handler *CommentHandler) Create(writer http.ResponseWriter, req *http.Requ
 	}
 	writer.WriteHeader(http.StatusCreated)
 	writer.Write(createdComment)
+}
+
+func (handler *CommentHandler) Update(writer http.ResponseWriter, req *http.Request) {
+	var comment model.Comment
+	err := json.NewDecoder(req.Body).Decode(&comment)
+
+	fmt.Println(comment)
+
+	if err != nil {
+		log.Println("Error while parsing comment JSON:", err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = handler.CommentService.Update(&comment)
+	if err != nil {
+		log.Println("Error while updating comment:", err)
+		writer.WriteHeader(http.StatusExpectationFailed)
+		return
+	}
+
+	jsonData, err := json.Marshal(comment)
+	if err != nil {
+		http.Error(writer, "Failed to marshal JSON", http.StatusInternalServerError)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(jsonData)
 }

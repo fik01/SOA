@@ -102,10 +102,28 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpPut("editComment")]
-        public ActionResult<CommentDto> UpdateComment([FromBody] CommentDto commentDto)
+        public async Task<ActionResult<CommentDto>> UpdateComment([FromBody] CommentDto commentDto)
         {
-            var result = _blogService.UpdateComment(commentDto);
-            return CreateResponse(result);
+            var result = await UpdateCommentAsync(_blogClient, commentDto);
+            return Ok(result);
+        }
+        static async Task<CommentDto> UpdateCommentAsync(HttpClient httpClient, CommentDto commentDto)
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(commentDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PutAsync("blog/updateComment", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpDelete("deleteComment/{id:int}")]
