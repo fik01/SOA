@@ -10,6 +10,7 @@ import (
 
 type Handler struct {
 	CommentHandler *CommentHandler
+	BlogHandler *BlogHandler
 }
 
 func NewHandler(db *gorm.DB) *Handler {
@@ -19,7 +20,9 @@ func NewHandler(db *gorm.DB) *Handler {
 	commentService := &service.CommentService{CommentRepo: commentRepo}
 	handler.CommentHandler = &CommentHandler{CommentService: commentService}
 
+	blogRepo := &repo.CRUDRepository[model.BlogPage]{DatabaseConnection: db}
+	blogService := &service.BlogService{BlogRepo: blogRepo}
+	handler.BlogHandler = &BlogHandler{BlogService: blogService}
 
 	return handler
-
 }
