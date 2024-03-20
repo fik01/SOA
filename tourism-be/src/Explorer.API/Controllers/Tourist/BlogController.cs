@@ -8,6 +8,9 @@ using Explorer.Tours.Core.UseCases.Administration;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using System.Text;
+using System.Net;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -17,6 +20,11 @@ namespace Explorer.API.Controllers.Tourist
     {
         private readonly IBlogService _blogService;
         //private readonly ICommentService _commentService;
+
+        private static HttpClient _blogClient = new()
+        {
+            BaseAddress = new Uri("http://localhost:8090"),
+        };
 
         public BlogController(IBlogService blogService)
         {
@@ -63,10 +71,29 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpPost("createComment")]
-        public ActionResult<CommentDto> Create([FromBody] CommentDto commentDto)
+        public async Task<ActionResult<CommentDto>> Create([FromBody] CommentDto commentDto)
         {
-            var result = _blogService.CreateComment(commentDto);
-            return CreateResponse(result);
+            var result = await CreateCommentAsync(_blogClient, commentDto);
+            return Ok(result);
+        }
+
+        static async Task<CommentDto> CreateCommentAsync(HttpClient httpClient, CommentDto commentDto)
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(commentDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PostAsync("blog/createComment", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpGet("comment/{id:int}")]
@@ -77,17 +104,53 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpPut("editComment")]
-        public ActionResult<CommentDto> UpdateComment([FromBody] CommentDto commentDto)
+        public async Task<ActionResult<CommentDto>> UpdateComment([FromBody] CommentDto commentDto)
         {
-            var result = _blogService.UpdateComment(commentDto);
-            return CreateResponse(result);
+            var result = await UpdateCommentAsync(_blogClient, commentDto);
+            return Ok(result);
+        }
+        static async Task<CommentDto> UpdateCommentAsync(HttpClient httpClient, CommentDto commentDto)
+        {
+            using StringContent jsonContent = new(
+                JsonSerializer.Serialize(commentDto),
+                Encoding.UTF8,
+                "application/json");
+
+            using HttpResponseMessage response = await httpClient.PutAsync("blog/updateComment", jsonContent);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"{jsonResponse}\n");
+
+            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+
+            return result;
         }
 
         [HttpDelete("deleteComment/{id:int}")]
-        public ActionResult DeleteComment(int id)
+        public async Task<ActionResult> DeleteComment(int id)
         {
-            var result = _blogService.DeleteComment(id);
-            return CreateResponse(result);
+            var result = DeleteCommentAsync(_blogClient, id);
+            return result.Result ? Ok() : NotFound();
+        }
+
+        static async Task<bool> DeleteCommentAsync(HttpClient httpClient, int id)
+        {
+            using HttpResponseMessage response = await httpClient.DeleteAsync("blog/deleteComment/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+
+            response.EnsureSuccessStatusCode();
+            return false;
         }
 
         [HttpGet("allComments")]
@@ -98,12 +161,26 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("blogComments/{blogId:int}")]
-        public ActionResult<List<CommentDto>> GetCommentsByBlogId(int blogId)
+        public async Task<ActionResult<List<CommentDto>>> GetCommentsByBlogId(int blogId)
         {
-            var result = _blogService.GetCommentsByBlogId(blogId);
-            return CreateResponse(result);
+            HttpResponseMessage response = await _blogClient.GetAsync("blog/blogComments/" + blogId);
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                var responseObject = JsonSerializer.Deserialize<List<CommentDto>>(responseBody);
+                var comments = new PagedResult<CommentDto>(responseObject, responseObject.Count);
+
+                return Ok(comments);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+            }
         }
-        
+
         [HttpDelete("rating/{userId:int}/{blogId:int}")]
         public ActionResult DeleteRating(int blogId,int userId)
         {
