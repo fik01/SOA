@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+  explorer:
+    build:
+      context: ./tourism-be/
+      target: final
+    networks:
+      - database
+    ports:
+      - "51713:80"
+    restart: on-failure
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5433
+      DATABASE_PASSWORD: super
+      DATABASE_USER: postgres
+      DATABASE_SCHEMA: explorer
+    depends_on:
+      - db
+      - go-tour-service
+
+  go-tour-service:
+    build:
+      context: ./golang-be/Tours/
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    networks:
+      - database
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=host=db user=postgres password=super dbname=tour port=5433 sslmode=disable
+
+  db:
+    image: postgres:latest
+    restart: always
+    networks:
+      - database
+    ports:
+      - "5433:5433"
+    volumes:
+      - ./db_init.sh:/docker-entrypoint-initdb.d/db_init.sh 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: super
+      POSTGRES_MULTIPLE_DATABASES: tour,explorer
+      PGPORT: 5433
+
+networks:
+  database:
+    name: database
+    driver: bridge
+
