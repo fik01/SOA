@@ -20,6 +20,7 @@ services:
     depends_on:
       - db
       - go-tour-service
+      - go-encounter-service
 
   go-tour-service:
     build:
@@ -33,6 +34,19 @@ services:
       - db
     environment:
       - DATABASE_URL=host=db user=postgres password=super dbname=tour port=5433 sslmode=disable
+
+  go-encounter-service:
+    build:
+      context: ./golang-be/Encounters/
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    networks:
+      - database
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
 
   db:
     image: postgres:latest
