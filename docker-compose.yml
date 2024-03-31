@@ -46,7 +46,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
+      - DATABASE_URL_1=host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
 
   db:
     image: postgres:latest
