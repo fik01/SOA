@@ -35,6 +35,19 @@ services:
     environment:
       - DATABASE_URL=host=db user=postgres password=super dbname=tour port=5433 sslmode=disable
 
+  go-blog-service:
+    build:
+      context: ./golang-be-blogs/
+    ports:
+      - "8090:8090"
+    restart: on-failure
+    networks:
+      - database
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=host=db user=postgres password=super dbname=tour port=5433 sslmode=disable
+
   db:
     image: postgres:latest
     restart: always
