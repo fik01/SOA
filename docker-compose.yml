@@ -9,7 +9,7 @@ services:
     networks:
       - database
     ports:
-      - "51713:80"
+      - "44333:80"
     restart: on-failure
     environment:
       DATABASE_HOST: db
