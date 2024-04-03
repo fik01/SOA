@@ -43,12 +43,13 @@ services:
       context: ./golang-be-blogs/
     ports:
       - "8090:8090"
+    restart: on-failure
     networks:
       - database
     depends_on:
       - db
     environment:
-      - DATABASE_URL2=host=db user=postgres password=super dbname=Blogs port=5433 sslmode=disable
+      - DATABASE_URL2=host=db user=postgres password=super dbname=blogs port=5433 sslmode=disable
 
       
   go-encounter-service:
@@ -76,7 +77,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: super
-      POSTGRES_MULTIPLE_DATABASES: tour,explorer,Blogs
+      POSTGRES_MULTIPLE_DATABASES: tour,explorer,blogs
       PGPORT: 5433
 
 networks:
