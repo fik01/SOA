@@ -18,9 +18,11 @@ services:
       DATABASE_USER: postgres
       DATABASE_SCHEMA: explorer
       GO_TOUR_SERVICE_HOST: go-tour-service
+      GO_BLOG_SERVICE_HOST: go-blog-service
     depends_on:
       - db
       - go-tour-service
+      - go-blog-service
       - go-encounter-service
 
   go-tour-service:
@@ -36,6 +38,20 @@ services:
     environment:
       - DATABASE_URL=host=db user=postgres password=super dbname=tour port=5433 sslmode=disable
 
+  go-blog-service:
+    build:
+      context: ./golang-be-blogs/
+    ports:
+      - "8090:8090"
+    restart: on-failure
+    networks:
+      - database
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL2=host=db user=postgres password=super dbname=blogs port=5433 sslmode=disable
+
+      
   go-encounter-service:
     build:
       context: ./golang-be/Encounters/
@@ -57,11 +73,11 @@ services:
     ports:
       - "5433:5433"
     volumes:
-      - ./db_init.sh:/docker-entrypoint-initdb.d/db_init.sh 
+      - ./db_init.sh:/docker-entrypoint-initdb.d/db_init.sh
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: super
-      POSTGRES_MULTIPLE_DATABASES: tour,explorer
+      POSTGRES_MULTIPLE_DATABASES: tour,explorer,blogs
       PGPORT: 5433
 
 networks:

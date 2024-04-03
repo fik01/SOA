@@ -20,10 +20,9 @@ namespace Explorer.API.Controllers.Author
         public TourProblemController(ITourProblemService problemService)
         {
             _problemService = problemService;
-            _httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri("http://localhost:8080"),
-            };
+            _httpClient = new HttpClient();
+            var service = Environment.GetEnvironmentVariable("GO_TOUR_SERVICE_HOST") ?? "localhost";
+            _httpClient.BaseAddress = new Uri($"http://{service}:8080");
         }
 
         [HttpGet("{authorId:long}")]
@@ -33,6 +32,10 @@ namespace Explorer.API.Controllers.Author
             var tourProblemsDtos = JsonConvert.DeserializeObject<List<TourProblemDto>>(jsonResponse);
 
             int total = 0;
+            if(tourProblemsDtos == null)
+            {
+                return null;
+            }
             foreach (var ex in tourProblemsDtos)
             {
                 total++;

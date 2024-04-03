@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text;
 using System.Net;
+using System.Net.Http;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -21,15 +22,16 @@ namespace Explorer.API.Controllers.Tourist
         private readonly IBlogService _blogService;
         //private readonly ICommentService _commentService;
 
-        private static HttpClient _blogClient = new()
-        {
-            BaseAddress = new Uri("http://localhost:8090"),
-        };
+        private static HttpClient _blogClient;
 
-        public BlogController(IBlogService blogService)
+        public BlogController(IBlogService blogService, IHttpClientFactory httpClientFactory)
         {
             _blogService = blogService;
             //_commentService = commentService;
+
+            _blogClient = httpClientFactory.CreateClient();
+            var service = Environment.GetEnvironmentVariable("GO_BLOG_SERVICE_HOST") ?? "localhost";
+            _blogClient.BaseAddress = new Uri($"http://{service}:8090");
         }
 
         [HttpPost]
