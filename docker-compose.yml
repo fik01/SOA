@@ -9,7 +9,7 @@ services:
     networks:
       - database
     ports:
-      - "51713:80"
+      - "44333:80"
     restart: on-failure
     environment:
       DATABASE_HOST: db
@@ -17,6 +17,7 @@ services:
       DATABASE_PASSWORD: super
       DATABASE_USER: postgres
       DATABASE_SCHEMA: explorer
+      GO_TOUR_SERVICE_HOST: go-tour-service
     depends_on:
       - db
       - go-tour-service

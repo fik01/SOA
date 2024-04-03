@@ -22,7 +22,8 @@ namespace Explorer.API.Controllers.Execution
             _positionSimulatorService = positionSimulatorService;
 
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:8080");
+            var service = Environment.GetEnvironmentVariable("GO_TOUR_SERVICE_HOST") ?? "localhost";
+            _httpClient.BaseAddress = new Uri($"http://{service}:8080");
 
         }
 
