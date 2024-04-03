@@ -25,9 +25,10 @@ namespace Explorer.API.Controllers.Tourist
         {
             _tourKeyPointService = tourKeyPointService;
             _publicTourKeyPointService = publicTourKeyPointService;
+            var service = Environment.GetEnvironmentVariable("GO_TOUR_SERVICE_HOST") ?? "localhost";
             _httpClient = new HttpClient()
             {
-                BaseAddress = new Uri("http://localhost:8080"),
+                BaseAddress = new Uri($"http://{service}:8080"),
             };
         }
 

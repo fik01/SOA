@@ -24,7 +24,8 @@ builder.Services.AddSignalR(o =>
 });
 
 builder.Services.AddHttpClient();
-builder.Services.AddHttpClient("encounters", (client) => client.BaseAddress = new Uri("http://localhost:8081/"));
+var service = Environment.GetEnvironmentVariable("GO_ENCOUNTER_SERVICE_HOST");
+builder.Services.AddHttpClient("encounters", (client) => client.BaseAddress = new Uri($"http://{service}:8081/"));
 
 var app = builder.Build();
 
