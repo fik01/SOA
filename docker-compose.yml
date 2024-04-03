@@ -19,6 +19,7 @@ services:
       DATABASE_SCHEMA: explorer
       GO_TOUR_SERVICE_HOST: go-tour-service
       GO_BLOG_SERVICE_HOST: go-blog-service
+      GO_ENCOUNTER_SERVICE_HOST: go-encounter-service
     depends_on:
       - db
       - go-tour-service
