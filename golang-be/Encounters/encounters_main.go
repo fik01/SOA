@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-
+	"os"
 	"encounters.xws.com/handler"
 	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
@@ -14,8 +14,14 @@ import (
 )
 
 func initDB() *gorm.DB {
-	// Set up database connection
+	
 	dsn := "host=localhost user=postgres password=super dbname=explorer-v1 port=5432 sslmode=disable"
+
+	connectionString, isPresent := os.LookupEnv("DATABASE_URL_1")
+	if isPresent {
+		dsn = connectionString
+	} 
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)

@@ -33,6 +33,10 @@ namespace Explorer.API.Controllers.Author
             var tourProblemsDtos = JsonConvert.DeserializeObject<List<TourProblemDto>>(jsonResponse);
 
             int total = 0;
+            if(tourProblemsDtos == null)
+            {
+                return null;
+            }
             foreach (var ex in tourProblemsDtos)
             {
                 total++;

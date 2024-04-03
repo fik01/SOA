@@ -23,6 +23,7 @@ services:
       - db
       - go-tour-service
       - go-blog-service
+      - go-encounter-service
 
   go-tour-service:
     build:
@@ -42,13 +43,26 @@ services:
       context: ./golang-be-blogs/
     ports:
       - "8090:8090"
-    restart: on-failure
     networks:
       - database
     depends_on:
       - db
     environment:
       - DATABASE_URL2=host=db user=postgres password=super dbname=Blogs port=5433 sslmode=disable
+
+      
+  go-encounter-service:
+    build:
+      context: ./golang-be/Encounters/
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    networks:
+      - database
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL_1=host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
 
   db:
     image: postgres:latest

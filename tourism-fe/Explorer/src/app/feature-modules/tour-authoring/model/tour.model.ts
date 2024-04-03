@@ -2,7 +2,7 @@ import { TourDuration } from "./tour-duration.model";
 import { TourKeyPoints } from "./tour-keypoints.model";
 
 export interface Tour {
-    id?: number;
+    id?: any;
     name: string;
     description: string;
     difficulty: TourDifficulty;
