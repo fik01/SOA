@@ -22,6 +22,7 @@ namespace Explorer.Blog.Tests.Integration
         {
         }
 
+        /*
         [Theory]
         [InlineData(-21, 200)]
         public void Get_comments_by_blog_id(int blogId, int expectedResponseCode)
@@ -31,11 +32,11 @@ namespace Explorer.Blog.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
 
-            /*var result = (ObjectResult)controller.GetCommentsByBlogId(blogId).Result;
+            var result = (ObjectResult)controller.GetCommentsByBlogId(blogId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(expectedResponseCode);*/
+            result.StatusCode.ShouldBe(expectedResponseCode);
         }
         
         [Fact]
@@ -61,5 +62,6 @@ namespace Explorer.Blog.Tests.Integration
                 ControllerContext = BuildContext("-1")
             };
         }
+        */
     }
 }

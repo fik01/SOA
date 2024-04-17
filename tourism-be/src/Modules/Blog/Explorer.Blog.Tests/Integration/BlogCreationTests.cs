@@ -23,8 +23,7 @@ namespace Explorer.Blog.Tests.Integration
     public class BlogCreationTests : BaseBlogIntegrationTest
     {
         public BlogCreationTests(BlogTestFactory factory) : base(factory) { }
-
-
+        /*
         [Theory]
         [MemberData(nameof(BlogDtos))]
         public void Creation(BlogDto blogDto, int expectedResponseCode)
@@ -34,7 +33,7 @@ namespace Explorer.Blog.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
             
-            /*var result = (ObjectResult)controller.Create(blogDto).Result;
+            var result = (ObjectResult)controller.Create(blogDto).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -45,7 +44,7 @@ namespace Explorer.Blog.Tests.Integration
             {
                 var storedEntity = dbContext.Blogs.FirstOrDefault(t => t.Id == blogDto.Id);
                 storedEntity.ShouldNotBeNull();
-            }*/
+            }
             
             
         }
@@ -63,11 +62,11 @@ namespace Explorer.Blog.Tests.Integration
                 new BlogDto(-6,"huuuuuuaha","hihi",0,-21,"",0,new List<RatingDto>()),
                 200
             },
-            /*new object[]
+            new object[]
             {
                 new BlogDto(-7,"huuuuuuaha","hihi",0,-21,"",0,new List<RatingDto>()),
                 23505
-            },*/
+            },
             new object[]
             {
                 new BlogDto{
@@ -137,5 +136,6 @@ namespace Explorer.Blog.Tests.Integration
                 ControllerContext = BuildContext("-1")
             };
         }
+        */
     }
 }

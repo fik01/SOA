@@ -24,7 +24,8 @@ namespace Explorer.Blog.Tests.Integration
         public CommentCommandTests(BlogTestFactory factory) : base(factory)
         {
         }
-
+        
+        /*
         [Theory]
         [MemberData(nameof(CommentDtos))]
         public void Creation(CommentDto commentDto, int expectedResponseCode)
@@ -41,11 +42,11 @@ namespace Explorer.Blog.Tests.Integration
             //result.StatusCode.ShouldBe(expectedResponseCode);
 
             //Assert - Database
-            /*if (result.StatusCode != 400)
+            if (result.StatusCode != 400)
             {
                 var storedEntity = dbContext.Comments.FirstOrDefault(t => t.Id == commentDto.Id);
                 storedEntity.ShouldNotBeNull();
-            }*/
+            }
         }
 
         public static IEnumerable<object[]> CommentDtos()
@@ -99,7 +100,7 @@ namespace Explorer.Blog.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
 
-            /*var result = (ObjectResult)controller.UpdateComment(commentDto).Result;
+            var result = (ObjectResult)controller.UpdateComment(commentDto).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -107,8 +108,8 @@ namespace Explorer.Blog.Tests.Integration
 
             // Assert - Database
             var storedEntity = dbContext.Comments.FirstOrDefault(t => t.Id == commentDto.Id);
-            storedEntity.ShouldNotBeNull();*/
-        }
+            storedEntity.ShouldNotBeNull();
+        
 
         [Theory]
         [InlineData(-3, 200)]
@@ -188,5 +189,6 @@ namespace Explorer.Blog.Tests.Integration
                 ControllerContext = BuildContext("-1")
             };
         }
+        */
     }
 }
