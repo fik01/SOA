@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"encounters.xws.com/handler"
 	"encounters.xws.com/model"
 	"encounters.xws.com/repo"
@@ -14,13 +15,13 @@ import (
 )
 
 func initDB() *gorm.DB {
-	
+
 	dsn := "host=localhost user=postgres password=super dbname=explorer-v1 port=5432 sslmode=disable"
 
 	connectionString, isPresent := os.LookupEnv("DATABASE_URL_1")
 	if isPresent {
 		dsn = connectionString
-	} 
+	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -29,7 +30,7 @@ func initDB() *gorm.DB {
 
 	err = db.Exec("SET search_path TO encounters").Error
 	if err != nil {
-		log.Fatal("Error setting search path:",err)
+		log.Fatal("Error setting search path:", err)
 	}
 
 	// Migrate the schema
@@ -50,7 +51,7 @@ func initDB() *gorm.DB {
 	return db
 }
 
-func startServer(database *gorm.DB){
+func startServer(database *gorm.DB) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	initUserExperience(router, database)
@@ -61,7 +62,7 @@ func startServer(database *gorm.DB){
 	log.Fatal(http.ListenAndServe(":8081", router))
 }
 
-func initChallengeExecution(router *mux.Router, database *gorm.DB){
+func initChallengeExecution(router *mux.Router, database *gorm.DB) {
 	repo := &repo.ChallengeExecutionRepository{DatabaseConnection: database}
 	service := &service.ChallengeExecutionService{ChallengeExecutionRepository: repo}
 	handler := &handler.ChallengeExecutionHandler{ChallengeExecutionService: service}
@@ -72,7 +73,7 @@ func initChallengeExecution(router *mux.Router, database *gorm.DB){
 	router.HandleFunc("/tourist/challengeExecution", handler.GetAll).Methods("GET")
 }
 
-func initUserExperience(router *mux.Router, database *gorm.DB){
+func initUserExperience(router *mux.Router, database *gorm.DB) {
 	repo := &repo.UserExperienceRepository{DatabaseConnection: database}
 	service := &service.UserExperienceService{UserExperienceRepo: repo}
 	handler := &handler.UserExperienceHandler{UserExperienceService: service}
