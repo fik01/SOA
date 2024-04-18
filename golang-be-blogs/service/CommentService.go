@@ -42,7 +42,7 @@ func (service *CommentService) Update(comment *model.Comment) error {
 }
 
 func (service *CommentService) DeleteById(id int) error {
-	err := service.CommentRepo.DeleteById(id)
+	err := service.CommentRepo.Delete(id)
 	if err != nil {
 		return err
 	}
