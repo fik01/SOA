@@ -66,6 +66,22 @@ services:
     environment:
       - DATABASE_URL_1=host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
 
+  go-follower-service:
+    build:
+      context: ./golang-be/Followers/
+      target: final
+    networks:
+      - database
+    ports:
+      - "8082:8082" # Choose a port for the new service
+    restart: on-failure
+    depends_on:
+      - neo4j # This ensures the Neo4j service is healthy before starting the follower service
+    environment:
+      NEO4J_DB: "bolt://neo4j:7687" # Neo4j database connection string
+      NEO4J_USERNAME: neo4j
+      NEO4J_PASS: nekaSifra
+
   db:
     image: postgres:latest
     restart: always
@@ -80,6 +96,30 @@ services:
       POSTGRES_PASSWORD: super
       POSTGRES_MULTIPLE_DATABASES: tour,explorer,blogs
       PGPORT: 5433
+  
+  neo4j:
+    image: neo4j:latest
+    restart: always
+    networks:
+      - database
+    ports:
+      - "7474:7474" # HTTP port for Neo4j
+      - "7473:7473" # HTTPS port for Neo4j
+      - "7687:7687" # Bolt protocol port for Neo4j
+    healthcheck:
+      test: ["CMD-SHELL", "echo RETURN 1 | cypher-shell -a bolt://neo4j:7687 -u neo4j -p nekaSifra || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    environment:
+      - NEO4J_AUTH=neo4j/nekaSifra
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  neo4j_data:
+    driver: local
+
 
 networks:
   database:

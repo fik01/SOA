@@ -27,7 +27,9 @@ func NewFollower(followerID, followedID int64, notification *FollowerNotificatio
 
 package model
 
-import "errors"
+import (
+	"errors"
+)
 
 type Follower struct {
 	FollowerID   int64 `gorm:"primaryKey"`
