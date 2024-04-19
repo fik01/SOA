@@ -69,7 +69,6 @@ services:
   go-follower-service:
     build:
       context: ./golang-be/Followers/
-      target: final
     networks:
       - database
     ports:

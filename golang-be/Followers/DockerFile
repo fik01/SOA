@@ -5,6 +5,6 @@ WORKDIR /go/src/app
 COPY . .
 
 RUN go mod tidy
-RUN go build
+RUN go build -o main followers_main.go
 
-CMD ["./GolangNeo4j"]
+CMD ["./main"]
