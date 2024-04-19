@@ -1,16 +1,31 @@
 package db
 
 import (
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"context"
 	"log"
 	"tours/config"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func Connect() *gorm.DB {
-	db, err := gorm.Open(postgres.Open(config.GetConnectionString()), &gorm.Config{})
+func Connect() *mongo.Database {
+	clientOptions := options.Client().ApplyURI(config.GetConnectionString())
+	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Check if the connection was successful
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dbName := "tour"
+	db := client.Database(dbName)
+
+	log.Println("Connected to MongoDB successfully")
+
 	return db
 }

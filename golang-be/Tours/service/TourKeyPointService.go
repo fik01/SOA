@@ -1,59 +1,66 @@
 package service
 
 import (
+	"context"
 	"tours/model"
 	"tours/repo"
 )
 
 type TourKeyPointService struct {
-	TourKeyPointRepo *repo.CRUDRepository[model.TourKeyPoint]
+	TourKeyPointRepo *repo.TourKeyPointRepository
 }
 
-func (service *TourKeyPointService) Create(tourKeyPoint *model.TourKeyPoint) error {
-	err := service.TourKeyPointRepo.Create(tourKeyPoint)
+func (service *TourKeyPointService) Create(ctx context.Context, tourKeyPoint *model.TourKeyPoint) (*model.TourKeyPoint, error) {
+	customID, err := service.TourKeyPointRepo.GenerateCustomID(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	tourKeyPoint.Id = customID
+	newTour, err := service.TourKeyPointRepo.Create(ctx, tourKeyPoint)
+	if err != nil {
+		return nil, err
+	}
+	return newTour, nil
+}
+
+func (service *TourKeyPointService) Update(ctx context.Context, tourKeyPoint *model.TourKeyPoint) error {
+	err := service.TourKeyPointRepo.Update(ctx, tourKeyPoint)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (service *TourKeyPointService) Update(tourKeyPoint *model.TourKeyPoint) error {
-	err := service.TourKeyPointRepo.Update(tourKeyPoint)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (service *TourKeyPointService) DeleteById(tourKeyPointId int) error {
+/*func (service *TourKeyPointService) DeleteById(tourKeyPointId int) error {
 	err := service.TourKeyPointRepo.DeleteById(tourKeyPointId)
 	if err != nil {
 		return err
 	}
 	return nil
-}
+}*/
 
-func (service *TourKeyPointService) Get(tourKeyPointId int) (*model.TourKeyPoint, error) {
+func (service *TourKeyPointService) Get(ctx context.Context, tourKeyPointId int) (*model.TourKeyPoint, error) {
 	var tourKeyPoint *model.TourKeyPoint
-	tourKeyPoint, err := service.TourKeyPointRepo.GetById(tourKeyPointId)
+	tourKeyPoint, err := service.TourKeyPointRepo.Get(ctx, tourKeyPointId)
 	if err != nil {
 		return nil, err
 	}
 	return tourKeyPoint, err
 }
 
-func (service *TourKeyPointService) GetAll() (*[]model.TourKeyPoint, error) {
-	var tourKeyPoints *[]model.TourKeyPoint
-	tourKeyPoints, err := service.TourKeyPointRepo.GetAll()
+func (service *TourKeyPointService) GetAll(ctx context.Context) ([]model.TourKeyPoint, error) {
+	var tourKeyPoints []model.TourKeyPoint
+	tourKeyPoints, err := service.TourKeyPointRepo.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return tourKeyPoints, nil
 }
 
-func (service *TourKeyPointService) GetByTourId(tourId int) (*[]model.TourKeyPoint, error) {
-	var tourKeyPoints *[]model.TourKeyPoint
-	tourKeyPoints, err := service.TourKeyPointRepo.Where("tour_id = ?", tourId)
+func (service *TourKeyPointService) GetByTourId(ctx context.Context, tourId int) ([]model.TourKeyPoint, error) {
+	var tourKeyPoints []model.TourKeyPoint
+	tourKeyPoints, err := service.TourKeyPointRepo.GetByTourId(ctx, tourId)
 	if err != nil {
 		return nil, err
 	}

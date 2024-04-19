@@ -1,24 +1,25 @@
 package app
 
 import (
-	"github.com/gorilla/mux"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"tours/config"
 	"tours/db"
 	"tours/handler"
+
+	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type App struct {
-	db *gorm.DB
+	db *mongo.Database
 }
 
 func Run() {
 	app := new(App)
 
 	app.db = db.Connect()
-	db.AutoMigrate(app.db)
+	/*db.AutoMigrate(app.db)*/
 
 	handler := handler.NewHandler(app.db)
 	router := mux.NewRouter().StrictSlash(true)

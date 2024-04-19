@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"tours/model"
+	//"tours/model"
 	"tours/repo"
 	"tours/service"
 
-	"gorm.io/gorm"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Handler struct {
@@ -17,10 +17,10 @@ type Handler struct {
 	TourProblemHandler       *TourProblemHandler
 }
 
-func NewHandler(db *gorm.DB) *Handler {
+func NewHandler(db *mongo.Database) *Handler {
 	handler := new(Handler)
 
-	ratingRepo := &repo.CRUDRepository[model.Rating]{DatabaseConnection: db}
+	ratingRepo := &repo.RatingRepository{DatabaseConnection: db}
 	ratingService := &service.RatingService{RatingRepo: ratingRepo}
 	handler.RatingHandler = &RatingHandler{RatingService: ratingService}
 
@@ -28,21 +28,21 @@ func NewHandler(db *gorm.DB) *Handler {
 	tourService := &service.TourService{TourRepo: tourRepo}
 	handler.TourHandler = &TourHandler{TourService: tourService}
 
-	equipmentRepo := &repo.CRUDRepository[model.Equipment]{DatabaseConnection: db}
+	/*equipmentRepo := &repo.CRUDRepository[model.Equipment]{DatabaseConnection: db}
 	equipmentService := &service.EquipmentService{EquipmentRepo: equipmentRepo}
 	handler.EquipmentHandler = &EquipmentHandler{EquipmentService: equipmentService}
-
-	positionRepo := &repo.CRUDRepository[model.Position]{DatabaseConnection: db}
+	*/
+	positionRepo := &repo.PositionRepository{DatabaseConnection: db}
 	positionSimulatorService := &service.PositionSimulatorService{PositionRepo: positionRepo}
 	handler.PositionSimulatorHandler = &PositionSimulatorHandler{PositionSimulatorService: positionSimulatorService}
 
-	tourKeyPointRepo := &repo.CRUDRepository[model.TourKeyPoint]{DatabaseConnection: db}
+	tourKeyPointRepo := &repo.TourKeyPointRepository{DatabaseConnection: db}
 	tourKeyPointService := &service.TourKeyPointService{TourKeyPointRepo: tourKeyPointRepo}
 	handler.TourKeyPointHandler = &TourKeyPointHandler{TourKeyPointService: tourKeyPointService}
-
-	tourProblemRepo := &repo.CRUDRepository[model.TourProblem]{DatabaseConnection: db}
-	tourProblemService := &service.TourProblemService{TourProblemRepo: tourProblemRepo, ToursRepo: tourRepo}
-	handler.TourProblemHandler = &TourProblemHandler{TourProblemService: tourProblemService}
+	/*
+		tourProblemRepo := &repo.CRUDRepository[model.TourProblem]{DatabaseConnection: db}
+		tourProblemService := &service.TourProblemService{TourProblemRepo: tourProblemRepo, ToursRepo: tourRepo}
+		handler.TourProblemHandler = &TourProblemHandler{TourProblemService: tourProblemService}*/
 
 	return handler
 

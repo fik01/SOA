@@ -2,22 +2,19 @@ package model
 
 import (
 	"errors"
-
-	"gorm.io/gorm"
 )
 
 type TourKeyPoint struct {
-	gorm.Model
-	Id             int `gorm:"primaryKey"`
-	Name           string
-	Description    string
-	Longitude      float64
-	Latitude       float64
-	Image          string
-	TourID         int
-	Secret         string
-	PositionInTour int
-	PublicPointId  int
+	Id             int     `bson:"_id, omitempty"`
+	Name           string  `bson:"name"`
+	Description    string  `bson:"description"`
+	Longitude      float64 `bson:"longitude"`
+	Latitude       float64 `bson:"latitude"`
+	Image          string  `bson:"image"`
+	TourID         int     `bson:"tour_id"`
+	Secret         string  `bson:"secret"`
+	PositionInTour int     `bson:"position_in_tour"`
+	PublicPointID  int     `bson:"public_point_id"`
 }
 
 func (tourKeyPoint *TourKeyPoint) validate() error {
