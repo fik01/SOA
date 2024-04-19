@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -50,36 +51,43 @@ func (repo *CRUDRepository[T]) Update(entity *T) error {
 }
 
 func (repo *CRUDRepository[T]) Delete(id interface{}) error {
-	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).DeleteOne(context.Background(), bson.M{repo.PrimaryKeyField: id})
+
+	var entity T
+	repo.DatabaseConnection.Collection(repo.CollectionName).FindOne(context.Background(), bson.M{repo.PrimaryKeyField: id}).Decode(&entity)
+
+	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).DeleteOne(context.Background(), bson.M{repo.PrimaryKeyField: getId(entity)})
 	return err
 }
 
 func (repo *CRUDRepository[T]) Where(query interface{}) (*[]T, error) {
-	var entities []T
-	cur, err := repo.DatabaseConnection.Collection(repo.CollectionName).Find(context.Background(), query)
-	if err != nil {
-		return nil, err
-	}
-	defer cur.Close(context.Background())
+    var entities []T
+    cur, err := repo.DatabaseConnection.Collection(repo.CollectionName).Find(context.Background(), query)
+    if err != nil {
+        fmt.Println("Database Error:", err)
+        return nil, err
+    }
+    defer cur.Close(context.Background())
 
-	for cur.Next(context.Background()) {
-		var entity T
-		if err := cur.Decode(&entity); err != nil {
-			return nil, err
-		}
-		entities = append(entities, entity)
-	}
+    for cur.Next(context.Background()) {
+        var entity T
+        if err := cur.Decode(&entity); err != nil {
+            fmt.Println("Decoding Error:", err)
+            return nil, err
+        }
+        entities = append(entities, entity)
+    }
 
-	return &entities, nil
+    return &entities, nil
 }
 
 func getId(entity interface{}) interface{} {
-
     value := reflect.ValueOf(entity)
-    idField := value.FieldByName("Id")
+    if value.Kind() == reflect.Ptr {
+        value = value.Elem()
+    }
+    idField := value.FieldByName("_id")
     if idField.IsValid() {
         return idField.Interface()
     }
-
     return nil
 }

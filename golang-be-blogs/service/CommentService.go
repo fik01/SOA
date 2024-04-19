@@ -3,8 +3,10 @@ package service
 import (
 	"database-example/model"
 	"database-example/repo"
-	"strconv"
+	"fmt"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type CommentService struct {
@@ -12,13 +14,15 @@ type CommentService struct {
 }
 
 func (service *CommentService) GetByBlogId(Id int) (*[]model.Comment, error) {
-	query := "blog_id = " + strconv.Itoa(Id)
+    query := bson.M{"blogid": Id}
+    fmt.Println("Query:", query)
 
-	comments, err := service.CommentRepo.Where(query)
-	if err != nil {
-		return nil, err
-	}
-	return comments, nil
+    comments, err := service.CommentRepo.Where(query)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return nil, err
+    }
+    return comments, nil
 }
 
 func (service *CommentService) Create(comment *model.Comment) error {
