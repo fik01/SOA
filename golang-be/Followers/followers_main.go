@@ -33,10 +33,10 @@ func initDB() *gorm.DB {
 		log.Fatal("Error setting search path:", err)
 	}
 
-	//err = db.AutoMigrate(&model.Follower{})
-	//if err != nil {
-	//	log.Fatalf("Error migrating schema: %v", err)
-	//}
+	err = db.AutoMigrate(&model.Follower{})
+	if err != nil {
+		log.Fatalf("Error migrating schema: %v", err)
+	}
 
 	return db
 }
@@ -52,12 +52,13 @@ func startServer(database *gorm.DB) {
 }
 
 func initFollower(router *mux.Router, database *gorm.DB) {
-	repo := &repo.CRUDRepository[model.Follower]{DatabaseConnection: database}
-	service := &service.FollowerService{CRUDRepository: repo}
+	repo := &repo.FollowerRepository{DatabaseConnection: database}
+
+	service := &service.FollowerService{FollowerRepository: repo}
 	handler := &handler.FollowerHandler{FollowerService: service}
 
 	router.HandleFunc("/tourist/follower", handler.CreateFollowerHandler).Methods("PUT")
-
+	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", handler.DeleteFollowerHandler).Methods("DELETE")
 }
 
 func main() {

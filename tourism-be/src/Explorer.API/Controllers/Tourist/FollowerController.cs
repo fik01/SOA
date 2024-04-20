@@ -52,12 +52,30 @@ namespace Explorer.API.Controllers.Tourist.Identity
             return Ok(jsonResponse);
 
         }
-        
+
+        /*
         [HttpDelete("{followerId:int}/{followedId:int}")]
         public ActionResult Delete(int followerId, int followedId)
         {
             var result = _followerService.Delete(followerId, followedId);
             return CreateResponse(result);
+        }
+        */
+
+        [HttpDelete("{followerId:int}/{followedId:int}")]
+        public async Task<ActionResult> Delete(int followerId, int followedId)
+        {
+            var client = _httpClientFactory.CreateClient("encounters");
+
+            var response = await client.DeleteAsync($"tourist/follower/{followerId}/{followedId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return Ok(jsonResponse);
         }
 
         [HttpGet("followings/{id:int}")]
