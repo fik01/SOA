@@ -2,10 +2,8 @@ package main
 
 import (
 	"context"
-	"followers/handler"
+	"encoding/json"
 	"followers/model"
-	"followers/repo"
-	"followers/service"
 	"log"
 	"net/http"
 	"os"
@@ -13,54 +11,52 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
-func initDB() *gorm.DB {
+// func initDB() *gorm.DB {
 
-	dsn := "host=localhost user=postgres password=super dbname=explorer-v1 port=5432 sslmode=disable"
+// 	dsn := "host=localhost user=postgres password=super dbname=explorer-v1 port=5432 sslmode=disable"
 
-	connectionString, isPresent := os.LookupEnv("DATABASE_URL_1")
-	if isPresent {
-		dsn = connectionString
-	}
+// 	connectionString, isPresent := os.LookupEnv("DATABASE_URL_1")
+// 	if isPresent {
+// 		dsn = connectionString
+// 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("Error connecting to database: %v", err)
-	}
+// 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+// 	if err != nil {
+// 		log.Fatalf("Error connecting to database: %v", err)
+// 	}
 
-	err = db.Exec("SET search_path TO stakeholders").Error
-	if err != nil {
-		log.Fatal("Error setting search path:", err)
-	}
+// 	err = db.Exec("SET search_path TO stakeholders").Error
+// 	if err != nil {
+// 		log.Fatal("Error setting search path:", err)
+// 	}
 
-	//err = db.AutoMigrate(&model.Follower{})
-	//if err != nil {
-	//	log.Fatalf("Error migrating schema: %v", err)
-	//}
+// 	//err = db.AutoMigrate(&model.Follower{})
+// 	//if err != nil {
+// 	//	log.Fatalf("Error migrating schema: %v", err)
+// 	//}
 
-	return db
-}
+// 	return db
+// }
 
-func startServer(database *gorm.DB) {
+func startServer(database *log.Logger) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	initFollower(router, database)
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
-	log.Fatal(http.ListenAndServe(":8081", router))
+
+	log.Fatal(http.ListenAndServe(":8082", router))
 }
 
-func initFollower(router *mux.Router, database *gorm.DB) {
-	repo := &repo.CRUDRepository[model.Follower]{DatabaseConnection: database}
-	service := &service.FollowerService{CRUDRepository: repo}
-	handler := &handler.FollowerHandler{FollowerService: service}
+func initFollower(router *mux.Router, database *log.Logger) {
+	// repo := &repo.CRUDRepository[model.Follower]{DatabaseConnection: database}
+	// service := &service.FollowerService{CRUDRepository: repo}
+	// handler := &handler.FollowerHandler{FollowerService: service}
 
-	router.HandleFunc("/tourist/follower", handler.CreateFollowerHandler).Methods("PUT")
-
+	router.HandleFunc("/tourist/follower", WriteFollowerr).Methods("PUT")
 }
 
 func main() {
@@ -72,7 +68,7 @@ func main() {
 	// 	print("CONNECTED")
 	// }
 
-	// startServer(database)
+	//startServer(database)
 	//Initialize the logger we are going to use, with prefix and datetime for every log
 	storeLogger := log.New(os.Stdout, "[follower-store] ", log.LstdFlags)
 
@@ -88,6 +84,8 @@ func main() {
 	signal.Notify(sigCh, os.Interrupt)
 	signal.Notify(sigCh, os.Kill)
 	storeLogger.Println("Successfully connected!")
+	
+	startServer(storeLogger)
 
 	var personOne = model.Follower{}
 	err = store.WriteFollower(&personOne)
@@ -173,4 +171,30 @@ func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
 	}
 	pr.logger.Println(savedFollower.(string))
 	return nil
+}
+
+func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
+	// Parse the request body
+	var follower model.Follower
+	err := json.NewDecoder(r.Body).Decode(&follower)
+	if err != nil {
+		 http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+		 return
+	}
+
+	storeLogger := log.New(os.Stdout, "[follower-store] ", log.LstdFlags)
+
+	store, err := New(storeLogger)
+	if err != nil {
+		storeLogger.Fatal(err)
+	}
+	defer store.CloseDriverConnection(context.Background())
+	store.CheckConnection()
+
+	var personOne = model.Follower{}
+	err = store.WriteFollower(&personOne)
+
+	// Respond with a success message
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Follower created successfully"))
 }
