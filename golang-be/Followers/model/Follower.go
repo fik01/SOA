@@ -38,7 +38,7 @@ type Follower struct {
 }
 
 func NewFollower(followerID, followedID int64, notification FollowerNotification) (*Follower, error) {
-	if followerID == 0 {
+	if followerID == 0 { 
 		return nil, errors.New("invalid FollowerID")
 	}
 	if followedID == 0 {
