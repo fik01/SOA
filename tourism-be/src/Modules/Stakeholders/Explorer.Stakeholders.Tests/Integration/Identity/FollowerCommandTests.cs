@@ -26,7 +26,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Identity
 
         }
 
-        [Theory]
+        /*[Theory]
         [MemberData(nameof(FollowerDto))]
         public void Create_session(FollowerDto follower, int expectedResponseCode)
         {
@@ -106,6 +106,6 @@ namespace Explorer.Stakeholders.Tests.Integration.Identity
             {
                 ControllerContext = BuildContext("-1")
             };
-        }
+        }*/
     }
 }

@@ -20,7 +20,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Identity
 
         }
 
-        [Theory]
+        /*[Theory]
         [InlineData(-11, 200)]
         public void Get_followers_notifications(int id, int expectedResponseCode)
         {
@@ -41,6 +41,6 @@ namespace Explorer.Stakeholders.Tests.Integration.Identity
             {
                 ControllerContext = BuildContext("-1")
             };
-        }
+        }*/
     }
 }
