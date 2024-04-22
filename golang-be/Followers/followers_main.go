@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"followers/model"
 	"log"
 	"net/http"
@@ -90,8 +91,8 @@ func main() {
 
 	startServer(storeLogger)
 
-	var personOne = model.Follower{}
-	err = store.WriteFollower(&personOne)
+	//var personOne = model.Follower{}
+	//err = store.WriteFollower(&personOne)
 
 	// err = store.CreateConnectionBetweenPersons()
 
@@ -142,7 +143,7 @@ func (pr *FollowerRepo) CloseDriverConnection(ctx context.Context) {
 	pr.driver.Close(ctx)
 }
 
-func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
+/*func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
 	ctx := context.Background()
 	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
@@ -168,7 +169,7 @@ func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
 	}
 	pr.logger.Println(savedFollower.(string))
 	return nil
-}
+}*/
 
 func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
 
@@ -188,12 +189,12 @@ func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
 	defer store.CloseDriverConnection(context.Background())
 	store.CheckConnection()
 
-	err = store.WriteFollower(&follower)
-	if err != nil {
-		storeLogger.Println("Error writing follower to database:", err)
-		http.Error(w, "Failed to write follower to database", http.StatusInternalServerError)
-		return
-	}
+	//err = store.WriteFollower(&follower)
+	//if err != nil {
+	//	storeLogger.Println("Error writing follower to database:", err)
+	//	http.Error(w, "Failed to write follower to database", http.StatusInternalServerError)
+	//	return
+	//}
 
 	err = store.CreateConnectionBetweenUsers(int(follower.FollowerID), int(follower.FollowedID))
 	if err != nil {
@@ -211,7 +212,38 @@ func (pr *FollowerRepo) CreateConnectionBetweenUsers(followerID, followedID int)
 	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
 
-	_, err := session.Run(
+	// Check if the connection already exists
+	result, err := session.Run(
+		ctx,
+		"MATCH (follower:User)-[:FOLLOWS]->(followed:User) WHERE follower.id = $followerID AND followed.id = $followedID RETURN COUNT(*)",
+		map[string]interface{}{
+			"followerID": followerID,
+			"followedID": followedID,
+		},
+	)
+	if err != nil {
+		pr.logger.Println("Error checking connection between users:", err)
+		return err
+	}
+
+	if result.Next(ctx) {
+		record := result.Record()
+		countValue, ok := record.Get("COUNT(*)")
+		if !ok {
+			return errors.New("count not found in result")
+		}
+		count, ok := countValue.(int64)
+		if !ok {
+			return errors.New("failed to parse count")
+		}
+		if count > 0 {
+			return errors.New("connection already exists between users")
+		}
+	} else {
+		return result.Err()
+	}
+
+	_, err = session.Run(
 		ctx,
 		"MATCH (follower:User), (followed:User) WHERE follower.id = $followerID AND followed.id = $followedID CREATE (follower)-[:FOLLOWS]->(followed)",
 		map[string]interface{}{
