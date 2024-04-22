@@ -3,9 +3,12 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"followers/model"
 	"followers/service"
+
+	"github.com/gorilla/mux"
 )
 
 type FollowerHandler struct {
@@ -25,4 +28,27 @@ func (h *FollowerHandler) CreateFollowerHandler(w http.ResponseWriter, r *http.R
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (h *FollowerHandler) DeleteFollowerHandler(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	followerID, err := strconv.ParseInt(vars["followerId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid follower ID", http.StatusBadRequest)
+		return
+	}
+	followedID, err := strconv.ParseInt(vars["followedId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid followed ID", http.StatusBadRequest)
+		return
+	}
+
+	err = h.FollowerService.DeleteFollower(followerID, followedID)
+	if err != nil {
+		http.Error(w, "Failed to delete follower: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
