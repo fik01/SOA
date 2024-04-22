@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
@@ -57,7 +58,7 @@ func initFollower(router *mux.Router, database *log.Logger) {
 	// handler := &handler.FollowerHandler{FollowerService: service}
 
 	router.HandleFunc("/tourist/follower", WriteFollowerr).Methods("PUT")
-	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", handler.DeleteFollowerHandler).Methods("DELETE")
+	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", DeleteFollowerr).Methods("DELETE")
 
 }
 
@@ -170,7 +171,7 @@ func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
 }
 
 func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
-	// Parse the request body
+
 	var follower model.Follower
 	err := json.NewDecoder(r.Body).Decode(&follower)
 	if err != nil {
@@ -220,6 +221,62 @@ func (pr *FollowerRepo) CreateConnectionBetweenUsers(followerID, followedID int)
 	)
 	if err != nil {
 		pr.logger.Println("Error creating connection between users:", err)
+		return err
+	}
+	return nil
+}
+
+func DeleteFollowerr(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	followerID := params["followerId"]
+	followedID := params["followedId"]
+
+	followerIDInt, err := strconv.Atoi(followerID)
+	if err != nil {
+		http.Error(w, "Invalid follower ID", http.StatusBadRequest)
+		return
+	}
+	followedIDInt, err := strconv.Atoi(followedID)
+	if err != nil {
+		http.Error(w, "Invalid followed ID", http.StatusBadRequest)
+		return
+	}
+
+	storeLogger := log.New(os.Stdout, "[follower-store] ", log.LstdFlags)
+
+	store, err := New(storeLogger)
+	if err != nil {
+		storeLogger.Fatal(err)
+	}
+	defer store.CloseDriverConnection(context.Background())
+	store.CheckConnection()
+
+	err = store.DeleteConnectionBetweenUsers(followerIDInt, followedIDInt)
+	if err != nil {
+		storeLogger.Println("Error deleting connection between users:", err)
+		http.Error(w, "Failed to delete connection between users", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Connection between users deleted successfully"))
+}
+
+func (pr *FollowerRepo) DeleteConnectionBetweenUsers(followerID, followedID int) error {
+	ctx := context.Background()
+	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
+	defer session.Close(ctx)
+
+	_, err := session.Run(
+		ctx,
+		"MATCH (follower:User)-[r:FOLLOWS]->(followed:User) WHERE follower.id = $followerID AND followed.id = $followedID DELETE r",
+		map[string]interface{}{
+			"followerID": followerID,
+			"followedID": followedID,
+		},
+	)
+	if err != nil {
+		pr.logger.Println("Error deleting connection between users:", err)
 		return err
 	}
 	return nil
