@@ -60,7 +60,7 @@ func initFollower(router *mux.Router, database *log.Logger) {
 
 	router.HandleFunc("/tourist/follower", WriteFollowerr).Methods("PUT")
 	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", DeleteFollowerr).Methods("DELETE")
-
+	router.HandleFunc("/tourist/follower/followings/{followerId}", handler.GetFollowingsHandler).Methods("GET")
 }
 
 func main() {

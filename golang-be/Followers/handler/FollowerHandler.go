@@ -52,3 +52,22 @@ func (h *FollowerHandler) DeleteFollowerHandler(w http.ResponseWriter, r *http.R
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h *FollowerHandler) GetFollowingsHandler(w http.ResponseWriter, r *http.Request) {
+	followerIDStr := mux.Vars(r)["followerId"]
+
+	followerID, err := strconv.ParseInt(followerIDStr, 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid or missing follower ID", http.StatusBadRequest)
+		return
+	}
+
+	followings, err := h.FollowerService.GetFollowings(followerID)
+	if err != nil {
+		http.Error(w, "Failed to get followings: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(followings)
+}
