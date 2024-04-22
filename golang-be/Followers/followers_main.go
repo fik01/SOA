@@ -59,6 +59,8 @@ func initFollower(router *mux.Router, database *gorm.DB) {
 
 	router.HandleFunc("/tourist/follower", handler.CreateFollowerHandler).Methods("PUT")
 	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", handler.DeleteFollowerHandler).Methods("DELETE")
+	router.HandleFunc("/tourist/follower/followings/{followerId}", handler.GetFollowingsHandler).Methods("GET")
+
 }
 
 func main() {

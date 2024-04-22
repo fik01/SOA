@@ -78,11 +78,30 @@ namespace Explorer.API.Controllers.Tourist.Identity
             return Ok(jsonResponse);
         }
 
+        /*
         [HttpGet("followings/{id:int}")]
         public ActionResult<List<FollowerDto>> GetFollowings(int id)
         {
             var result = _followerService.GetFollowings(id);
             return CreateResponse(result);
+        }
+        */
+
+        [HttpGet("followings/{id:int}")]
+        public async Task<ActionResult<List<FollowerDto>>> GetFollowings(int id)
+        {
+            var client = _httpClientFactory.CreateClient("encounters");
+
+            var response = await client.GetAsync($"tourist/follower/followings/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode);
+            }
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<FollowerDto>>(jsonResponse);
+            return Ok(result);
         }
     }
 }

@@ -39,3 +39,14 @@ func (r *FollowerRepository) DeleteFollower(followerID, followedID int64) error 
 
 	return nil
 }
+
+func (r *FollowerRepository) GetFollowings(userID int64) ([]model.Follower, error) {
+	var followings []model.Follower
+
+	result := r.DatabaseConnection.Where("follower_id = ?", userID).Find(&followings)
+	if result.Error != nil {
+		return followings, result.Error
+	}
+
+	return followings, nil
+}

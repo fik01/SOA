@@ -26,3 +26,11 @@ func (s *FollowerService) DeleteFollower(followerID, followedID int64) error {
 
 	return nil
 }
+
+func (s *FollowerService) GetFollowings(userID int64) ([]model.Follower, error) {
+	followings, err := s.FollowerRepository.GetFollowings(userID)
+	if err != nil {
+		return nil, err
+	}
+	return followings, nil
+}
