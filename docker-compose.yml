@@ -48,9 +48,9 @@ services:
     networks:
       - database
     depends_on:
-      - db
+      - mongo
     environment:
-      - DATABASE_URL2=host=db user=postgres password=super dbname=blogs port=5433 sslmode=disable
+      - DATABASE_URL2=mongodb://root:jemta@mongo:27017/
 
       
   go-encounter-service:
@@ -80,6 +80,31 @@ services:
       POSTGRES_PASSWORD: super
       POSTGRES_MULTIPLE_DATABASES: tour,explorer,blogs
       PGPORT: 5433
+
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - database
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: jemta
+    ports:
+      - 27017:27017
+
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    networks:
+      - database
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: jemta
+      ME_CONFIG_MONGODB_URL: mongodb://root:jemta@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
 
 networks:
   database:
