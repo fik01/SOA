@@ -84,12 +84,11 @@ func main() {
 	signal.Notify(sigCh, os.Interrupt)
 	signal.Notify(sigCh, os.Kill)
 	storeLogger.Println("Successfully connected!")
-	
+
 	startServer(storeLogger)
 
 	var personOne = model.Follower{}
 	err = store.WriteFollower(&personOne)
-
 
 	// err = store.CreateConnectionBetweenPersons()
 
@@ -100,7 +99,6 @@ func main() {
 	sig := <-sigCh
 	storeLogger.Println("Received terminate, graceful shutdown", sig)
 }
-
 
 type FollowerRepo struct {
 	driver neo4j.DriverWithContext
@@ -120,14 +118,12 @@ func New(logger *log.Logger) (*FollowerRepo, error) {
 		return nil, err
 	}
 
-	// Return repository with logger and DB session
 	return &FollowerRepo{
 		driver: driver,
 		logger: logger,
 	}, nil
 }
 
-// CheckConnection Check if connection is established
 func (pr *FollowerRepo) CheckConnection() {
 	ctx := context.Background()
 	err := pr.driver.VerifyConnectivity(ctx)
@@ -135,11 +131,10 @@ func (pr *FollowerRepo) CheckConnection() {
 		pr.logger.Panic(err)
 		return
 	}
-	// Print Neo4J server address
+
 	pr.logger.Printf(`Neo4J server address: %s`, pr.driver.Target().Host)
 }
 
-// CloseDriverConnection Disconnect from database
 func (pr *FollowerRepo) CloseDriverConnection(ctx context.Context) {
 	pr.driver.Close(ctx)
 }
@@ -149,7 +144,6 @@ func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
 	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
 
-	// ExecuteWrite for write transactions (Create/Update/Delete)
 	savedFollower, err := session.ExecuteWrite(ctx,
 		func(transaction neo4j.ManagedTransaction) (any, error) {
 			result, err := transaction.Run(ctx,
@@ -178,8 +172,8 @@ func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
 	var follower model.Follower
 	err := json.NewDecoder(r.Body).Decode(&follower)
 	if err != nil {
-		 http.Error(w, "Failed to decode request body", http.StatusBadRequest)
-		 return
+		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+		return
 	}
 
 	storeLogger := log.New(os.Stdout, "[follower-store] ", log.LstdFlags)
@@ -191,10 +185,40 @@ func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
 	defer store.CloseDriverConnection(context.Background())
 	store.CheckConnection()
 
-	var personOne = model.Follower{}
-	err = store.WriteFollower(&personOne)
+	err = store.WriteFollower(&follower)
+	if err != nil {
+		storeLogger.Println("Error writing follower to database:", err)
+		http.Error(w, "Failed to write follower to database", http.StatusInternalServerError)
+		return
+	}
 
-	// Respond with a success message
+	err = store.CreateConnectionBetweenUsers(int(follower.FollowerID), int(follower.FollowedID))
+	if err != nil {
+		storeLogger.Println("Error creating connection between users:", err)
+		http.Error(w, "Failed to create connection between users", http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Follower created successfully"))
+	w.Write([]byte("Follower created successfully and connection established between users"))
+}
+
+func (pr *FollowerRepo) CreateConnectionBetweenUsers(followerID, followedID int) error {
+	ctx := context.Background()
+	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
+	defer session.Close(ctx)
+
+	_, err := session.Run(
+		ctx,
+		"MATCH (follower:User), (followed:User) WHERE follower.id = $followerID AND followed.id = $followedID CREATE (follower)-[:FOLLOWS]->(followed)",
+		map[string]interface{}{
+			"followerID": followerID,
+			"followedID": followedID,
+		},
+	)
+	if err != nil {
+		pr.logger.Println("Error creating connection between users:", err)
+		return err
+	}
+	return nil
 }
