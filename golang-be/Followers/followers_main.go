@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"followers/model"
 	"log"
 	"net/http"
@@ -60,7 +61,7 @@ func initFollower(router *mux.Router, database *log.Logger) {
 
 	router.HandleFunc("/tourist/follower", WriteFollowerr).Methods("PUT")
 	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", DeleteFollowerr).Methods("DELETE")
-	//router.HandleFunc("/tourist/follower/followings/{followerId}", handler.GetFollowingsHandler).Methods("GET")
+	router.HandleFunc("/tourist/follower/followings/{followerId}", GetFollowerr).Methods("GET")
 }
 
 func main() {
@@ -312,4 +313,103 @@ func (pr *FollowerRepo) DeleteConnectionBetweenUsers(followerID, followedID int)
 		return err
 	}
 	return nil
+}
+
+func GetFollowerr(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	followerID := params["followerId"]
+	followerIDInt, err := strconv.Atoi(followerID)
+	if err != nil {
+		http.Error(w, "Invalid follower ID", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("Follower ID:", followerIDInt)
+
+	storeLogger := log.New(os.Stdout, "[follower-store] ", log.LstdFlags)
+
+	store, err := New(storeLogger)
+	if err != nil {
+		storeLogger.Fatal(err)
+	}
+	defer store.CloseDriverConnection(context.Background())
+	store.CheckConnection()
+
+	users, err := store.GetFollowingsForUser(followerIDInt)
+	if err != nil {
+		storeLogger.Println("Error retrieving followings for user:", err)
+		http.Error(w, "Failed to retrieve followings for user", http.StatusInternalServerError)
+		return
+	}
+
+	usersJSON, err := json.Marshal(users)
+	if err != nil {
+		storeLogger.Println("Error marshaling users to JSON:", err)
+		http.Error(w, "Failed to marshal users to JSON", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(usersJSON)
+}
+
+func (pr *FollowerRepo) GetFollowingsForUser(followerID int) ([]model.User, error) {
+	ctx := context.Background()
+	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
+	defer session.Close(ctx)
+
+	result, err := session.Run(
+		ctx,
+		"MATCH (follower:User)-[:FOLLOWS]->(followed:User) WHERE follower.id = $followerID RETURN followed",
+		map[string]interface{}{
+			"followerID": followerID,
+		},
+	)
+	if err != nil {
+		pr.logger.Println("Error retrieving followings for user:", err)
+		return nil, err
+	}
+
+	users := make([]model.User, 0)
+	for result.Next(ctx) {
+		record := result.Record()
+		followedNode, ok := record.Get("followed")
+		if !ok {
+			return nil, errors.New("followed node not found in result")
+		}
+
+		user, err := pr.parseUserNode(followedNode)
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (pr *FollowerRepo) parseUserNode(node interface{}) (model.User, error) {
+	user := model.User{}
+
+	switch v := node.(type) {
+	case map[string]interface{}:
+		pr.logger.Printf("Type of node: %T\n", v)
+
+		id, ok := v["id"].(int64)
+		if !ok {
+			return user, errors.New("failed to parse user ID")
+		}
+		name, ok := v["name"].(string)
+		if !ok {
+			return user, errors.New("failed to parse user name")
+		}
+		user.ID = id
+		user.Name = name
+	default:
+		return user, fmt.Errorf("unexpected node type: %T", node)
+	}
+
+	return user, nil
 }
