@@ -7,7 +7,7 @@ func GetConnectionString() string {
 	if isPresent {
 		return connectionString
 	} else {
-		return "host=localhost user=postgres password=super dbname= port=5432 sslmode=disable"
+		return "mongodb://localhost:27017/blogs"
 	}
 }
 

@@ -48,9 +48,9 @@ services:
     networks:
       - database
     depends_on:
-      - db
+      - mongo
     environment:
-      - DATABASE_URL2=host=db user=postgres password=super dbname=blogs port=5433 sslmode=disable
+      - DATABASE_URL2=mongodb://root:jemta@mongo:27017/
 
       
   go-encounter-service:
@@ -94,6 +94,7 @@ services:
       - 27017:27017
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
 
   mongo-express:
     image: mongo-express
