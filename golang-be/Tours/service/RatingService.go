@@ -11,7 +11,13 @@ type RatingService struct {
 }
 
 func (service *RatingService) Create(ctx context.Context, rating *model.Rating) error {
-	_, err := service.RatingRepo.Create(ctx, rating)
+	customID, err := service.RatingRepo.GenerateCustomID(ctx)
+	if err != nil {
+		return nil
+	}
+
+	rating.ID = customID
+	_, err = service.RatingRepo.Create(ctx, rating)
 	if err != nil {
 		return err
 	}

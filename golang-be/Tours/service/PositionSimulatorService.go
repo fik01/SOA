@@ -11,7 +11,14 @@ type PositionSimulatorService struct {
 }
 
 func (service *PositionSimulatorService) Create(ctx context.Context, position *model.Position) error {
-	_, err := service.PositionRepo.Create(ctx, position)
+	customID, err := service.PositionRepo.GenerateCustomID(ctx)
+	if err != nil {
+		return nil
+	}
+
+	position.ID = customID
+
+	_, err = service.PositionRepo.Create(ctx, position)
 	if err != nil {
 		return err
 	}
