@@ -24,8 +24,8 @@ func (handler *PositionSimulatorHandler) Create(writer http.ResponseWriter, req 
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	err = handler.PositionSimulatorService.Create(&position)
+	ctx := req.Context()
+	err = handler.PositionSimulatorService.Create(ctx, &position)
 
 	if err != nil {
 		log.Println("Error while creating position simulator")
@@ -47,8 +47,8 @@ func (handler *PositionSimulatorHandler) Update(writer http.ResponseWriter, req 
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	err = handler.PositionSimulatorService.Update(&position)
+	ctx := req.Context()
+	err = handler.PositionSimulatorService.Update(ctx, &position)
 
 	if err != nil {
 		log.Println("Error while updating position simulator")
@@ -67,8 +67,8 @@ func (handler *PositionSimulatorHandler) GetByTouristId(writer http.ResponseWrit
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	position, err := handler.PositionSimulatorService.GetByTouristId(id)
+	ctx := req.Context()
+	position, err := handler.PositionSimulatorService.GetByTouristId(ctx, id)
 
 	if err != nil {
 		log.Println("Error while getting position")
@@ -98,8 +98,8 @@ func (handler *PositionSimulatorHandler) GetById(writer http.ResponseWriter, req
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	position, err := handler.PositionSimulatorService.GetById(id)
+	ctx := req.Context()
+	position, err := handler.PositionSimulatorService.GetById(ctx, id)
 
 	if err != nil {
 		log.Println("Error while getting position")

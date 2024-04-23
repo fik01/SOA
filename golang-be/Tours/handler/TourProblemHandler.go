@@ -109,7 +109,7 @@ func (handler *TourProblemHandler) GetByTouristId(writer http.ResponseWriter, re
 
 }
 
-func (handler *TourProblemHandler) GetByAuthorId(writer http.ResponseWriter, req *http.Request) {
+/*func (handler *TourProblemHandler) GetByAuthorId(writer http.ResponseWriter, req *http.Request) {
 	var tourProblems *[]model.TourProblem
 
 	authorId, err := strconv.Atoi(req.URL.Query().Get("authorId"))
@@ -141,4 +141,4 @@ func (handler *TourProblemHandler) GetByAuthorId(writer http.ResponseWriter, req
 		http.Error(writer, "Failed to write JSON data!", http.StatusInternalServerError)
 	}
 
-}
+}*/

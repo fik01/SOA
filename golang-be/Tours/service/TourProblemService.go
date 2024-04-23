@@ -37,8 +37,8 @@ func (service *TourProblemService) GetByTouristId(touristId int) (*[]model.TourP
 
 }
 
-func (service *TourProblemService) GetByAuthorId(authorId int) (*[]model.TourProblem, error) {
-	tours, err := service.ToursRepo.GetAllByAuthorId(authorId)
+/*func (service *TourProblemService) GetByAuthorId(authorId int) (*[]model.TourProblem, error) {
+	tours, err := service.ToursRepo.GetAllByAuthorID(authorId)
 	if err != nil {
 		return nil, err
 	}
@@ -54,4 +54,4 @@ func (service *TourProblemService) GetByAuthorId(authorId int) (*[]model.TourPro
 	}
 
 	return &tourProblems, nil
-}
+}*/
