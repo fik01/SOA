@@ -115,10 +115,6 @@ services:
     volumes:
       - neo4j_data:/data
 
-volumes:
-  neo4j_data:
-    driver: local
-
 
   mongo:
     image: mongo
@@ -153,3 +149,6 @@ networks:
     name: database
     driver: bridge
 
+volumes:
+  neo4j_data:
+    driver: local
