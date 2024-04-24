@@ -43,6 +43,7 @@ import (
 // 	return db
 // }
 
+
 func startServer(database *log.Logger) {
 	router := mux.NewRouter().StrictSlash(true)
 
@@ -61,7 +62,7 @@ func initFollower(router *mux.Router, database *log.Logger) {
 
 	router.HandleFunc("/tourist/follower", WriteFollowerr).Methods("PUT")
 	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", DeleteFollowerr).Methods("DELETE")
-	router.HandleFunc("/tourist/follower/followings/{followerId}", GetFollowerr).Methods("GET")
+	router.HandleFunc("/tourist/follower/followings/{followerId}", GetRecomended).Methods("GET")
 }
 
 func main() {
@@ -315,7 +316,7 @@ func (pr *FollowerRepo) DeleteConnectionBetweenUsers(followerID, followedID int)
 	return nil
 }
 
-func GetFollowerr(w http.ResponseWriter, r *http.Request) {
+func GetRecomended(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	followerID := params["followerId"]
 	followerIDInt, err := strconv.Atoi(followerID)
@@ -335,10 +336,10 @@ func GetFollowerr(w http.ResponseWriter, r *http.Request) {
 	defer store.CloseDriverConnection(context.Background())
 	store.CheckConnection()
 
-	users, err := store.GetFollowingsForUser(followerIDInt)
+	users, err := store.GetRecomendedUsers(followerIDInt)
 	if err != nil {
-		storeLogger.Println("Error retrieving followings for user:", err)
-		http.Error(w, "Failed to retrieve followings for user", http.StatusInternalServerError)
+		storeLogger.Println("Error retrieving recomendations for user:", err)
+		http.Error(w, "Failed to retrieve recomendations for user", http.StatusInternalServerError)
 		return
 	}
 
@@ -354,62 +355,59 @@ func GetFollowerr(w http.ResponseWriter, r *http.Request) {
 	w.Write(usersJSON)
 }
 
-func (pr *FollowerRepo) GetFollowingsForUser(followerID int) ([]model.User, error) {
-	ctx := context.Background()
-	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
-	defer session.Close(ctx)
+func (pr *FollowerRepo) GetRecomendedUsers(followerID int) (model.Users, error) {
+    ctx := context.Background()
+    session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
+    defer session.Close(ctx)
 
-	result, err := session.Run(
-		ctx,
-		"MATCH (follower:User)-[:FOLLOWS]->(followed:User) WHERE follower.id = $followerID RETURN followed",
-		map[string]interface{}{
-			"followerID": followerID,
-		},
-	)
-	if err != nil {
-		pr.logger.Println("Error retrieving followings for user:", err)
-		return nil, err
-	}
+    result, err := session.ExecuteRead(
+        ctx,
+        func(transaction neo4j.ManagedTransaction) (any, error) {
+            result, err := transaction.Run(ctx,
+                `MATCH (user:User {id: $userId})-[:FOLLOWS]->(followed),
+                  (followed)-[:FOLLOWS]->(suggested)
+                  WHERE NOT (user)-[:FOLLOWS]->(suggested)
+                  RETURN suggested.id AS id, suggested.name AS name`,
+                map[string]interface{}{
+                    "userId": followerID,
+                })
+            if err != nil {
+                return nil, err
+            }
 
-	users := make([]model.User, 0)
-	for result.Next(ctx) {
-		record := result.Record()
-		followedNode, ok := record.Get("followed")
-		if !ok {
-			return nil, errors.New("followed node not found in result")
-		}
+            var users model.Users
+            for result.Next(ctx) {
+                record := result.Record()
 
-		user, err := pr.parseUserNode(followedNode)
-		if err != nil {
-			return nil, err
-		}
+                id, ok := record.Get("id")
+                if !ok {
+                    return nil, errors.New("ID not found in the record")
+                }
+                name, ok := record.Get("name")
+                if !ok {
+                    return nil, errors.New("Name not found in the record")
+                }
 
-		users = append(users, user)
-	}
+                userID, ok := id.(int64)
+                if !ok {
+                    return nil, errors.New("Failed to assert ID as int64")
+                }
 
-	return users, nil
-}
+                userName, ok := name.(string)
+                if !ok {
+                    return nil, errors.New("Failed to assert Name as string")
+                }
 
-func (pr *FollowerRepo) parseUserNode(node interface{}) (model.User, error) {
-	user := model.User{}
-
-	switch v := node.(type) {
-	case map[string]interface{}:
-		pr.logger.Printf("Type of node: %T\n", v)
-
-		id, ok := v["id"].(int64)
-		if !ok {
-			return user, errors.New("failed to parse user ID")
-		}
-		name, ok := v["name"].(string)
-		if !ok {
-			return user, errors.New("failed to parse user name")
-		}
-		user.ID = id
-		user.Name = name
-	default:
-		return user, fmt.Errorf("unexpected node type: %T", node)
-	}
-
-	return user, nil
+                users = append(users, &model.User{
+                    ID:   userID,
+                    Name: userName,
+                })
+            }
+            return users, nil
+        })
+    if err != nil {
+        pr.logger.Println("Error querying search:", err)
+        return nil, err
+    }
+    return result.(model.Users), nil
 }

@@ -5,3 +5,5 @@ type User struct {
 	Name string `json:"name"`
 	// Add other user properties as needed
 }
+
+type Users []*User
