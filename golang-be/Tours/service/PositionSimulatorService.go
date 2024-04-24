@@ -1,24 +1,32 @@
 package service
 
 import (
+	"context"
 	"tours/model"
 	"tours/repo"
 )
 
 type PositionSimulatorService struct {
-	PositionRepo *repo.CRUDRepository[model.Position]
+	PositionRepo *repo.PositionRepository
 }
 
-func (service *PositionSimulatorService) Create(position *model.Position) error {
-	err := service.PositionRepo.Create(position)
+func (service *PositionSimulatorService) Create(ctx context.Context, position *model.Position) error {
+	customID, err := service.PositionRepo.GenerateCustomID(ctx)
+	if err != nil {
+		return nil
+	}
+
+	position.ID = customID
+
+	_, err = service.PositionRepo.Create(ctx, position)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (service *PositionSimulatorService) GetByTouristId(id int) (*model.Position, error) {
-	position, err := service.PositionRepo.Where("tourist_id = ?", id)
+func (service *PositionSimulatorService) GetByTouristId(ctx context.Context, id int) (*model.Position, error) {
+	position, err := service.PositionRepo.GetByTouristId(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +37,7 @@ func (service *PositionSimulatorService) GetByTouristId(id int) (*model.Position
 			TouristId: id,
 		}
 
-		err = service.Create(&newPos)
+		err = service.Create(ctx, &newPos)
 		if err != nil {
 			return nil, err
 		}
@@ -38,16 +46,16 @@ func (service *PositionSimulatorService) GetByTouristId(id int) (*model.Position
 	return &(*position)[0], nil // wtf
 }
 
-func (service *PositionSimulatorService) Update(position *model.Position) error {
-	err := service.PositionRepo.Update(position)
+func (service *PositionSimulatorService) Update(ctx context.Context, position *model.Position) error {
+	err := service.PositionRepo.Update(ctx, position)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (service *PositionSimulatorService) GetById(id int) (*model.Position, error) {
-	position, err := service.PositionRepo.GetById(id)
+func (service *PositionSimulatorService) GetById(ctx context.Context, id int) (*model.Position, error) {
+	position, err := service.PositionRepo.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}

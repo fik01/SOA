@@ -18,6 +18,8 @@ type CommentHandler struct {
 
 func (handler *CommentHandler) GetByBlogId(writer http.ResponseWriter, req *http.Request) {
 
+	fmt.Println("Pogodio")
+
 	vars := mux.Vars(req)
 	idStr := vars["id"]
 	id, err := strconv.Atoi(idStr)

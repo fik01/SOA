@@ -2,20 +2,21 @@ package model
 
 import (
 	"errors"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Rating struct {
 	gorm.Model
-	ID               int `gorm:"primaryKey" json:"Id"`
-	TourID           int `gorm:"foreignKey:TourId"`
-	PersonID         int
-	Mark             int
-	Comment          string
-	DateOfVisit      time.Time
-	DateOfCommenting time.Time
-	Images           ArrayString `gorm:"type:text[]"`
+	ID               int         `bson:"_id,omitempty"`
+	TourID           int         `bson:"TourId"`
+	PersonID         int         `bson:"PersonId"`
+	Mark             int         `bson:"Mark"`
+	Comment          string      `bson:"Comment"`
+	DateOfVisit      time.Time   `bson:"DateOfVisit"`
+	DateOfCommenting time.Time   `bson:"DateOfCommenting"`
+	Images           ArrayString `bson:"Images"`
 }
 
 func (rating *Rating) validate() error {

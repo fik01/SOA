@@ -20,6 +20,7 @@ func (service *BlogService) Create(blog *model.BlogPage) error {
 
 func (service *BlogService) GetAll() (*[]model.BlogPage, error) {
 	blogs, err := service.BlogRepo.GetAll()
+
 	if err != nil {
 		return nil, err
 	}

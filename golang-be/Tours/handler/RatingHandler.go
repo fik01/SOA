@@ -15,7 +15,7 @@ type RatingHandler struct {
 
 func (handler *RatingHandler) Create(writer http.ResponseWriter, req *http.Request) {
 	var rating model.Rating
-
+	ctx := req.Context()
 	err := json.NewDecoder(req.Body).Decode(&rating)
 
 	if err != nil {
@@ -25,7 +25,7 @@ func (handler *RatingHandler) Create(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 
-	err = handler.RatingService.Create(&rating)
+	err = handler.RatingService.Create(ctx, &rating)
 
 	if err != nil {
 		log.Println("Error while creating tour")
@@ -37,7 +37,7 @@ func (handler *RatingHandler) Create(writer http.ResponseWriter, req *http.Reque
 }
 
 func (handler *RatingHandler) GetById(writer http.ResponseWriter, req *http.Request) {
-
+	ctx := req.Context()
 	var rating *model.Rating
 
 	id, err := strconv.Atoi(req.URL.Query().Get("id"))
@@ -48,7 +48,7 @@ func (handler *RatingHandler) GetById(writer http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	rating, err = handler.RatingService.GetById(id)
+	rating, err = handler.RatingService.GetById(ctx, id)
 
 	if err != nil {
 		log.Println("Error while getting rating")
@@ -73,7 +73,7 @@ func (handler *RatingHandler) GetById(writer http.ResponseWriter, req *http.Requ
 
 func (handler *RatingHandler) Update(writer http.ResponseWriter, req *http.Request) {
 	var rating model.Rating
-
+	ctx := req.Context()
 	err := json.NewDecoder(req.Body).Decode(&rating)
 
 	if err != nil {
@@ -83,7 +83,7 @@ func (handler *RatingHandler) Update(writer http.ResponseWriter, req *http.Reque
 		return
 	}
 
-	err = handler.RatingService.Update(&rating)
+	err = handler.RatingService.Update(ctx, &rating)
 
 	if err != nil {
 		log.Println("Error while updating tour")
@@ -104,8 +104,8 @@ func (handler *RatingHandler) GetByTourId(writer http.ResponseWriter, req *http.
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	rating, err = handler.RatingService.GetByTourId(id)
+	ctx := req.Context()
+	rating, err = handler.RatingService.GetByTourId(ctx, id)
 
 	if err != nil {
 		log.Println("Error while getting rating")
@@ -138,8 +138,8 @@ func (handler *RatingHandler) GetByPersonIdAndTourId(writer http.ResponseWriter,
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	rating, err := handler.RatingService.GetByPersonIdAndTourId(tourId, personId)
+	ctx := req.Context()
+	rating, err := handler.RatingService.GetByTourIdAndPersonId(ctx, tourId, personId)
 
 	if err != nil {
 		log.Println("Error while getting rating")

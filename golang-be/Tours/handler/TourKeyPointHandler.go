@@ -15,6 +15,7 @@ type TourKeyPointHandler struct {
 
 func (handler *TourKeyPointHandler) Create(writer http.ResponseWriter, req *http.Request) {
 	var tourKeyPoint model.TourKeyPoint
+	ctx := req.Context()
 	err := json.NewDecoder(req.Body).Decode(&tourKeyPoint)
 	if err != nil {
 		log.Println("Error while parsing tour key point json")
@@ -22,7 +23,7 @@ func (handler *TourKeyPointHandler) Create(writer http.ResponseWriter, req *http
 		return
 	}
 
-	err = handler.TourKeyPointService.Create(&tourKeyPoint)
+	_, err = handler.TourKeyPointService.Create(ctx, &tourKeyPoint)
 	if err != nil {
 		log.Println("Error while creating tour key point")
 		writer.WriteHeader(http.StatusExpectationFailed)
@@ -42,7 +43,7 @@ func (handler *TourKeyPointHandler) Create(writer http.ResponseWriter, req *http
 
 func (handler *TourKeyPointHandler) Update(writer http.ResponseWriter, req *http.Request) {
 	var tourKeyPoint model.TourKeyPoint
-
+	ctx := req.Context()
 	err := json.NewDecoder(req.Body).Decode(&tourKeyPoint)
 
 	if err != nil {
@@ -52,7 +53,7 @@ func (handler *TourKeyPointHandler) Update(writer http.ResponseWriter, req *http
 		return
 	}
 
-	err = handler.TourKeyPointService.Update(&tourKeyPoint)
+	err = handler.TourKeyPointService.Update(ctx, &tourKeyPoint)
 
 	if err != nil {
 		log.Println("Error while updating tour key point")
@@ -72,7 +73,7 @@ func (handler *TourKeyPointHandler) Update(writer http.ResponseWriter, req *http
 }
 
 func (handler *TourKeyPointHandler) GetById(writer http.ResponseWriter, req *http.Request) {
-
+	ctx := req.Context()
 	var tourKeyPoint *model.TourKeyPoint
 
 	id, err := strconv.Atoi(req.URL.Query().Get("id"))
@@ -83,7 +84,7 @@ func (handler *TourKeyPointHandler) GetById(writer http.ResponseWriter, req *htt
 		return
 	}
 
-	tourKeyPoint, err = handler.TourKeyPointService.Get(id)
+	tourKeyPoint, err = handler.TourKeyPointService.Get(ctx, id)
 
 	if err != nil {
 		log.Println("Error while getting tour key point")
@@ -107,8 +108,8 @@ func (handler *TourKeyPointHandler) GetById(writer http.ResponseWriter, req *htt
 }
 
 func (handler *TourKeyPointHandler) GetByTourId(writer http.ResponseWriter, req *http.Request) {
-	var tourKeyPoints *[]model.TourKeyPoint
-
+	var tourKeyPoints []model.TourKeyPoint
+	ctx := req.Context()
 	id, err := strconv.Atoi(req.URL.Query().Get("tourId"))
 
 	if err != nil {
@@ -117,7 +118,7 @@ func (handler *TourKeyPointHandler) GetByTourId(writer http.ResponseWriter, req 
 		return
 	}
 
-	tourKeyPoints, err = handler.TourKeyPointService.GetByTourId(id)
+	tourKeyPoints, err = handler.TourKeyPointService.GetByTourId(ctx, id)
 
 	if err != nil {
 		log.Println("Error while getting tour key points")
@@ -140,8 +141,8 @@ func (handler *TourKeyPointHandler) GetByTourId(writer http.ResponseWriter, req 
 
 }
 
-func (handler *TourKeyPointHandler) Delete(writer http.ResponseWriter, req *http.Request) {
-
+/*func (handler *TourKeyPointHandler) Delete(writer http.ResponseWriter, req *http.Request) {
+	ctx := req.Context()
 	id, err := strconv.Atoi(req.URL.Query().Get("tourKeyPointId"))
 
 	if err != nil {
@@ -150,7 +151,7 @@ func (handler *TourKeyPointHandler) Delete(writer http.ResponseWriter, req *http
 		return
 	}
 
-	err = handler.TourKeyPointService.DeleteById(id)
+	err = handler.TourKeyPointService.DeleteById(ctx, id)
 
 	if err != nil {
 		log.Println("Error while updating tour key point")
@@ -159,4 +160,4 @@ func (handler *TourKeyPointHandler) Delete(writer http.ResponseWriter, req *http
 	}
 
 	writer.WriteHeader(http.StatusOK)
-}
+}*/

@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
-
-	"gorm.io/gorm"
+	//"gorm.io/gorm"
 )
 
 type ArrayString []string
@@ -60,22 +59,21 @@ func (a *ArrayString) Scan(value interface{}) error {
 }
 
 type Tour struct {
-	gorm.Model
-	Id            int `gorm:"primaryKey"`
-	Name          string
-	Description   string
-	Price         float64
-	Difficulty    TourDifficulty
-	Tags          ArrayString `json:"tags" gorm:"type:text[]"`
-	Equipment     []int       `gorm:"type:integer[]"`
-	Status        TourStatus
-	AuthorID      int
-	DistanceInKm  float64
-	ArchivedDate  time.Time
-	PublishedDate time.Time
-	Image         string
-	KeyPoints     []TourKeyPoint `gorm:"foreignKey:TourID"`
-	Durations     []TourDuration `gorm: "foreignKey:TourID"`
+	Id            int            `bson:"_id,omitempty"` // If you want to use a custom ID, use "_id" field name
+	Name          string         `bson:"name"`
+	Description   string         `bson:"description"`
+	Price         float64        `bson:"price"`
+	Difficulty    TourDifficulty `bson:"difficulty"`
+	Tags          []string       `bson:"tags"`
+	Equipment     []int          `bson:"equipment"`
+	Status        TourStatus     `bson:"status"`
+	AuthorID      int            `bson:"author_id"`
+	DistanceInKm  float64        `bson:"distance_in_km"`
+	ArchivedDate  time.Time      `bson:"archived_date"`
+	PublishedDate time.Time      `bson:"published_date"`
+	Image         string         `bson:"image"`
+	KeyPoints     []TourKeyPoint `bson:"key_points"`
+	Durations     []TourDuration `bson:"durations"`
 }
 
 func NewTour(name string, description string, price float64, difficulty TourDifficulty,
@@ -98,11 +96,6 @@ func NewTour(name string, description string, price float64, difficulty TourDiff
 	}
 
 	return tour
-}
-
-func (tour *Tour) CreateID(scope *gorm.DB) error {
-	tour.ID = 0
-	return nil
 }
 
 func (tour *Tour) validate() error {

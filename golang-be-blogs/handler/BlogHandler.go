@@ -16,6 +16,7 @@ type BlogHandler struct {
 func (handler *BlogHandler) GetAll(writer http.ResponseWriter, req *http.Request) {
 
 	blogs, err := handler.BlogService.GetAll()
+
 	if err != nil {
 		log.Println("Error while getting blogs:", err)
 		http.Error(writer, "Failed to retrieve blogs", http.StatusInternalServerError)
