@@ -27,6 +27,10 @@ builder.Services.AddHttpClient();
 var service = Environment.GetEnvironmentVariable("GO_ENCOUNTER_SERVICE_HOST");
 builder.Services.AddHttpClient("encounters", (client) => client.BaseAddress = new Uri($"http://{service}:8081/"));
 
+var serviceFollowers = Environment.GetEnvironmentVariable("GO_FOLLOWER_SERVICE_HOST");
+builder.Services.AddHttpClient("followers", client => client.BaseAddress = new Uri($"http://{serviceFollowers}:8082/"));
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

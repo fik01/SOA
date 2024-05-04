@@ -20,6 +20,7 @@ services:
       GO_TOUR_SERVICE_HOST: go-tour-service
       GO_BLOG_SERVICE_HOST: go-blog-service
       GO_ENCOUNTER_SERVICE_HOST: go-encounter-service
+      GO_FOLLOWER_SERVICE_HOST: go-follower-service
     depends_on:
       - db
       - go-tour-service

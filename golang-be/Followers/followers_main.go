@@ -63,6 +63,7 @@ func initFollower(router *mux.Router, database *log.Logger) {
 	router.HandleFunc("/tourist/follower", WriteFollowerr).Methods("PUT")
 	router.HandleFunc("/tourist/follower/{followerId}/{followedId}", DeleteFollowerr).Methods("DELETE")
 	router.HandleFunc("/tourist/follower/followings/{followerId}", GetRecomended).Methods("GET")
+	router.HandleFunc("/tourist/follower/followers/{followerId}", GetFollowers).Methods("GET")
 }
 
 func main() {
@@ -410,4 +411,98 @@ func (pr *FollowerRepo) GetRecomendedUsers(followerID int) (model.Users, error) 
         return nil, err
     }
     return result.(model.Users), nil
+}
+
+func GetFollowers(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	followerID := params["followerId"]
+	followerIDInt, err := strconv.Atoi(followerID)
+	if err != nil {
+		http.Error(w, "Invalid follower ID", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("Follower ID:", followerIDInt)
+
+	storeLogger := log.New(os.Stdout, "[follower-store] ", log.LstdFlags)
+
+	store, err := New(storeLogger)
+	if err != nil {
+		storeLogger.Fatal(err)
+	}
+	defer store.CloseDriverConnection(context.Background())
+	store.CheckConnection()
+
+	users, err := store.GetFollowersUsers(followerIDInt)
+	if err != nil {
+		storeLogger.Println("Error retrieving recomendations for user:", err)
+		http.Error(w, "Failed to retrieve recomendations for user", http.StatusInternalServerError)
+		return
+	}
+
+	usersJSON, err := json.Marshal(users)
+	if err != nil {
+		storeLogger.Println("Error marshaling users to JSON:", err)
+		http.Error(w, "Failed to marshal users to JSON", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(usersJSON)
+}
+
+func (pr *FollowerRepo) GetFollowersUsers(followerID int) (model.Users, error) {
+	ctx := context.Background()
+	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
+	defer session.Close(ctx)
+
+	result, err := session.ExecuteRead(
+		 ctx,
+		 func(transaction neo4j.ManagedTransaction) (any, error) {
+			  result, err := transaction.Run(ctx,
+					`MATCH (user:User {id: $userId})-[:FOLLOWS]->(follower)
+					RETURN follower.id AS id, follower.name AS name`,
+					map[string]interface{}{
+						 "userId": followerID,
+					})
+			  if err != nil {
+					return nil, err
+			  }
+
+			  var users model.Users
+			  for result.Next(ctx) {
+					record := result.Record()
+
+					id, ok := record.Get("id")
+					if !ok {
+						 return nil, errors.New("ID not found in the record")
+					}
+					name, ok := record.Get("name")
+					if !ok {
+						 return nil, errors.New("Name not found in the record")
+					}
+
+					userID, ok := id.(int64)
+					if !ok {
+						 return nil, errors.New("Failed to assert ID as int64")
+					}
+
+					userName, ok := name.(string)
+					if !ok {
+						 return nil, errors.New("Failed to assert Name as string")
+					}
+
+					users = append(users, &model.User{
+						 ID:   userID,
+						 Name: userName,
+					})
+			  }
+			  return users, nil
+		 })
+	if err != nil {
+		 pr.logger.Println("Error querying search:", err)
+		 return nil, err
+	}
+	return result.(model.Users), nil
 }

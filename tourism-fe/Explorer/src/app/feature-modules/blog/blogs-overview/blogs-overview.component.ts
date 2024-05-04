@@ -8,49 +8,57 @@ import { BlogPage } from '../model/blog.model';
 import { marked } from 'marked';
 import { Person } from 'src/app/shared/model/person.model';
 import { LayoutService } from '../../layout/layout.service';
+import { getAll } from '@tweenjs/tween.js';
 
 @Component({
   selector: 'xp-blogs-overview',
   templateUrl: './blogs-overview.component.html',
-  styleUrls: ['./blogs-overview.component.css']
+  styleUrls: ['./blogs-overview.component.css'],
 })
 export class BlogsOverviewComponent {
-  public blogs:BlogPage[] = [];
+  public blogs: BlogPage[] = [];
   public user: User;
   public flags: number[];
   public ratedBlogNumberOfComments: number = 0;
   public followingIds: number[] = [];
 
-  constructor(private authService: AuthService, private service: BlogService, private router: Router, private layoutService: LayoutService) { }
+  constructor(
+    private authService: AuthService,
+    private service: BlogService,
+    private router: Router,
+    private layoutService: LayoutService
+  ) {}
 
   ngOnInit(): void {
+    console.log('Svi blogovi:', this.service.getAll(-5));
     this.user = this.authService.user$.getValue();
     this.layoutService.getFollowings(this.user.id, this.user.role).subscribe({
       next: (result: Person[]) => {
-          this.followingIds = result.map(person => person.id)
-          this.followingIds.push(this.user.id)
-          this.getBlogs()
-      }
-    })
+        this.followingIds = result.map((person) => person.id);
+        this.followingIds.push(this.user.id);
+        this.getBlogs();
+      },
+    });
   }
 
   getBlogs() {
-    this.followingIds.forEach(followingId=> {
-      this.service.getBlogsByAuthor(followingId, this.user).subscribe({
+    this.followingIds.forEach((followingId) => {
+      this.service.getAll(-5).subscribe({
         next: (result: BlogPage[]) => {
-          this.blogs.push(...result)
+          this.blogs.push(...result);
           this.blogs.sort((a, b) => a.title.localeCompare(b.title));
-          this.initFlags();
-        }
+          //this.initFlags();
+        },
       });
-    });    
+    });
   }
 
   private initFlags() {
     this.flags = new Array<number>(this.blogs.length).fill(0);
     this.blogs.forEach((blog, i) => {
-
-      const foundObjects = blog.ratings.find(obj => obj.userId === this.user.id);
+      const foundObjects = blog.ratings.find(
+        (obj) => obj.userId === this.user.id
+      );
       if (foundObjects) {
         this.flags[i] = foundObjects.ratingValue;
       }
@@ -60,11 +68,10 @@ export class BlogsOverviewComponent {
   filterBlogs(status: number): void {
     this.service.getBlogsByStatus(status, this.user).subscribe({
       next: (result: BlogPage[]) => {
-
         this.blogs = result.sort((a, b) => a.title.localeCompare(b.title));
 
         this.initFlags();
-      }
+      },
     });
   }
 
@@ -77,7 +84,7 @@ export class BlogsOverviewComponent {
   }
 
   renderMarkdown(desc: string): string {
-    let markdown: string = desc || "";
+    let markdown: string = desc || '';
     return marked(markdown);
   }
 
@@ -100,58 +107,74 @@ export class BlogsOverviewComponent {
               }
               blog.status = 3;
               console.log(blog);
-              this.service.updateBlogOnBlogPage(blog, this.user.role).subscribe({
-                next: (result: BlogPage) => {
-                  let itemToUpdate = this.blogs.find((item) => item.id === blog.id);
-                  if (itemToUpdate) {
-                    itemToUpdate.status = 3;
-                  }
-                }
-              })
-            }
-            else if (blog.ratingSum <= -1) {
+              this.service
+                .updateBlogOnBlogPage(blog, this.user.role)
+                .subscribe({
+                  next: (result: BlogPage) => {
+                    let itemToUpdate = this.blogs.find(
+                      (item) => item.id === blog.id
+                    );
+                    if (itemToUpdate) {
+                      itemToUpdate.status = 3;
+                    }
+                  },
+                });
+            } else if (blog.ratingSum <= -1) {
               if (blog.status == 2) {
                 return;
               }
               blog.status = 2;
-              this.service.updateBlogOnBlogPage(blog, this.user.role).subscribe({
-                next: (result: BlogPage) => {
-                  let itemToUpdate = this.blogs.find((item) => item.id === blog.id);
-                  if (itemToUpdate) {
-                    itemToUpdate.status = 2;
-                  }
-                }
-              })
-            }
-            else if ((blog.ratingSum >= 1 || this.ratedBlogNumberOfComments >= 1)) {
+              this.service
+                .updateBlogOnBlogPage(blog, this.user.role)
+                .subscribe({
+                  next: (result: BlogPage) => {
+                    let itemToUpdate = this.blogs.find(
+                      (item) => item.id === blog.id
+                    );
+                    if (itemToUpdate) {
+                      itemToUpdate.status = 2;
+                    }
+                  },
+                });
+            } else if (
+              blog.ratingSum >= 1 ||
+              this.ratedBlogNumberOfComments >= 1
+            ) {
               if (blog.status == 4) {
                 return;
               }
               blog.status = 4;
-              this.service.updateBlogOnBlogPage(blog, this.user.role).subscribe({
-                next: (result: BlogPage) => {
-                  let itemToUpdate = this.blogs.find((item) => item.id === blog.id);
-                  if (itemToUpdate) {
-                    itemToUpdate.status = 4;
-                  }
-                }
-              })
-            }
-            else if (blog.status != 1) {
+              this.service
+                .updateBlogOnBlogPage(blog, this.user.role)
+                .subscribe({
+                  next: (result: BlogPage) => {
+                    let itemToUpdate = this.blogs.find(
+                      (item) => item.id === blog.id
+                    );
+                    if (itemToUpdate) {
+                      itemToUpdate.status = 4;
+                    }
+                  },
+                });
+            } else if (blog.status != 1) {
               blog.status = 1;
-              this.service.updateBlogOnBlogPage(blog, this.user.role).subscribe({
-                next: (result: BlogPage) => {
-                  let itemToUpdate = this.blogs.find((item) => item.id === blog.id);
-                  if (itemToUpdate) {
-                    itemToUpdate.status = 4;
-                  }
-                }
-              })
+              this.service
+                .updateBlogOnBlogPage(blog, this.user.role)
+                .subscribe({
+                  next: (result: BlogPage) => {
+                    let itemToUpdate = this.blogs.find(
+                      (item) => item.id === blog.id
+                    );
+                    if (itemToUpdate) {
+                      itemToUpdate.status = 4;
+                    }
+                  },
+                });
             }
-          }
-        })
-      }
-    })
+          },
+        });
+      },
+    });
   }
 
   rateBlog(flag: boolean, event: Event, index: number, element: any) {
@@ -160,7 +183,6 @@ export class BlogsOverviewComponent {
     //flag==true clicked upvote
     //flag==false clicked downvote
     if (flag) {
-
       //flags[ind]=1 - upvote selected
       //flags[ind]=0 - nothing selected
       //flags[ind]=-1 - downvote selected
@@ -174,10 +196,9 @@ export class BlogsOverviewComponent {
           },
           error: (error: any) => {
             console.error('An error occurred:', error);
-          }
+          },
         });
-      }
-      else {
+      } else {
         this.service.updateRating(element.id, this.user, 1).subscribe({
           next: () => {
             if (this.flags[index] == -1) element.ratingSum += 2;
@@ -187,11 +208,10 @@ export class BlogsOverviewComponent {
           },
           error: (error: any) => {
             console.error('An error occurred:', error);
-          }
+          },
         });
       }
-    }
-    else {
+    } else {
       if (this.flags[index] == -1) {
         this.flags[index] = 0;
         this.service.deleteRating(element.id, this.user).subscribe({
@@ -201,10 +221,9 @@ export class BlogsOverviewComponent {
           },
           error: (error: any) => {
             console.error('An error occurred:', error);
-          }
+          },
         });
-      }
-      else {
+      } else {
         this.service.updateRating(element.id, this.user, -1).subscribe({
           next: () => {
             if (this.flags[index] == 1) element.ratingSum -= 2;
@@ -214,7 +233,7 @@ export class BlogsOverviewComponent {
           },
           error: (error: any) => {
             console.error('An error occurred:', error);
-          }
+          },
         });
       }
     }

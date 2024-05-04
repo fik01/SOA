@@ -12,6 +12,9 @@ using System.Text.Json;
 using System.Text;
 using System.Net;
 using System.Net.Http;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public.Identity;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -19,19 +22,27 @@ namespace Explorer.API.Controllers.Tourist
     [Route("api/tourist/blog")]
     public class BlogController : BaseApiController
     {
-        private readonly IBlogService _blogService;
-        //private readonly ICommentService _commentService;
+        private readonly IBlogService _blogService;        //private readonly ICommentService _commentService;
+        private readonly IFollowerService _followerService;
 
+        private IHttpClientFactory _httpClientFactory;
         private static HttpClient _blogClient;
+        private static HttpClient _followerClient;
 
-        public BlogController(IBlogService blogService, IHttpClientFactory httpClientFactory)
+        public BlogController(IBlogService blogService, IFollowerService followerService, IHttpClientFactory httpClientFactory)
         {
             _blogService = blogService;
+            _followerService = followerService;
             //_commentService = commentService;
+            _httpClientFactory = httpClientFactory;
 
             _blogClient = httpClientFactory.CreateClient();
-            var service = Environment.GetEnvironmentVariable("GO_BLOG_SERVICE_HOST") ?? "localhost";
-            _blogClient.BaseAddress = new Uri($"http://{service}:8090");
+            var blogServiceHost = Environment.GetEnvironmentVariable("GO_BLOG_SERVICE_HOST") ?? "localhost";
+            _blogClient.BaseAddress = new Uri($"http://{blogServiceHost}:8090");
+
+            _followerClient = httpClientFactory.CreateClient();
+            var followerServiceHost = Environment.GetEnvironmentVariable("FOLLOWER_SERVICE_HOST") ?? "localhost";
+            _followerClient.BaseAddress = new Uri($"http://{followerServiceHost}:8082");
         }
 
         [HttpPost]
@@ -44,7 +55,7 @@ namespace Explorer.API.Controllers.Tourist
         static async Task<CommentDto> CreateBlogAsync(HttpClient httpClient, BlogDto blogDto)
         {
             using StringContent jsonContent = new(
-                JsonSerializer.Serialize(blogDto),
+                System.Text.Json.JsonSerializer.Serialize(blogDto),
                 Encoding.UTF8,
                 "application/json");
 
@@ -55,14 +66,15 @@ namespace Explorer.API.Controllers.Tourist
             var jsonResponse = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"{jsonResponse}\n");
 
-            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+            var result = System.Text.Json.JsonSerializer.Deserialize<CommentDto>(jsonResponse);
 
             return result;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<BlogDto>>> GetAll()
+        [HttpGet("allBlogs/{id:int}")]
+        public async Task<ActionResult<List<BlogDto>>> GetAllBlogsFromFollowers(int id)
         {
+            List<BlogDto> blogs = new List<BlogDto>();
             HttpResponseMessage response = await _blogClient.GetAsync("blog");
 
             if (response.IsSuccessStatusCode)
@@ -70,16 +82,30 @@ namespace Explorer.API.Controllers.Tourist
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var responseObject = JsonSerializer.Deserialize<List<BlogDto>>(responseBody);
-                var blogs = new PagedResult<BlogDto>(responseObject, responseObject.Count);
+                var responseObject = System.Text.Json.JsonSerializer.Deserialize<List<BlogDto>>(responseBody);
+                blogs = responseObject;
+            }
 
-                return Ok(blogs);
+            // Fetching blogs based on followers
+            HttpResponseMessage followerResponse = await _followerClient.GetAsync($"tourist/follower/followers/{id}");
+
+            if (followerResponse.IsSuccessStatusCode)
+            {
+                var followerJsonResponse = await followerResponse.Content.ReadAsStringAsync();
+                var followers = JsonConvert.DeserializeObject<List<FollowerDto>>(followerJsonResponse);
+
+                // Filter blogs based on the followers
+                var filteredBlogs = blogs.Where(blog => followers.Any(follower => blog.UserId == follower.Id)).ToList();
+
+                return Ok(filteredBlogs);
             }
             else
             {
-                return StatusCode((int)response.StatusCode, "Failed to fetch data from the GoLang API");
+                return StatusCode((int)followerResponse.StatusCode, "Failed to fetch data from the follower API");
             }
         }
+
+
 
         [HttpGet("{id:int}")]
         public ActionResult<BlogDto> Get(int id)
@@ -115,7 +141,7 @@ namespace Explorer.API.Controllers.Tourist
         static async Task<CommentDto> CreateCommentAsync(HttpClient httpClient, CommentDto commentDto)
         {
             using StringContent jsonContent = new(
-                JsonSerializer.Serialize(commentDto),
+                System.Text.Json.JsonSerializer.Serialize(commentDto),
                 Encoding.UTF8,
                 "application/json");
 
@@ -126,7 +152,7 @@ namespace Explorer.API.Controllers.Tourist
             var jsonResponse = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"{jsonResponse}\n");
 
-            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+            var result = System.Text.Json.JsonSerializer.Deserialize<CommentDto>(jsonResponse);
 
             return result;
         }
@@ -147,7 +173,7 @@ namespace Explorer.API.Controllers.Tourist
         static async Task<CommentDto> UpdateCommentAsync(HttpClient httpClient, CommentDto commentDto)
         {
             using StringContent jsonContent = new(
-                JsonSerializer.Serialize(commentDto),
+                System.Text.Json.JsonSerializer.Serialize(commentDto),
                 Encoding.UTF8,
                 "application/json");
 
@@ -158,7 +184,7 @@ namespace Explorer.API.Controllers.Tourist
             var jsonResponse = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"{jsonResponse}\n");
 
-            var result = JsonSerializer.Deserialize<CommentDto>(jsonResponse);
+            var result = System.Text.Json.JsonSerializer.Deserialize<CommentDto>(jsonResponse);
 
             return result;
         }
@@ -205,7 +231,7 @@ namespace Explorer.API.Controllers.Tourist
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                var responseObject = JsonSerializer.Deserialize<List<CommentDto>>(responseBody);
+                var responseObject = System.Text.Json.JsonSerializer.Deserialize<List<CommentDto>>(responseBody);
                 var comments = new PagedResult<CommentDto>(responseObject, responseObject.Count);
 
                 return Ok(comments);
