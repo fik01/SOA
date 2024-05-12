@@ -56,7 +56,7 @@ func (repo *PositionRepository) GetAll(ctx context.Context) ([]model.Rating, err
 
 func (repo *PositionRepository) Update(ctx context.Context, position *model.Position) error {
 	collection := repo.DatabaseConnection.Collection("tours")
-	filter := bson.M{"_id": position.ID}
+	filter := bson.M{"id": position.ID}
 	update := bson.M{"$set": position}
 	_, err := collection.UpdateOne(ctx, filter, update)
 	if err != nil {
@@ -68,7 +68,7 @@ func (repo *PositionRepository) Update(ctx context.Context, position *model.Posi
 func (repo *PositionRepository) Get(ctx context.Context, id int) (*model.Position, error) {
 	var position model.Position
 	collection := repo.DatabaseConnection.Collection("positions")
-	filter := bson.M{"_id": id}
+	filter := bson.M{"id": id}
 	err := collection.FindOne(ctx, filter).Decode(&position)
 	if err != nil {
 		return nil, err
@@ -76,10 +76,10 @@ func (repo *PositionRepository) Get(ctx context.Context, id int) (*model.Positio
 
 	return &position, nil
 }
-func (repo *PositionRepository) GetByTouristId(ctx context.Context, touristId int) (*[]model.Position, error) {
-	var position *[]model.Position
+func (repo *PositionRepository) GetByTouristId(ctx context.Context, touristId int) ([]*model.Position, error) {
+	var position []*model.Position
 	collection := repo.DatabaseConnection.Collection("positions")
-	filter := bson.M{"tourist_id": touristId}
+	filter := bson.M{"touristid": touristId}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
 		return nil, err

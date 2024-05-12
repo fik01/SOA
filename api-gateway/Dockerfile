@@ -9,7 +9,7 @@ RUN go mod download
 COPY ./ ./
 
 
-RUN go build -o main tours_main.go
+RUN go build -o main main.go
 
 FROM alpine:latest
 
@@ -17,6 +17,6 @@ WORKDIR /root/
 
 COPY --from=builder /app/main .
 
-EXPOSE 8000
+EXPOSE 8000 8090
 
 CMD ["./main"]

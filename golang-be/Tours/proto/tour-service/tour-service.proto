@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+option go_package = "proto/tour-service";
+
+import "google/protobuf/timestamp.proto";
+
+service TourService{
+
+  // Rating
+  rpc CreateRating(Rating) returns (StatusCodeResponse) {}
+  rpc UpdateRating(Rating) returns (StatusCodeResponse) {}
+  rpc GetRatingById(GetRatingIdRequest) returns (GetRatingResponse) {}
+  rpc GetRatingByTourId(GetRatingTourIdRequest) returns (GetRatingResponse) {}
+  rpc GetRatingByUserAndTourId(GetRatingUserAndTourRequest) returns (Rating) {}
+
+  // Equipment
+  rpc GetEquipment(EmptyRequest) returns (GetEquipmentResponse) {}
+  rpc GetByIdEquipment(GetEquipmentIdRequest) returns (Equipment) {}
+  rpc CreateEquipment(Equipment) returns (StatusCodeResponse) {}
+  rpc UpdateEquipment(Equipment) returns (StatusCodeResponse) {}
+  rpc DeleteEquipment(DeleteEquipmentRequest) returns (StatusCodeResponse) {}
+
+  // Position simulator
+  rpc CreatePos(Pos) returns (StatusCodeResponse) {}
+  rpc UpdatePos(Pos) returns (StatusCodeResponse) {}
+  rpc GetTouristIdPos(GetPosTouristRequest) returns (Pos) {}
+  rpc GetIdPos(GetPosIdRequest) returns (Pos) {}
+}
+
+// Position simulator
+
+message GetPosTouristRequest{
+  int32 touristId = 1;
+}
+message GetPosIdRequest{
+  int32 id = 1;
+}
+
+message Pos{
+  int32 Id = 1;
+  double Latitude = 2;
+  double Longitude = 3;
+  int32 TouristId = 4;
+}
+
+// Equipment
+
+message GetEquipmentIdRequest{
+  int32 id = 1;
+}
+message DeleteEquipmentRequest{
+  int32 id = 1;
+}
+message GetEquipmentResponse{
+  repeated Equipment equipment = 1;
+}
+message Equipment{
+  int32 Id = 1;
+  string Name = 2;
+  string Description = 3;
+}
+
+// Rating
+
+message UpdateRatingRequest {
+  Rating rating = 1;
+}
+message GetRatingResponse{
+  repeated Rating rating = 1;
+}
+message GetRatingTourIdRequest{
+  int32 tourId = 1;
+}
+message GetRatingIdRequest{
+  int32 id = 1;
+}
+message GetRatingUserAndTourRequest{
+  int32 tourId = 1;
+  int32 personId = 2;
+}
+message Rating {
+  int32 Id = 1;
+  int32 TourId = 2;
+  int32 PersonId = 3;
+  int32 Mark = 4;
+  string Comment = 5;
+  google.protobuf.Timestamp DateOfVisit = 6;
+  google.protobuf.Timestamp DateOfCommenting = 7;
+  repeated string Images = 8;
+}
+
+// Shared
+message StatusCodeResponse {
+  int32 status_code = 1;
+}
+
+message EmptyRequest{
+}
+
+
+
+

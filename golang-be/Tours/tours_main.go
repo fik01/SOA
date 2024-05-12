@@ -1,9 +1,10 @@
 package main
 
-import (
-	"tours/app"
-)
+import "tours/gRPCapp"
 
 func main() {
-	app.Run()
+
+	gRPCapp.Run()
+
+	//app.Run()
 }

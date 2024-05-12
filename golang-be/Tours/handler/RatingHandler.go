@@ -95,7 +95,7 @@ func (handler *RatingHandler) Update(writer http.ResponseWriter, req *http.Reque
 }
 
 func (handler *RatingHandler) GetByTourId(writer http.ResponseWriter, req *http.Request) {
-	var rating *[]model.Rating
+	var rating []*model.Rating
 
 	id, err := strconv.Atoi(req.URL.Query().Get("tourId"))
 

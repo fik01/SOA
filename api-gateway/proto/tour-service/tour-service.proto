@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+option go_package = "proto/tour-service";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service TourService{
+
+  //Rating
+  rpc CreateRating(Rating) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      post: "/api/tourist/tourrating"
+      body: "*"
+    };
+  }
+
+  rpc GetRatingById(GetRatingIdRequest) returns (GetRatingResponse) {
+    option(google.api.http) = {
+      get: "/api/tourist/tourrating/{id}"
+    };
+  }
+
+  rpc GetRatingByTourId(GetRatingTourIdRequest) returns (GetRatingResponse) {
+    option(google.api.http) = {
+      get: "/api/tourist/tourrating/tour/{tourId}"
+    };
+  }
+
+  rpc GetRatingByUserAndTourId(GetRatingUserAndTourRequest) returns (Rating) {
+    option(google.api.http) = {
+      get: "/api/tourist/tourrating/getByPersonIdAndTourId/{personId}/{tourId}"
+    };
+  }
+
+  rpc UpdateRating(Rating) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      put: "/api/tourist/tourrating"
+      body: "*"
+    };
+  }
+
+
+  //Equipment
+
+  rpc GetEquipment(EmptyRequest) returns (GetEquipmentResponse) {
+    option(google.api.http) = {
+      get: "/api/administration/equipment"
+    };
+  }
+  rpc GetByIdEquipment(GetEquipmentIdRequest) returns (Equipment) {
+    option(google.api.http) = {
+      get: "/api/tourManagement/equipment/{id}"
+    };
+  }
+  rpc CreateEquipment(Equipment) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      post: "/api/tourManagement/equipment"
+      body: "*"
+    };
+  }
+  rpc UpdateEquipment(Equipment) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      put: "/api/tourManagement/equipment"
+      body: "*"
+    };
+  }
+  rpc DeleteEquipment(DeleteEquipmentRequest) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      delete: "/api/tourManagement/equipment/{id}"
+    };
+  }
+
+  // Position simulator
+
+  rpc CreatePos(Pos) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      post: "/api/tourist/positionSimulator"
+      body: "*"
+    };
+  }
+  rpc UpdatePos(Pos) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      put: "/api/tourist/positionSimulator"
+      body: "*"
+    };
+  }
+  rpc GetTouristIdPos(GetPosTouristRequest) returns (Pos) {
+    option(google.api.http) = {
+      get: "/api/tourist/positionSimulator/touristId/{touristId}"
+    };
+  }
+  rpc GetIdPos(GetPosIdRequest) returns (Pos) {
+    option(google.api.http) = {
+      get: "/api/tourist/positionSimulator/{id}"
+    };
+  }
+
+}
+
+// Position simulator
+
+message GetPosTouristRequest{
+  int32 touristId = 1;
+}
+message GetPosIdRequest{
+  int32 id = 1;
+}
+
+message Pos{
+  int32 Id = 1;
+  double Latitude = 2;
+  double Longitude = 3;
+  int32 TouristId = 4;
+}
+
+//Equipment
+
+message    GetEquipmentIdRequest{
+  int32 id = 1;
+}
+message    DeleteEquipmentRequest{
+  int32 id = 1;
+}
+message    GetEquipmentResponse{
+  repeated Equipment equipment = 1;
+}
+message Equipment{
+  int32 Id = 1;
+  string Name = 2;
+  string Description = 3;
+}
+
+//Rating
+message UpdateRatingRequest {
+  Rating rating = 1;
+}
+
+message GetRatingResponse{
+  repeated Rating rating = 1;
+}
+
+message GetRatingTourIdRequest{
+  int32 tourId = 1;
+}
+
+message GetRatingIdRequest{
+  int32 id = 1;
+}
+
+message GetRatingUserAndTourRequest{
+  int32 tourId = 1;
+  int32 personId = 2;
+}
+
+message Rating {
+  int32 Id = 1;
+  int32 TourId = 2;
+  int32 PersonId = 3;
+  int32 Mark = 4;
+  string Comment = 5;
+  google.protobuf.Timestamp DateOfVisit = 6;
+  google.protobuf.Timestamp DateOfCommenting = 7;
+  repeated string Images = 8;
+}
+
+
+message StatusCodeResponse {
+  int32 status_code = 1;
+}
+
+message EmptyRequest{
+}
+

@@ -79,8 +79,8 @@ func (repo *RatingRepository) Update(ctx context.Context, rating *model.Rating) 
 	return nil
 }
 
-func (repo *RatingRepository) GetByTourId(ctx context.Context, tourId int) (*[]model.Rating, error) {
-	var ratings *[]model.Rating
+func (repo *RatingRepository) GetByTourId(ctx context.Context, tourId int) ([]*model.Rating, error) {
+	var ratings []*model.Rating
 	collection := repo.DatabaseConnection.Collection("ratings")
 	filter := bson.M{"TourId": tourId}
 	cursor, err := collection.Find(ctx, filter)

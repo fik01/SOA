@@ -32,7 +32,7 @@ func (service *RatingService) GetById(ctx context.Context, id int) (*model.Ratin
 	return rating, nil
 }
 
-func (service *RatingService) GetByTourId(ctx context.Context, id int) (*[]model.Rating, error) {
+func (service *RatingService) GetByTourId(ctx context.Context, id int) ([]*model.Rating, error) {
 	rating, err := service.RatingRepo.GetByTourId(ctx, id)
 	if err != nil {
 		return nil, err

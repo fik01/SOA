@@ -30,7 +30,7 @@ func (service *PositionSimulatorService) GetByTouristId(ctx context.Context, id 
 	if err != nil {
 		return nil, err
 	}
-	if len(*position) == 0 {
+	if len(position) == 0 {
 		newPos := model.Position{
 			Latitude:  45.267136,
 			Longitude: 19.833549,
@@ -43,7 +43,7 @@ func (service *PositionSimulatorService) GetByTouristId(ctx context.Context, id 
 		}
 		return &newPos, nil
 	}
-	return &(*position)[0], nil // wtf
+	return position[0], nil
 }
 
 func (service *PositionSimulatorService) Update(ctx context.Context, position *model.Position) error {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"go.mongodb.org/mongo-driver/bson"
 	"tours/model"
 	"tours/repo"
 )
@@ -29,7 +30,7 @@ func (service *TourProblemService) Update(problem *model.TourProblem) error {
 
 func (service *TourProblemService) GetByTouristId(touristId int) (*[]model.TourProblem, error) {
 	var tourProblems *[]model.TourProblem
-	tourProblems, err := service.TourProblemRepo.Where("tourist_id = ?", touristId)
+	tourProblems, err := service.TourProblemRepo.Where(bson.M{"tourist_id": touristId})
 	if err != nil {
 		return nil, err
 	}

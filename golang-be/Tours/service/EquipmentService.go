@@ -9,7 +9,7 @@ type EquipmentService struct {
 	EquipmentRepo *repo.CRUDRepository[model.Equipment]
 }
 
-func (service *EquipmentService) Get() (*[]model.Equipment, error) {
+func (service *EquipmentService) Get() ([]*model.Equipment, error) {
 	equipment, err := service.EquipmentRepo.GetAll()
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (service *EquipmentService) Update(equipment *model.Equipment) error {
 }
 
 func (service *EquipmentService) Delete(id int) error {
-	err := service.EquipmentRepo.DeleteById(id)
+	err := service.EquipmentRepo.Delete(id)
 	if err != nil {
 		return err
 	}
