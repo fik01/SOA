@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-gateway/config"
 	tour_service "api-gateway/proto/tour-service"
 	"context"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -15,9 +16,11 @@ import (
 
 func main() {
 
+	cfg := config.GetConfig()
+
 	conn, err := grpc.DialContext(
 		context.Background(),
-		":8000",
+		cfg.TourServiceAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
 	)
@@ -26,23 +29,24 @@ func main() {
 	}
 
 	gwmux := runtime.NewServeMux()
-	// Register Greeter
+
 	client := tour_service.NewTourServiceClient(conn)
 	err = tour_service.RegisterTourServiceHandlerClient(
 		context.Background(),
 		gwmux,
 		client,
 	)
+
 	if err != nil {
 		log.Fatalln("Failed to register gateway:", err)
 	}
 
 	gwServer := &http.Server{
-		Addr:    ":8090",
+		Addr:    cfg.Address,
 		Handler: gwmux,
 	}
 
-	log.Println("Serving gRPC-Gateway on http://0.0.0.0:8090")
+	log.Println("Serving gRPC-Gateway on http://0.0.0.0:44333")
 
 	go func() {
 		if err := gwServer.ListenAndServe(); err != nil {

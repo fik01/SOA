@@ -5,37 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6fe1ac9-e6f0-412a-a5e7-fbdf2a85c335" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/proto/google/api/annotations.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/proto/google/api/empty.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/proto/google/api/field_behavior.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/proto/google/api/http.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/proto/google/api/httpbody.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../api-gateway/proto/tour-service/tour-service.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gRPCHandlers/EquipmentHandler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gRPCHandlers/PositionSimulatorHandler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gRPCHandlers/RatingHandler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gRPCHandlers/TourHandler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gRPCapp/app.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proto/google/api/annotations.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proto/google/api/field_behavior.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proto/google/api/http.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proto/google/api/httpbody.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proto/tour-service/tour-service.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.env" beforeDir="false" afterPath="$PROJECT_DIR$/../../.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../api-gateway/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../api-gateway/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../api-gateway/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../../api-gateway/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../docker-compose-test.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/RatingHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/RatingHandler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/CRUDRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/CRUDRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/PositionRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/PositionRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repo/RatingRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/repo/RatingRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/EquipmentService.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/EquipmentService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/PositionSimulatorService.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/PositionSimulatorService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/RatingService.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/RatingService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/TourProblemService.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/TourProblemService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tours_main.go" beforeDir="false" afterPath="$PROJECT_DIR$/tours_main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gRPCapp/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/gRPCapp/app.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +47,7 @@
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "development",
+    "git-widget-placeholder": "feat/api-gateway",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "C:/Users/mbosk/Desktop/SOA/golang-be/Tours/repo",

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"tours/config"
 	"tours/db"
 	"tours/gRPCHandlers"
 	"tours/model"
@@ -25,8 +26,9 @@ func Run() {
 	app := new(App)
 
 	app.db = db.Connect()
+	cfg := config.GetConfig()
 
-	listener, err := net.Listen("tcp", ":8000")
+	listener, err := net.Listen("tcp", cfg.Address)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -60,7 +62,7 @@ func Run() {
 	tour_service.RegisterTourServiceServer(grpcServer, &serverTourHandler)
 
 	go func() {
-		log.Println("Serving gRPC on 0.0.0.0:8000")
+		log.Println("Serving gRPC on " + cfg.Address)
 		if err := grpcServer.Serve(listener); err != nil {
 			log.Fatal("server error: ", err)
 		}

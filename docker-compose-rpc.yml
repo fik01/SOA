@@ -12,15 +12,15 @@ services:
     restart: always
     environment: 
       TOUR_SERVICE_ADDRESS: tour-service:8000
-      GATEWAY_ADDRESS: "8000"
+      GATEWAY_ADDRESS: ":44333"
     depends_on:
       - tour-service
     networks:
       - network
     ports:
+      - "44333:44333"
+    expose:
       - "8000:8000"
-      - "8090:8090"
-
 
   tour-service:
     image: tour-service
@@ -29,15 +29,13 @@ services:
     build:
       context: ./golang-be/Tours/
     restart: on-failure
-    expose:
-      - "8000:8000"
     networks:
       - network
     depends_on:
       - mongo
     environment:
       DATABASE_URL: mongodb://root:jemta@mongo:27017/
-      TOUR_ADDRESS: "8000"
+      TOUR_SERVICE_ADDRESS: tour-service:8000
 
   mongo:
     image: mongo
