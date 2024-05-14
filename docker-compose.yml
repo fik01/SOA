@@ -22,11 +22,15 @@ services:
       GO_ENCOUNTER_SERVICE_HOST: go-encounter-service
       GO_FOLLOWER_SERVICE_HOST: go-follower-service
     depends_on:
-      - db
-      - go-tour-service
-      - go-blog-service
-      - go-encounter-service
-
+      go-tour-service:
+        condition: service_started
+      go-blog-service:
+        condition: service_started
+      go-encounter-service:
+        condition: service_started
+      db:
+        condition: service_healthy
+      
   go-tour-service:
     build:
       context: ./golang-be/Tours/
@@ -36,7 +40,8 @@ services:
     networks:
       - database
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     environment:
       - DATABASE_URL=mongodb://root:jemta@mongo:27017/
 
@@ -49,7 +54,8 @@ services:
     networks:
       - database
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     environment:
       - DATABASE_URL2=mongodb://root:jemta@mongo:27017/
 
@@ -63,7 +69,8 @@ services:
     networks:
       - database
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - DATABASE_URL_1=host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
 
@@ -76,7 +83,8 @@ services:
       - "8082:8082" # Choose a port for the new service
     restart: on-failure
     depends_on:
-      - neo4j # This ensures the Neo4j service is healthy before starting the follower service
+      neo4j: # This ensures the Neo4j service is healthy before starting the follower service
+        condition: service_healthy
     environment:
       NEO4J_DB: "bolt://neo4j:7687" # Neo4j database connection string
       NEO4J_USERNAME: neo4j
@@ -91,6 +99,11 @@ services:
       - "5433:5433"
     volumes:
       - ./db_init.sh:/docker-entrypoint-initdb.d/db_init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: super
@@ -119,6 +132,8 @@ services:
 
   mongo:
     image: mongo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
     restart: always
     networks:
       - database
@@ -135,6 +150,9 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
+    depends_on:
+      mongo:
+        condition: service_healthy
     networks:
       - database
     ports:
