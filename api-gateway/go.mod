@@ -3,6 +3,7 @@ module api-gateway
 go 1.22.1
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.12.0
 	google.golang.org/genproto v0.0.0-20221014213838-99cd37c6964a
 	google.golang.org/grpc v1.50.1

@@ -2,7 +2,10 @@ package main
 
 import (
 	"api-gateway/config"
+	"api-gateway/middleware"
+	stakeholders_service "api-gateway/proto/stakeholders-service"
 	tour_service "api-gateway/proto/tour-service"
+	"api-gateway/utils"
 	"context"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -18,32 +21,10 @@ func main() {
 
 	cfg := config.GetConfig()
 
-	conn, err := grpc.DialContext(
-		context.Background(),
-		cfg.TourServiceAddress,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-	)
-	if err != nil {
-		log.Fatalln("Failed to dial server:", err)
-	}
-
-	gwmux := runtime.NewServeMux()
-
-	client := tour_service.NewTourServiceClient(conn)
-	err = tour_service.RegisterTourServiceHandlerClient(
-		context.Background(),
-		gwmux,
-		client,
-	)
-
-	if err != nil {
-		log.Fatalln("Failed to register gateway:", err)
-	}
-
+	// Http Server
 	gwServer := &http.Server{
 		Addr:    cfg.Address,
-		Handler: gwmux,
+		Handler: setupGateway(&cfg),
 	}
 
 	log.Println("Serving gRPC-Gateway on http://0.0.0.0:44333")
@@ -59,8 +40,60 @@ func main() {
 
 	<-stopCh
 
-	if err = gwServer.Close(); err != nil {
+	if err := gwServer.Close(); err != nil {
 		log.Fatalln("error while stopping server: ", err)
 	}
 
+}
+
+func setupGateway(cfg *config.Config) http.Handler {
+
+	gwmux := runtime.NewServeMux()
+
+	// Tours Gateway
+	conn, err := grpc.DialContext(
+		context.Background(),
+		cfg.TourServiceAddress,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Fatalln("Failed to dial server:", err)
+	}
+
+	client := tour_service.NewTourServiceClient(conn)
+	err = tour_service.RegisterTourServiceHandlerClient(
+		context.Background(),
+		gwmux,
+		client,
+	)
+
+	if err != nil {
+		log.Fatalln("Failed to register gateway:", err)
+	}
+
+	//Stakeholders gateway
+	connStake, err := grpc.DialContext(
+		context.Background(),
+		cfg.StakeholdersServiceAddress,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
+	if err != nil {
+		log.Fatalln("Failed to dial server:", err)
+	}
+
+	clientStake := stakeholders_service.NewStakeholdersServiceClient(connStake)
+	err = stakeholders_service.RegisterStakeholdersServiceHandlerClient(
+		context.Background(),
+		gwmux,
+		clientStake,
+	)
+
+	if err != nil {
+		log.Fatalln("Failed to register gateway:", err)
+	}
+
+	// Apply JWT middleware
+	return middleware.JwtMiddleware(gwmux, utils.GetProtectedPaths())
 }
