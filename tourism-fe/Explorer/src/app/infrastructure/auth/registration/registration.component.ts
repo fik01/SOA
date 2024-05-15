@@ -22,8 +22,8 @@ export class RegistrationComponent {
   ) {}
   submitted: boolean = false;
   samePasswords:boolean=true;
-  
- 
+
+
 
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
@@ -44,11 +44,17 @@ export class RegistrationComponent {
 
   register(): void {
     const registration: Registration = {
-      name: this.registrationForm.value.name || "",
-      surname: this.registrationForm.value.surname || "",
-      email: this.registrationForm.value.email || "",
+      user: {
       username: this.registrationForm.value.username || "",
       password: this.registrationForm.value.password || "",
+        role: "tourist",
+        IsActive: true,
+      personalInfo: {
+        surname: this.registrationForm.value.surname || "",
+        email: this.registrationForm.value.email || "",
+        name: this.registrationForm.value.name || "",
+      }
+      }
     };
 
     const confirmPassword = this.registrationForm.value.confirmPassword;
@@ -58,25 +64,25 @@ export class RegistrationComponent {
     } else {
       this.nameFilled = true;
     }
-    
+
     if (registrationFormValues.surname === undefined || registrationFormValues.surname === null || registrationFormValues.surname === "") {
       this.surnameFilled = false;
     } else {
       this.surnameFilled = true;
     }
-    
+
     if (registrationFormValues.email === undefined || registrationFormValues.email === null || registrationFormValues.email === "") {
       this.emailFilled = false;
     } else {
       this.emailFilled = true;
     }
-    
+
     if (registrationFormValues.username === undefined || registrationFormValues.username === null || registrationFormValues.username === "") {
       this.usernameFilled = false;
     } else {
       this.usernameFilled = true;
     }
-    
+
     if (registrationFormValues.password === undefined || registrationFormValues.password === null || registrationFormValues.password === "") {
       this.passwordFilled = false;
     } else {
@@ -88,40 +94,18 @@ export class RegistrationComponent {
     } else {
       this.confirmPasswordFilled = true;
     }*/
-    console.log(this.registrationForm.valid) 
+    console.log(this.registrationForm.valid)
     this.submitted=true
     if(registrationFormValues.password!==registrationFormValues.confirmPassword)
       this.samePasswords=false;
     else
       this.samePasswords=true;
-    
+
     if (this.registrationForm.valid &&
-        registration.password === confirmPassword) {
+        registration.user.password === confirmPassword) {
       this.authService.register(registration).subscribe({
         next: (result) => {
           // const user = this.authService.user$.getValue();
-
-          
-          const jwtHelperService = new JwtHelperService();
-          const userId = +jwtHelperService.decodeToken(result.accessToken).id
-
-          console.log("radis liiiiiiiiiiiiii")
-          console.log(userId)
-          const userNews = {
-            id: 0,
-            touristId: userId,
-            lastSendMs: 0,
-            sendingPeriod: 0,
-          }
-          this.authService.createUserNews(userNews).subscribe({
-            next: (createdUserNews) => {
-              console.log('User news created:', createdUserNews);
-              this.router.navigate(['home']);
-            },
-            error: (error) => {
-              console.error('Error creating user news:', error);
-            },
-          });
           this.router.navigate(['home']);
         },
       });

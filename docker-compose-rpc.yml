@@ -12,15 +12,18 @@ services:
     restart: always
     environment: 
       TOUR_SERVICE_ADDRESS: tour-service:8000
+      STAKEHOLDERS_SERVICE_ADDRESS: stakeholders-service:7999
       GATEWAY_ADDRESS: ":44333"
     depends_on:
       - tour-service
+      - stakeholders-service
     networks:
       - network
     ports:
       - "44333:44333"
     expose:
       - "8000:8000"
+      - "7999:7999"
 
   tour-service:
     image: tour-service
@@ -36,6 +39,21 @@ services:
     environment:
       DATABASE_URL: mongodb://root:jemta@mongo:27017/
       TOUR_SERVICE_ADDRESS: tour-service:8000
+
+  stakeholders-service:
+    image: stakeholders-service
+    container_name: stakeholders-service
+    hostname: stakeholders-service
+    build:
+      context: ./golang-be/Stakeholders/
+    restart: on-failure
+    networks:
+      - network
+    depends_on:
+      - mongo
+    environment:
+      DATABASE_URL: mongodb://root:jemta@mongo:27017/
+      STAKEHOLDERS_SERVICE_ADDRESS: stakeholders-service:7999
 
   mongo:
     image: mongo
