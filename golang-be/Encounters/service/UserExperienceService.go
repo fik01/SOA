@@ -1,8 +1,8 @@
 package service
 
 import (
-	"encounters.xws.com/model"
-	"encounters.xws.com/repo"
+	"encounters/model"
+	"encounters/repo"
 )
 
 type UserExperienceService struct {

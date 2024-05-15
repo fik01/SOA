@@ -3,7 +3,7 @@ package repo
 import (
 	"fmt"
 
-	"encounters.xws.com/model"
+	"encounters/model"
 	"gorm.io/gorm"
 )
 

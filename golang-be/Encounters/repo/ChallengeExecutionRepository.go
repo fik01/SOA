@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"encounters.xws.com/model"
+	"encounters/model"
 	"gorm.io/gorm"
 )
 

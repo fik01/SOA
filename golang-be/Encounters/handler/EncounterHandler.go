@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"encounters.xws.com/model"
-	"encounters.xws.com/service"
+	"encounters/model"
+	"encounters/service"
+
 	"github.com/gorilla/mux"
 )
 
