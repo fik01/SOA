@@ -14,7 +14,7 @@ service BlogService{
     };
   }
 
-  rpc Create(Comment) returns (StatusCodeResponse) {
+  rpc CreateComment(Comment) returns (StatusCodeResponse) {
     option(google.api.http) = {
       post: "/api/blog/createComment"
       body: "*"
@@ -41,12 +41,14 @@ service BlogService{
     };
   }
 
-  rpc Create(BlogPage) returns (StatusCodeResponse) {
+  rpc CreateBlog(BlogPage) returns (StatusCodeResponse) {
     option(google.api.http) = {
       post: "/api/blog"
       body: "*"
     };
   }
+
+}
 
   message DeleteCommentRequest{
     int32 id = 1;
@@ -91,7 +93,3 @@ service BlogService{
 
   message EmptyRequest{
   }
-
-}
-
-  
