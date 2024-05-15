@@ -7,6 +7,7 @@ import (
 	"stakeholders/dto"
 	"stakeholders/model"
 	"stakeholders/repo"
+	"strings"
 	"time"
 )
 
@@ -39,15 +40,15 @@ func (authService *AuthenticationService) Login(request *dto.AuthenticationReque
 	role := ""
 	switch user.Role {
 	case 0:
-		role = "Tourist"
+		role = "tourist"
 	case 1:
-		role = "Author"
+		role = "author"
 	case 2:
-		role = "Admin"
+		role = "administrator"
 	}
 
 	claims := &Claims{
-		Id:       user.ID.String(),
+		Id:       extractID(user.ID.String()),
 		Username: user.Username,
 		Role:     role,
 		StandardClaims: &jwt.StandardClaims{
@@ -76,4 +77,11 @@ func (authService *AuthenticationService) Register(request *dto.RegisterRequest)
 		return err
 	}
 	return nil
+}
+
+func extractID(objectIDString string) string {
+	// Trim the "ObjectID(" and ")" parts
+	id := strings.TrimPrefix(objectIDString, "ObjectID(\"")
+	id = strings.TrimSuffix(id, "\")")
+	return id
 }

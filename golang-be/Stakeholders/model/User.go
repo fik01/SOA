@@ -3,9 +3,9 @@ package model
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 const (
-	Tourist = iota
-	Author
-	Admin
+	tourist = iota
+	author
+	administrator
 )
 
 type User struct {

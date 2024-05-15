@@ -2,7 +2,7 @@ package utils
 
 type Path struct {
 	Path string
-	Role string // Roles {Tourist, Author, Admin} ; leave empty for all roles
+	Role string // Roles {tourist, author, administrator} ; leave empty for all roles
 }
 
 func GetProtectedPaths() []*Path {

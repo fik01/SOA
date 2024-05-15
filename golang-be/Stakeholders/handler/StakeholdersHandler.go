@@ -52,11 +52,11 @@ func protoToDtoRegisterReq(req *stakeholders_service.RegisterRequest) *dto.Regis
 
 		role := 0
 		switch req.GetUser().GetRole() {
-		case "Tourist":
+		case "tourist":
 			role = 0
-		case "Author":
+		case "author":
 			role = 1
-		case "Admin":
+		case "administrator":
 			role = 2
 		}
 
