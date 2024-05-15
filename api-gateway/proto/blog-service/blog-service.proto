@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+option go_package = "proto/blog-service";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service BlogService{
+
+  //Comments
+  rpc GetByBlogId(GetByBlogIdRequest) returns (GetByBlogIdResponse) {
+    option(google.api.http) = {
+      get: "/api/blog/blogComments/{id}"
+    };
+  }
+
+  rpc Create(Comment) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      post: "/api/blog/createComment"
+      body: "*"
+    };
+  }
+
+  rpc Update(Comment) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      put: "/api/blog/updateComment"
+      body: "*"
+    };
+  }
+
+  rpc Delete(DeleteCommentRequest) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      delete: "/api/blog/deleteComment/{id}"
+    };
+  }
+
+  //Blogs
+  rpc GetAll(EmptyRequest) returns (GetAllBlogsResponse) {
+    option(google.api.http) = {
+      get: "/api/blog"
+    };
+  }
+
+  rpc Create(BlogPage) returns (StatusCodeResponse) {
+    option(google.api.http) = {
+      post: "/api/blog"
+      body: "*"
+    };
+  }
+
+  message DeleteCommentRequest{
+    int32 id = 1;
+  }
+
+  message GetByBlogIdRequest{
+    int32 id = 1;
+  }
+
+  message GetByBlogIdResponse{
+    repeated Comment Comment = 1;
+  }
+
+  message GetAllBlogsResponse{
+    repeated BlogPage blogPage = 1;
+  }
+
+  message BlogPage{
+    int32 Id = 1;
+    string Title = 2;
+    string Description = 3;
+    int32 Status = 4;
+    int32 UserId = 5;
+    int32 RatingSum = 6;
+  }
+
+  message Comment{
+    int32 Id = 1;
+    string Description = 2;
+    int32 UserId = 3;
+    int32 BlogId = 4;
+    google.protobuf.Timestamp CreationDate = 5;
+    google.protobuf.Timestamp LastEditDate = 6;
+    string ProfilePic = 7;
+    string Usernam = 8;
+  }
+  
+
+  message StatusCodeResponse {
+  int32 status_code = 1;
+  }
+
+  message EmptyRequest{
+  }
+
+}
+
+  
