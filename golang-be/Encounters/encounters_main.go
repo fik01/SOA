@@ -10,7 +10,6 @@ import (
 
 	"encounters/gRPCHandlers"
 	"encounters/handler"
-	"encounters/model"
 	encounter_service "encounters/proto/encounters"
 	"encounters/repo"
 	"encounters/service"
@@ -24,7 +23,7 @@ import (
 
 func initDB() *gorm.DB {
 
-	dsn := "host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable"
+	dsn := "host=localhost user=postgres password=super dbname=explorer port=5433 sslmode=disable"
 
 	connectionString, isPresent := os.LookupEnv("DATABASE_URL_1")
 	if isPresent {
@@ -42,10 +41,10 @@ func initDB() *gorm.DB {
 	}
 
 	// Migrate the schema
-	err = db.AutoMigrate(&model.UserExperience{})
-	if err != nil {
-		log.Fatalf("Error migrating schema: %v", err)
-	}
+	// err = db.AutoMigrate(&model.UserExperience{})
+	// if err != nil {
+	// 	log.Fatalf("Error migrating schema: %v", err)
+	// }
 	// err = db.AutoMigrate(&model.Challenge{})
 	// if err != nil {
 	// 	log.Fatalf("Error migrating schema: %v", err)
@@ -107,13 +106,13 @@ func initChallengeExecution(router *mux.Router, database *gorm.DB) {
 func main() {
 	database := initDB()
 	if database == nil {
-		print("FAILED TO CONNECT TO DB")
+		log.Println("FAILED TO CONNECT TO DB")
 		return
 	} else {
-		print("CONNECTED")
+		log.Println("CONNECTED")
 	}
-
-	listener, err := net.Listen("tcp", "ENCOUNTER_SERVICE_ADDRESS")
+	Address := os.Getenv("ENCOUNTER_SERVICE_ADDRESS")
+	listener, err := net.Listen("tcp", Address)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -134,12 +133,14 @@ func main() {
 	reflection.Register(grpcServer)
 	encounter_service.RegisterEncounterServiceServer(grpcServer, &handler)
 
-	go func(){
+	
+
+	go func() {
+		log.Println("Serving gRPC on " + Address)
 		if err := grpcServer.Serve(listener); err != nil {
 			log.Fatal("server error: ", err)
-	  }
+		}
 	}()
-
 	stopCh := make(chan os.Signal)
 	signal.Notify(stopCh, syscall.SIGTERM)
 

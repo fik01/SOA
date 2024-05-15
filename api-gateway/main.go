@@ -2,16 +2,18 @@ package main
 
 import (
 	"api-gateway/config"
+	encounter_service "api-gateway/proto/encounter-service"
 	tour_service "api-gateway/proto/tour-service"
 	"context"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -24,6 +26,12 @@ func main() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
 	)
+	connEncounters, err := grpc.DialContext(
+		context.Background(),
+		cfg.EncounterServiceAddress,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
 	if err != nil {
 		log.Fatalln("Failed to dial server:", err)
 	}
@@ -31,10 +39,16 @@ func main() {
 	gwmux := runtime.NewServeMux()
 
 	client := tour_service.NewTourServiceClient(conn)
+	clientEncounter := encounter_service.NewEncounterServiceClient(connEncounters)
 	err = tour_service.RegisterTourServiceHandlerClient(
 		context.Background(),
 		gwmux,
 		client,
+	)
+	err = encounter_service.RegisterEncounterServiceHandlerClient(
+		context.Background(),
+		gwmux,
+		clientEncounter,
 	)
 
 	if err != nil {

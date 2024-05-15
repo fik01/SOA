@@ -12,7 +12,7 @@ services:
     restart: always
     environment: 
       TOUR_SERVICE_ADDRESS: tour-service:8000
-      ENCOUNTER_SERVICE_ADDRESS: tour-service:8001
+      ENCOUNTER_SERVICE_ADDRESS: encounter-service:8001
       GATEWAY_ADDRESS: ":44333"
     depends_on:
       - tour-service
@@ -53,7 +53,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL_1: host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
-      ENCOUNTER_SERVICE_ADDRESS: tour-service:8001
+      ENCOUNTER_SERVICE_ADDRESS: encounter-service:8001
 
   mongo:
     image: mongo
@@ -84,7 +84,7 @@ services:
     image: postgres:latest
     restart: always
     networks:
-      - database
+      - network
     ports:
       - "5433:5433"
     volumes:
@@ -103,7 +103,3 @@ services:
 networks:
   network:
     driver: bridge
-  database:
-    name: database
-    driver: bridge
-

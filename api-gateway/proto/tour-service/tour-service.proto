@@ -95,7 +95,6 @@ service TourService{
       get: "/api/tourist/positionSimulator/{id}"
     };
   }
-
 }
 
 // Position simulator
@@ -165,10 +164,9 @@ message Rating {
 }
 
 
-message StatusCodeResponse {
-  int32 status_code = 1;
-}
-
 message EmptyRequest{
 }
 
+message StatusCodeResponse {
+  int32 statusCode = 1;
+}
