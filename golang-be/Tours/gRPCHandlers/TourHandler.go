@@ -7,7 +7,9 @@ import (
 
 type TourHandler struct {
 	tour_service.UnimplementedTourServiceServer
-	RatingService    *service.RatingService
-	EquipmentService *service.EquipmentService
-	PositionService  *service.PositionSimulatorService
+	RatingService       *service.RatingService
+	EquipmentService    *service.EquipmentService
+	PositionService     *service.PositionSimulatorService
+	TourSerice          *service.TourService
+	TourKeyPointService *service.TourKeyPointService
 }

@@ -1,9 +1,6 @@
 package gRPCapp
 
 import (
-	"go.mongodb.org/mongo-driver/mongo"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"os"
@@ -16,6 +13,10 @@ import (
 	tour_service "tours/proto/tour-service"
 	"tours/repo"
 	"tours/service"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type App struct {
@@ -54,10 +55,18 @@ func Run() {
 	positionRepo := &repo.PositionRepository{DatabaseConnection: app.db}
 	positionService := &service.PositionSimulatorService{PositionRepo: positionRepo}
 
+	tourRepo := &repo.TourRepository{DatabaseConnection: app.db}
+	tourService := &service.TourService{TourRepo: tourRepo}
+
+	tourKpRepo := &repo.TourKeyPointRepository{DatabaseConnection: app.db}
+	tourKpService := &service.TourKeyPointService{TourKeyPointRepo: tourKpRepo}
+
 	var serverTourHandler = gRPCHandlers.TourHandler{
-		RatingService:    ratingService,
-		EquipmentService: equipmentService,
-		PositionService:  positionService,
+		RatingService:       ratingService,
+		EquipmentService:    equipmentService,
+		PositionService:     positionService,
+		TourSerice:          tourService,
+		TourKeyPointService: tourKpService,
 	}
 	tour_service.RegisterTourServiceServer(grpcServer, &serverTourHandler)
 
