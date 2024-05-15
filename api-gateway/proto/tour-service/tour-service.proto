@@ -96,6 +96,59 @@ service TourService{
     };
   }
 
+//Tour
+  rpc GetAll(EmptyRequest) returns (GetToursResponse) {
+    option(google.api.http) = {
+      get: "/api/tourManagement/tour"
+    };
+  }  
+
+  rpc CreateTour(Tour) returns (Tour) {
+    option(google.api.http) = {
+      post: "/api/tourManagement/tour"
+      body: "*"
+    };
+  }  
+
+  rpc UpdateTour(Tour) returns (Tour){
+    option(google.api.http) = {
+      put: "/api/tourManagement/tour/{id}"
+      body: "*"
+    };
+  }
+  rpc GetTourByAuthorId(AuthorRequest) returns(PagedTourList){
+    option(google.api.http) = {
+      get: "/api/tourManagement/tour/author"
+    };
+  }
+
+  //TourKeyPoints
+  rpc CreateTourKeyPoint(TourKeyPoint) returns (TourKeyPoint) {
+    option(google.api.http) = {
+      post: "/api/tourKeyPoint"
+      body: "*"
+    };
+  }  
+
+  rpc GetByTourId(GetTourKeyPointTourId) returns(TourKeyPointPaged){
+    option(google.api.http) = {
+      get: "/api/tourKeyPoint/tour/{tourId}"
+    };
+  }
+  rpc GetById(GetTourKeyPointId) returns(Tour){
+    option(google.api.http) = {
+      get: "/api/tourKeyPoint/{id}"
+    };
+  }
+
+  rpc Update(TourKeyPoint) returns (TourKeyPoint){
+    option(google.api.http) = {
+      put: "/api/tourKeyPoint/{Id}"
+      body: "*"
+    };
+  }
+
+
 }
 
 // Position simulator
@@ -172,3 +225,103 @@ message StatusCodeResponse {
 message EmptyRequest{
 }
 
+//Tour
+enum TourDifficulty {
+  Beginner = 0;
+  Intermediate = 1;
+  Advanced = 2;
+  Pro = 3;
+}
+
+enum TourStatus {
+  Draft = 0;
+  Published = 1;
+  Archived = 2;
+  TouristMade = 3;
+}
+
+message Tour {
+  int32 id = 1;
+  string Name = 2;
+  string Description = 3;
+  double Price = 4;
+  TourDifficulty Difficulty = 5;
+  repeated string Tags = 6;
+  repeated int32 Equipment = 7;
+  TourStatus Status = 8;
+  int32 AuthorID = 9;
+  double DistanceInKm = 10;
+  google.protobuf.Timestamp ArchivedDate = 11;
+  google.protobuf.Timestamp PublishedDate = 12;
+  string Image = 13;
+  repeated TourKeyPoint KeyPoints = 14;
+  repeated TourDuration Durations = 15;
+}
+
+message TourKeyPoint {
+  int32 Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double Longitude = 4;
+  double Latitude = 5;
+  string Image = 6;
+  int32 tourId = 7;
+  string Secret = 8;
+  int32 PositionInTour = 9;
+  int32 PublicPointID = 10;
+}
+
+message TourDuration {
+  int32 Id = 1;
+  int32 TourID = 2;
+  int32 TimeInSeconds = 3;
+  TransportationType transportation = 4;
+}
+
+enum TransportationType {
+  Walking = 0;
+  Bicycle = 1;
+  Car = 2;
+}
+
+message    GetToursResponse{
+  repeated Tour tours = 1;
+}
+
+message GetAllToursRequest {
+    int32 page = 1;
+    int32 page_size = 2;
+}
+
+message PagedTourList {
+    repeated Tour tours = 1;
+    int32 total = 2;
+}
+
+message TourRequest {
+    Tour tour = 1;
+}
+
+message TourPaged {
+  repeated Tour tours = 1;
+  int32 totalCount =2;
+}
+
+message AuthorRequest {
+    int32 author_id = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+}
+
+message TourKeyPointPaged {
+  repeated TourKeyPoint tourKeyPoints = 1;
+  int32 totalCount =2;
+}
+
+message GetTourKeyPointId {
+  int32 id = 1;
+}
+
+message GetTourKeyPointTourId {
+  int32 tourId = 1;
+}
