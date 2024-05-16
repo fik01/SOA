@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"database-example/model"
 	"database-example/service"
 	"encoding/json"
@@ -15,7 +16,7 @@ type BlogHandler struct {
 
 func (handler *BlogHandler) GetAll(writer http.ResponseWriter, req *http.Request) {
 
-	blogs, err := handler.BlogService.GetAll()
+	blogs, err := handler.BlogService.GetAll(context.Background())
 
 	if err != nil {
 		log.Println("Error while getting blogs:", err)
@@ -51,7 +52,7 @@ func (handler *BlogHandler) Create(writer http.ResponseWriter, req *http.Request
 		return 
 	}
 
-	err = handler.BlogService.Create(&blog)
+	err = handler.BlogService.Create(context.Background(),&blog)
 	if err != nil {
 		log.Println("Error while creating blog")
 		writer.WriteHeader(http.StatusExpectationFailed)

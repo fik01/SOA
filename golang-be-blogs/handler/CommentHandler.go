@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"database-example/model"
 	"database-example/service"
 	"encoding/json"
@@ -65,7 +66,7 @@ func (handler *CommentHandler) Create(writer http.ResponseWriter, req *http.Requ
 		return 
 	}
 
-	err = handler.CommentService.Create(&comment)
+	err = handler.CommentService.Create(context.Background(),&comment)
 	if err != nil {
 		log.Println("Error while creating comment")
 		writer.WriteHeader(http.StatusExpectationFailed)

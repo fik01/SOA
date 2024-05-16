@@ -15,8 +15,8 @@ type CRUDRepository[T any] struct {
 	PrimaryKeyField    string
 }
 
-func (repo *CRUDRepository[T]) Create(entity *T) error {
-	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).InsertOne(context.Background(), entity)
+func (repo *CRUDRepository[T]) Create(ctx context.Context,entity *T) error {
+	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).InsertOne(ctx, entity)
 	return err
 }
 
@@ -26,15 +26,15 @@ func (repo *CRUDRepository[T]) GetById(id interface{}) (T, error) {
 	return entity, err
 }
 
-func (repo *CRUDRepository[T]) GetAll() (*[]T, error) {
+func (repo *CRUDRepository[T]) GetAll(ctx context.Context) (*[]T, error) {
 	var entities []T
-	cur, err := repo.DatabaseConnection.Collection(repo.CollectionName).Find(context.Background(), bson.D{})
+	cur, err := repo.DatabaseConnection.Collection(repo.CollectionName).Find(ctx, bson.D{})
 	if err != nil {
 		return nil, err
 	}
-	defer cur.Close(context.Background())
+	defer cur.Close(ctx)
 
-	for cur.Next(context.Background()) {
+	for cur.Next(ctx) {
 		var entity T
 		if err := cur.Decode(&entity); err != nil {
 			return nil, err

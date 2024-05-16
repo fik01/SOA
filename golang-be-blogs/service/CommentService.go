@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"database-example/model"
 	"database-example/repo"
 	"fmt"
@@ -25,12 +26,12 @@ func (service *CommentService) GetByBlogId(Id int) (*[]model.Comment, error) {
     return comments, nil
 }
 
-func (service *CommentService) Create(comment *model.Comment) error {
+func (service *CommentService) Create(ctx context.Context,comment *model.Comment) error {
 
 	comment.CreationDate = time.Now()
 	comment.LastEditDate = time.Now()
 
-	err := service.CommentRepo.Create(comment)
+	err := service.CommentRepo.Create(ctx,comment)
 	if err != nil {
 		return err
 	}
