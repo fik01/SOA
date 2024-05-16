@@ -31,7 +31,7 @@ func (handler *CommentHandler) GetByBlogId(writer http.ResponseWriter, req *http
 		return
 	}
 
-	comments, err := handler.CommentService.GetByBlogId(id)	
+	comments, err := handler.CommentService.GetByBlogId(context.Background(), id)	
 	if err != nil {
 		log.Println("Error while getting comments:", err)
 		http.Error(writer, "Failed to retrieve comments", http.StatusInternalServerError)
@@ -95,7 +95,7 @@ func (handler *CommentHandler) Update(writer http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	err = handler.CommentService.Update(&comment)
+	err = handler.CommentService.Update(context.Background(), &comment)
 	if err != nil {
 		log.Println("Error while updating comment:", err)
 		writer.WriteHeader(http.StatusExpectationFailed)
@@ -123,7 +123,7 @@ func (handler *CommentHandler) Delete(writer http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	err = handler.CommentService.DeleteById(id)
+	err = handler.CommentService.DeleteById(context.Background(), id)
 	if err != nil {
 		log.Println("Error while updating comment:", err)
 		writer.WriteHeader(http.StatusExpectationFailed)

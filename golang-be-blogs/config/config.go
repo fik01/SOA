@@ -14,3 +14,13 @@ func GetConnectionString() string {
 func GetPort() string {
 	return ":8090"
 }
+
+type Config struct {
+	Address string
+}
+
+func GetConfig() Config {
+	return Config{
+		Address: os.Getenv("TOUR_SERVICE_ADDRESS"),
+	}
+}
