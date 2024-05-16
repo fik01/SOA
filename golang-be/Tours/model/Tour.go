@@ -65,7 +65,7 @@ type Tour struct {
 	Price         float64        `bson:"price"`
 	Difficulty    TourDifficulty `bson:"difficulty"`
 	Tags          []string       `bson:"tags"`
-	Equipment     []int          `bson:"equipment"`
+	Equipment     []int32        `bson:"equipment"`
 	Status        TourStatus     `bson:"status"`
 	AuthorID      int            `bson:"author_id"`
 	DistanceInKm  float64        `bson:"distance_in_km"`

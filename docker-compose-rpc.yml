@@ -13,9 +13,11 @@ services:
     environment: 
       TOUR_SERVICE_ADDRESS: tour-service:8000
       ENCOUNTER_SERVICE_ADDRESS: encounter-service:8001
+      STAKEHOLDERS_SERVICE_ADDRESS: stakeholders-service:7999
       GATEWAY_ADDRESS: ":44333"
     depends_on:
       - tour-service
+      - stakeholders-service
     networks:
       - network
     ports:
@@ -23,6 +25,7 @@ services:
     expose:
       - "8000:8000"
       - "8001:8001"
+      - "7999:7999"
 
   tour-service:
     image: tour-service
@@ -39,6 +42,7 @@ services:
       DATABASE_URL: mongodb://root:jemta@mongo:27017/
       TOUR_SERVICE_ADDRESS: tour-service:8000
 
+
   encounter-service:
     image: encounter-service
     container_name: encounter-service
@@ -54,6 +58,22 @@ services:
     environment:
       DATABASE_URL_1: host=db user=postgres password=super dbname=explorer port=5433 sslmode=disable
       ENCOUNTER_SERVICE_ADDRESS: encounter-service:8001
+
+  stakeholders-service:
+    image: stakeholders-service
+    container_name: stakeholders-service
+    hostname: stakeholders-service
+    build:
+      context: ./golang-be/Stakeholders/
+
+    restart: on-failure
+    networks:
+      - network
+    depends_on:
+      - mongo
+    environment:
+      DATABASE_URL: mongodb://root:jemta@mongo:27017/
+      STAKEHOLDERS_SERVICE_ADDRESS: stakeholders-service:7999
 
   mongo:
     image: mongo

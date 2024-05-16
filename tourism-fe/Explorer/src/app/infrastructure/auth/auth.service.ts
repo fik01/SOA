@@ -58,15 +58,44 @@ export class AuthService {
     this.setUser();
   }
 
+  customBase64Decode(input:string) {
+    return decodeURIComponent(atob(input).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  }
+
+
+  customDecodeToken(token:string) {
+    const jwtHelperService = new JwtHelperService();
+    var decoded = this.customBase64Decode(token.split('.')[1]);
+
+
+    var parsedToken = JSON.parse(String(decoded));
+
+    // Convert specific fields to string if necessary
+    if (parsedToken.hasOwnProperty('id')) {
+      parsedToken.id = parsedToken.id.toString();
+    }
+    if (parsedToken.hasOwnProperty('role')) {
+      parsedToken.role = parsedToken.role.toString();
+    }
+
+    if (parsedToken.hasOwnProperty('username')) {
+      parsedToken.username = parsedToken.username.toString();
+    }
+
+    return parsedToken;
+  }
+
   private setUser(): void {
     const jwtHelperService = new JwtHelperService();
-    const accessToken = this.tokenStorage.getAccessToken() || "";
+    const accessToken = this.tokenStorage.getAccessToken() || ""
+    const decodedToken = this.customDecodeToken(accessToken)
+
     const user: User = {
-      id: +jwtHelperService.decodeToken(accessToken).id,
-      username: jwtHelperService.decodeToken(accessToken).username,
-      role: jwtHelperService.decodeToken(accessToken)[
-        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-      ],
+      id: decodedToken.id,
+      username: decodedToken.username,
+      role: decodedToken.role,
     };
     // const userNews: UserNews = {
     //   id: 0,
@@ -75,6 +104,7 @@ export class AuthService {
     //   sendingPeriod: 0,
     // }
     // this.createUserNews(userNews);
+    console.log(user)
     this.user$.next(user);
   }
 
@@ -82,7 +112,7 @@ export class AuthService {
   createUserNews(userNews: UserNews): Observable<UserNews> {
     return this.http.post<UserNews>(environment.apiHost + 'tourist/userNews', userNews);
   }
-  
+
 
   requestPasswordChange(email: string): Observable<string> {
     const url = `${environment.apiHost}users/changePasswordRequest?email=${email}`;

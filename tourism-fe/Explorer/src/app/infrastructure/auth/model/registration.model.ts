@@ -1,7 +1,17 @@
 export interface Registration {
-    name: string,
-    surname: string,
-    email: string,
-    username: string,
-    password: string,
+    user : user
+}
+
+export interface user {
+  username: string,
+  password: string,
+  role: string,
+  IsActive: boolean
+  personalInfo: personalInfo,
+}
+
+export interface personalInfo{
+  name: string,
+  surname: string,
+  email: string,
 }
