@@ -45,30 +45,30 @@ func (repo *CRUDRepository[T]) GetAll(ctx context.Context) (*[]T, error) {
 	return &entities, nil
 }
 
-func (repo *CRUDRepository[T]) Update(entity *T) error {
-	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).ReplaceOne(context.Background(), bson.M{repo.PrimaryKeyField: getId(entity)}, entity)
+func (repo *CRUDRepository[T]) Update(ctx context.Context,entity *T) error {
+	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).ReplaceOne(ctx, bson.M{repo.PrimaryKeyField: getId(entity)}, entity)
 	return err
 }
 
-func (repo *CRUDRepository[T]) Delete(id interface{}) error {
+func (repo *CRUDRepository[T]) Delete(ctx context.Context,id interface{}) error {
 
 	var entity T
-	repo.DatabaseConnection.Collection(repo.CollectionName).FindOne(context.Background(), bson.M{repo.PrimaryKeyField: id}).Decode(&entity)
+	repo.DatabaseConnection.Collection(repo.CollectionName).FindOne(ctx, bson.M{repo.PrimaryKeyField: id}).Decode(&entity)
 
-	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).DeleteOne(context.Background(), bson.M{repo.PrimaryKeyField: getId(entity)})
+	_, err := repo.DatabaseConnection.Collection(repo.CollectionName).DeleteOne(ctx, bson.M{repo.PrimaryKeyField: getId(entity)})
 	return err
 }
 
-func (repo *CRUDRepository[T]) Where(query interface{}) (*[]T, error) {
+func (repo *CRUDRepository[T]) Where(ctx context.Context, query interface{}) (*[]T, error) {
     var entities []T
-    cur, err := repo.DatabaseConnection.Collection(repo.CollectionName).Find(context.Background(), query)
+    cur, err := repo.DatabaseConnection.Collection(repo.CollectionName).Find(ctx, query)
     if err != nil {
         fmt.Println("Database Error:", err)
         return nil, err
     }
-    defer cur.Close(context.Background())
+    defer cur.Close(ctx)
 
-    for cur.Next(context.Background()) {
+    for cur.Next(ctx) {
         var entity T
         if err := cur.Decode(&entity); err != nil {
             fmt.Println("Decoding Error:", err)
