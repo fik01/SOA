@@ -83,4 +83,6 @@ services:
 networks:
   network:
     driver: bridge
+  monitoring:
+    external: true
 

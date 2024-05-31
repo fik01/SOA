@@ -1,0 +1,62 @@
+groups:
+  - name: metrics
+    rules:
+      - record: instance:node_cpu_usage:per_core
+        expr: 100 - (avg by (instance, cpu) (rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100)
+        labels:
+          job: node-expoter
+
+      - record: instance:node_memory_usage_bytes:total
+        expr: node_memory_MemTotal_bytes - node_memory_MemFree_bytes - node_memory_Buffers_bytes - node_memory_Cached_bytes
+        labels:
+          job: node-expoter
+
+      - record: instance:node_disk_read_mb
+        expr: rate(node_disk_read_bytes_total[1m]) / (1024 * 1024)
+        labels:
+          job: node-exporter
+
+      - record: instance:node_disk_write_mb
+        expr: rate(node_disk_written_bytes_total[1m]) / (1024 * 1024)
+        labels:
+          job: node-exporter
+
+      - record: instance:node_network_receive_mb
+        expr: rate(node_network_receive_bytes_total[1m]) / (1024 * 1024)
+        labels:
+          job: node-expoter
+
+      - record: instance:node_network_transmit_mb
+        expr: rate(node_network_transmit_bytes_total[1m]) / (1024 * 1024)
+        labels:
+          job: node-expoter
+
+       # Container CPU usage in percentage
+      - record: instance:container_cpu_usage_percent
+        expr: 100 * (rate(container_cpu_usage_seconds_total{container!=""}[5m]) / on(node) group_left() machine_cpu_cores)
+        labels:
+          job: cadvisor
+
+      # Container memory usage in bytes
+      - record: instance:container_memory_usage_bytes
+        expr: container_memory_usage_bytes{image!=""}
+        labels:
+          job: cadvisor
+
+      # Container Disk Usage in Bytes
+      - record: instance:container_fs_usage_bytes:sum
+        expr: sum by (name, id, image) (container_fs_usage_bytes{image!=""})
+        labels:
+          job: cadvisor
+
+      # Container network received in MB/s
+      - record: instance:container_network_receive_bytes_total
+        expr: rate(container_network_receive_bytes_total{image!=""}[1m]) / (1024 * 1024)
+        labels:
+          job: cadvisor
+
+      # Container network transmitted in MB/s
+      - record: instance:container_network_transmit_bytes_total
+        expr: rate(container_network_transmit_bytes_total{image!=""}[1m]) / (1024 * 1024)
+        labels:
+          job: cadvisor
