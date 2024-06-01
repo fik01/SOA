@@ -1,5 +1,10 @@
 version: "3.9"
 
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: ${FLUENT_BIT_ADDRESS}:24224
+
 services:
 
   api-gateway:
@@ -18,7 +23,9 @@ services:
       - tour-service
       - stakeholders-service
     networks:
+      - monitoring
       - network
+    logging: *fluent-bit
     ports:
       - "44333:44333"
     expose:
@@ -33,7 +40,9 @@ services:
       context: ./golang-be/Tours/
     restart: on-failure
     networks:
+      - monitoring
       - network
+    logging: *fluent-bit
     depends_on:
       - mongo
     environment:
@@ -48,7 +57,9 @@ services:
       context: ./golang-be/Stakeholders/
     restart: on-failure
     networks:
+      - monitoring
       - network
+    logging: *fluent-bit
     depends_on:
       - mongo
     environment:
@@ -58,7 +69,7 @@ services:
   mongo:
     image: mongo
     restart: always
-    networks: 
+    networks:
      - network
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
