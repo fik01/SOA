@@ -1,5 +1,10 @@
 services:
 
+  loki:
+    image: grafana/loki:main-5206e3a
+    networks:
+      - monitoring
+
   renderer:
     image: grafana/grafana-image-renderer:3.10.5
     environment:
