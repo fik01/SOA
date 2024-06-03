@@ -3,10 +3,12 @@ package middleware
 import (
 	"api-gateway/utils"
 	"context"
-	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var jwtKey = []byte("super-secret-key-elmao")
@@ -67,4 +69,15 @@ func isProtectedPath(path string, protectedPaths []*utils.Path) (bool, string) {
 		}
 	}
 	return false, ""
+}
+
+func TracingMiddleware(tracer trace.Tracer, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx, span := tracer.Start(r.Context(), r.URL.Path)
+		defer span.End()
+
+		// Pass the updated context with the span to the next handler
+		r = r.WithContext(ctx)
+		next.ServeHTTP(w, r)
+	})
 }

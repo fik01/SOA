@@ -1,5 +1,4 @@
 services:
-
   grafana:
     image: grafana/grafana:latest
     ports:
@@ -13,7 +12,17 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
     networks:
       - monitoring
-  
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "14269:14269"
+      - "16686:16686"
+    environment:
+      JAEGER_AGENT_HOST: jaeger
+    networks:
+      - monitoring
+
   prometheus:
     image: prom/prometheus:latest
     restart: on-failure
@@ -36,7 +45,7 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - monitoring
-  
+
   node-exporter:
     image: prom/node-exporter:latest
     ports:

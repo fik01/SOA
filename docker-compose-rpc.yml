@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-
   api-gateway:
     image: api-gateway
     container_name: api-gateway
@@ -10,15 +9,17 @@ services:
       context: ./api-gateway/
       dockerfile: Dockerfile
     restart: always
-    environment: 
+    environment:
       TOUR_SERVICE_ADDRESS: tour-service:8000
       STAKEHOLDERS_SERVICE_ADDRESS: stakeholders-service:7999
       GATEWAY_ADDRESS: ":44333"
+      JAEGER_ENDPOINT: "http://jaeger:14268/api/traces"
+      SERVICE_NAME: "api-gateway"
     depends_on:
       - tour-service
       - stakeholders-service
     networks:
-      - network
+      - monitoring
     ports:
       - "44333:44333"
     expose:
@@ -33,7 +34,7 @@ services:
       context: ./golang-be/Tours/
     restart: on-failure
     networks:
-      - network
+      - monitoring
     depends_on:
       - mongo
     environment:
@@ -48,7 +49,7 @@ services:
       context: ./golang-be/Stakeholders/
     restart: on-failure
     networks:
-      - network
+      - monitoring
     depends_on:
       - mongo
     environment:
@@ -58,8 +59,8 @@ services:
   mongo:
     image: mongo
     restart: always
-    networks: 
-     - network
+    networks:
+      - monitoring
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: jemta
@@ -71,7 +72,7 @@ services:
     image: mongo-express
     restart: always
     networks:
-      - network
+      - monitoring
     ports:
       - 8081:8081
     environment:
@@ -79,10 +80,10 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: jemta
       ME_CONFIG_MONGODB_URL: mongodb://root:jemta@mongo:27017/
       ME_CONFIG_BASICAUTH: false
-     
 networks:
   network:
+    name: network
     driver: bridge
   monitoring:
     external: true
-
+    name: monitoring

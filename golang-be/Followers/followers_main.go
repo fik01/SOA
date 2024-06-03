@@ -146,34 +146,6 @@ func (pr *FollowerRepo) CloseDriverConnection(ctx context.Context) {
 	pr.driver.Close(ctx)
 }
 
-/*func (pr *FollowerRepo) WriteFollower(follower *model.Follower) error {
-	ctx := context.Background()
-	session := pr.driver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
-	defer session.Close(ctx)
-
-	savedFollower, err := session.ExecuteWrite(ctx,
-		func(transaction neo4j.ManagedTransaction) (any, error) {
-			result, err := transaction.Run(ctx,
-				"CREATE (f:Follower) SET f.name = $name, f.surname = $surname RETURN f.name + ', from node ' + id(f)",
-				map[string]any{"name": "ime", "surname": "prezime"})
-			if err != nil {
-				return nil, err
-			}
-
-			if result.Next(ctx) {
-				return result.Record().Values[0], nil
-			}
-
-			return nil, result.Err()
-		})
-	if err != nil {
-		pr.logger.Println("Error inserting Follower:", err)
-		return err
-	}
-	pr.logger.Println(savedFollower.(string))
-	return nil
-}*/
-
 func WriteFollowerr(w http.ResponseWriter, r *http.Request) {
 
 	var follower model.Follower
