@@ -5,6 +5,7 @@ import (
 	"api-gateway/middleware"
 	stakeholders_service "api-gateway/proto/stakeholders-service"
 	tour_service "api-gateway/proto/tour-service"
+	"api-gateway/utils"
 	"context"
 	"log"
 	"net/http"
@@ -16,6 +17,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/zsais/go-gin-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
@@ -92,7 +94,7 @@ func main() {
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
-	tracer := otel.Tracer(serviceName)
+	// tracer := otel.Tracer(serviceName)
 
 	cfg := config.GetConfig()
 
@@ -102,19 +104,15 @@ func main() {
 	p.Use(router)
 	router.Use(otelgin.Middleware(serviceName))
 
-	// gRPC Gateway
-	gwmux := setupGateway(&cfg)
-	//router.Any("/*any", gin.WrapH(gwmux))
-
-	httpServer := &http.Server{
+	gwServer := &http.Server{
 		Addr:    cfg.Address,
-		Handler: middleware.TracingMiddleware(tracer, router),
+		Handler: setupGateway(&cfg),
 	}
 
 	log.Println("Serving gRPC-Gateway on http://0.0.0.0:44333")
 
 	go func() {
-		if err := httpServer.ListenAndServe(); err != nil {
+		if err := gwServer.ListenAndServe(); err != nil {
 			log.Fatal("server error: ", err)
 		}
 	}()
@@ -124,12 +122,12 @@ func main() {
 
 	<-stopCh
 
-	if err := httpServer.Close(); err != nil {
+	if err := gwServer.Close(); err != nil {
 		log.Fatalln("error while stopping server: ", err)
 	}
 }
 
-func setupGateway(cfg *config.Config)  *runtime.ServeMux {
+func setupGateway(cfg *config.Config) http.Handler {
 
 	gwmux := runtime.NewServeMux()
 
@@ -139,6 +137,7 @@ func setupGateway(cfg *config.Config)  *runtime.ServeMux {
 		cfg.TourServiceAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 	)
 	if err != nil {
 		log.Fatalln("Failed to dial server:", err)
@@ -161,6 +160,7 @@ func setupGateway(cfg *config.Config)  *runtime.ServeMux {
 		cfg.StakeholdersServiceAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 	)
 	if err != nil {
 		log.Fatalln("Failed to dial server:", err)
@@ -177,7 +177,7 @@ func setupGateway(cfg *config.Config)  *runtime.ServeMux {
 		log.Fatalln("Failed to register gateway:", err)
 	}
 
-	return gwmux
+	return middleware.JwtMiddleware(addCorsMiddleware(gwmux), utils.GetProtectedPaths())
 }
 
 func addCorsMiddleware(handler http.Handler) http.Handler {

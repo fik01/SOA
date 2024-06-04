@@ -17,6 +17,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 )
 
 type App struct {
@@ -86,7 +87,8 @@ func Run() {
 }
 
 func initGrpc() *grpc.Server {
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.StatsHandler(otelgrpc.NewServerHandler()),
+)
 	reflection.Register(grpcServer)
 	return grpcServer
 }
