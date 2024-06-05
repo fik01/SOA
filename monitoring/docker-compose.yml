@@ -1,4 +1,28 @@
 services:
+  loki:
+    image: grafana/loki:main-5206e3a
+    networks:
+      - monitoring
+
+  renderer:
+    image: grafana/grafana-image-renderer:3.10.5
+    environment:
+      ENABLE_METRICS: "true"
+    networks:
+      - monitoring
+
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki:main
+    environment:
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
+    volumes:
+      - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - monitoring
+
   grafana:
     image: grafana/grafana:latest
     ports:

@@ -1,5 +1,10 @@
 version: '3.9'
 
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: ${FLUENT_BIT_ADDRESS}:24224
+
 services:
 
   explorer:
@@ -8,6 +13,8 @@ services:
       target: final
     networks:
       - database
+      - monitoring
+    logging: *fluent-bit
     ports:
       - "44333:80"
     restart: on-failure
@@ -34,7 +41,9 @@ services:
       - "8080:8080"
     restart: on-failure
     networks:
+      - monitoring
       - database
+    logging: *fluent-bit
     depends_on:
       - mongo
     environment:
@@ -47,7 +56,9 @@ services:
       - "8090:8090"
     restart: on-failure
     networks:
+      - monitoring
       - database
+    logging: *fluent-bit
     depends_on:
       - mongo
     environment:
@@ -62,6 +73,8 @@ services:
     restart: on-failure
     networks:
       - database
+      - monitoring
+    logging: *fluent-bit
     depends_on:
       - db
     environment:
@@ -72,6 +85,8 @@ services:
       context: ./golang-be/Followers/
     networks:
       - database
+      - monitoring
+    logging: *fluent-bit
     ports:
       - "8082:8082" # Choose a port for the new service
     restart: on-failure
@@ -149,6 +164,8 @@ networks:
   database:
     name: database
     driver: bridge
+  monitoring:
+    external: true
 
 volumes:
   neo4j_data:

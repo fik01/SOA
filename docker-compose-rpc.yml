@@ -1,5 +1,10 @@
 version: "3.9"
 
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: ${FLUENT_BIT_ADDRESS}:24224
+
 services:
   api-gateway:
     image: api-gateway
@@ -20,6 +25,7 @@ services:
       - stakeholders-service
     networks:
       - monitoring
+    logging: *fluent-bit
     ports:
       - "44333:44333"
     expose:
@@ -35,6 +41,7 @@ services:
     restart: on-failure
     networks:
       - monitoring
+    logging: *fluent-bit
     depends_on:
       - mongo
     environment:
@@ -50,6 +57,7 @@ services:
     restart: on-failure
     networks:
       - monitoring
+    logging: *fluent-bit
     depends_on:
       - mongo
     environment:
@@ -80,6 +88,8 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: jemta
       ME_CONFIG_MONGODB_URL: mongodb://root:jemta@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongo
 networks:
   network:
     name: network
